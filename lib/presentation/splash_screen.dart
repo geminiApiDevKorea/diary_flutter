@@ -31,7 +31,8 @@ class SplashScreen extends StatelessWidget {
               width: double.infinity,
               height: 60,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () =>
+                    Navigator.pushReplacementNamed(context, '/home'),
                 child: Text(
                   'Get started',
                   style: textTheme.labelLarge,

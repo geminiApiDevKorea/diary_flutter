@@ -1,3 +1,6 @@
+import 'package:diary_flutter/common/enums.dart';
+import 'package:diary_flutter/common/types.dart';
+import 'package:diary_flutter/presentation/home_screen.dart';
 import 'package:diary_flutter/presentation/splash_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -15,9 +18,23 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+          selectedItemColor: Colors.deepPurple,
+          unselectedItemColor: Colors.grey,
+        ),
         useMaterial3: true,
       ),
-      home: const SplashScreen(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const SplashScreen(),
+        '/home': (context) {
+          return HomeScreen(
+            homeNavigationNotifier: HomeNavigationNotifier(
+              HomeNavigations.home,
+            ),
+          );
+        },
+      },
     );
   }
 }
