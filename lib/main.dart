@@ -17,17 +17,16 @@ class MyApp extends StatelessWidget {
       title: 'Music Diary',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-          selectedItemColor: Colors.deepPurple,
-          unselectedItemColor: Colors.grey,
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+        bottomNavigationBarTheme: BottomNavigationBarThemeData(
+          selectedItemColor: Colors.blue,
+          unselectedItemColor: Colors.grey[400],
         ),
         useMaterial3: true,
       ),
-      initialRoute: '/',
+      home: const SplashScreen(),
       routes: {
-        '/': (context) => const SplashScreen(),
-        '/home': (context) {
+        HomeScreen.routeName: (context) {
           return HomeScreen(
             homeNavigationNotifier: HomeNavigationNotifier(
               HomeNavigations.home,
