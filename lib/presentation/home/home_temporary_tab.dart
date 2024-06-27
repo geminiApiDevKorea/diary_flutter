@@ -11,7 +11,10 @@ class HomeTemporaryTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Text('Home Body : $homeNavigations'),
+      child: Text(
+        '🚧 Under Construction : $homeNavigations 🚧',
+        style: const TextStyle(fontSize: 20),
+      ),
     );
   }
 }

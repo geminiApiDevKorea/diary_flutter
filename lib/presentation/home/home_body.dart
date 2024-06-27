@@ -1,24 +1,23 @@
 import 'package:diary_flutter/common/enums.dart';
-import 'package:diary_flutter/common/types.dart';
+import 'package:diary_flutter/domain/provider/setting_notifier.dart';
+import 'package:diary_flutter/presentation/diary/home_diary_tab.dart';
 import 'package:diary_flutter/presentation/home/home_temporary_tab.dart';
-import 'package:diary_flutter/presentation/log/home_log_tab.dart';
+import 'package:diary_flutter/presentation/write/home_write_tab.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class HomeBody extends StatelessWidget {
-  final HomeNavigationNotifier homeNavigationNotifier;
-  const HomeBody({
-    super.key,
-    required this.homeNavigationNotifier,
-  });
+class HomeBody extends ConsumerWidget {
+  const HomeBody({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return ValueListenableBuilder(
-      valueListenable: homeNavigationNotifier,
-      builder: (context, value, child) => switch (value) {
-        HomeNavigations.log => const HomeLogTab(),
-        _ => HomeTemporaryTab(homeNavigations: value),
-      },
-    );
+  Widget build(BuildContext context, WidgetRef ref) {
+    final setting = ref.watch(settingNotifierProvider);
+    if (setting.homeNavigation == HomeNavigations.write) {
+      return const HomeWriteTab();
+    } else if (setting.homeNavigation == HomeNavigations.diary) {
+      return const HomeDiaryTab();
+    } else {
+      return HomeTemporaryTab(homeNavigations: setting.homeNavigation);
+    }
   }
 }

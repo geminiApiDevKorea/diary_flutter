@@ -3,9 +3,26 @@ import 'package:flutter/material.dart';
 enum HomeNavigations {
   home,
   calendar,
-  log,
+  write,
   diary,
   setting,
+}
+
+extension HomeNavigationsExtension on HomeNavigations {
+  String get name => switch (this) {
+        HomeNavigations.home => 'Home',
+        HomeNavigations.calendar => 'Calendar',
+        HomeNavigations.write => 'Write',
+        HomeNavigations.diary => 'Diary',
+        HomeNavigations.setting => 'Setting',
+      };
+  IconData get iconData => switch (this) {
+        HomeNavigations.home => Icons.home_outlined,
+        HomeNavigations.calendar => Icons.calendar_month_outlined,
+        HomeNavigations.write => Icons.add_outlined,
+        HomeNavigations.diary => Icons.book_outlined,
+        HomeNavigations.setting => Icons.settings_outlined,
+      };
 }
 
 enum Moods {
