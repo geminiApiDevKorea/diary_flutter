@@ -1,4 +1,4 @@
-import 'package:diary_flutter/presentation/log/%08diary_editor.dart';
+import 'package:diary_flutter/presentation/log/diary_editor.dart';
 import 'package:diary_flutter/presentation/log/mood_items.dart';
 import 'package:diary_flutter/presentation/log/music_items.dart';
 import 'package:flutter/material.dart';
