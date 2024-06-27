@@ -10,11 +10,7 @@ class HomeBottomNavigationBar extends StatelessWidget {
   });
 
   _onTap(int index) {
-    final selectedTap = HomeNavigations.values[index];
-    // log인 경우 일기 작성창을 modal로 띄우고 나머지는 화면 갱신
-    if (selectedTap != HomeNavigations.log) {
-      homeNavigationNotifier.value = selectedTap;
-    }
+    homeNavigationNotifier.value = HomeNavigations.values[index];
   }
 
   @override

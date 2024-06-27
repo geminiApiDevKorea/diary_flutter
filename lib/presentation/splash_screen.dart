@@ -1,3 +1,5 @@
+import 'package:diary_flutter/common/enums.dart';
+import 'package:diary_flutter/presentation/home_screen.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatelessWidget {
@@ -31,8 +33,11 @@ class SplashScreen extends StatelessWidget {
               width: double.infinity,
               height: 60,
               child: ElevatedButton(
-                onPressed: () =>
-                    Navigator.pushReplacementNamed(context, '/home'),
+                onPressed: () => Navigator.pushReplacementNamed(
+                  context,
+                  HomeScreen.routeName,
+                  arguments: HomeNavigations.home,
+                ),
                 child: Text(
                   'Get started',
                   style: textTheme.labelLarge,
