@@ -1,39 +1,23 @@
-import 'package:diary_flutter/common/enums.dart';
-import 'package:diary_flutter/common/types.dart';
-import 'package:diary_flutter/presentation/home_screen.dart';
-import 'package:diary_flutter/presentation/splash_screen.dart';
+import 'package:diary_flutter/app.dart';
+import 'package:diary_flutter/data/provider/persistance_storage_provider.dart';
+import 'package:diary_flutter/data/storage/shared_preference_persistance_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Music Diary',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-        bottomNavigationBarTheme: BottomNavigationBarThemeData(
-          selectedItemColor: Colors.blue,
-          unselectedItemColor: Colors.grey[400],
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final sharedPreferencePersistanceStorage = SharedPreferencePersistanceStorage(
+    sharedPreferences: await SharedPreferences.getInstance(),
+  );
+  runApp(
+    ProviderScope(
+      overrides: [
+        persistanceStorageProvider.overrideWith(
+          (ref) => sharedPreferencePersistanceStorage,
         ),
-        useMaterial3: true,
-      ),
-      home: const SplashScreen(),
-      routes: {
-        HomeScreen.routeName: (context) {
-          return HomeScreen(
-            homeNavigationNotifier: HomeNavigationNotifier(
-              HomeNavigations.home,
-            ),
-          );
-        },
-      },
-    );
-  }
+      ],
+      child: const App(),
+    ),
+  );
 }
