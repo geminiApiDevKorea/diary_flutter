@@ -1,5 +1,5 @@
-import 'package:diary_flutter/presentation/home/home_body.dart';
-import 'package:diary_flutter/presentation/home/home_bottom_navigation_bar.dart';
+import 'package:diary_flutter/presentation/home_body.dart';
+import 'package:diary_flutter/presentation/home_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
