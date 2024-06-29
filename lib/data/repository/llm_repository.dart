@@ -1,13 +1,13 @@
-class LLMResult {
+class GenerativeResult {
   final String message;
   final bool isSuccess;
 
-  LLMResult({
+  GenerativeResult({
     required this.isSuccess,
     required this.message,
   });
 }
 
 abstract class LLMRepository {
-  Future<LLMResult> sendMessage(String message);
+  Future<GenerativeResult> request(String input);
 }

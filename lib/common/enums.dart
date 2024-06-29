@@ -46,3 +46,13 @@ extension MoodsExtension on Moods {
         Moods.neutral => Icons.sentiment_satisfied
       };
 }
+
+enum GeminiModels {
+  flash,
+}
+
+extension GeminiModelsExtension on GeminiModels {
+  String get name => switch (this) {
+        GeminiModels.flash => 'gemini-1.5-flash-latest',
+      };
+}

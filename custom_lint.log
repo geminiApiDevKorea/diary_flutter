@@ -1236,3 +1236,31 @@ at:
 #6      CustomLintServer._handleRequest (package:custom_lint/src/v2/custom_lint_analyzer_plugin.dart:171:22)
 <asynchronous suspension>
 
+[WrapWithConsumer] 2024-06-29T21:47:28.011604 Plugin WrapWithConsumer threw while analyzing /Users/cody/diary_flutter/lib/data/provider/gemini_repository_provider.dart:
+[WrapWithConsumer] 2024-06-29T21:47:28.011604 InconsistentAnalysisException: Requested result might be inconsistent with previously returned results
+[WrapWithConsumer] 2024-06-29T21:47:28.011604
+[WrapWithConsumer] 2024-06-29T21:47:28.011604 #0      AnalysisSessionImpl.checkConsistency (package:analyzer/src/dart/analysis/session.dart:54:7)
+[WrapWithConsumer] 2024-06-29T21:47:28.011604 #1      AnalysisSessionImpl.getResolvedUnit (package:analyzer/src/dart/analysis/session.dart:129:5)
+[WrapWithConsumer] 2024-06-29T21:47:28.011604 #2      ChangeBuilderImpl._createDartFileEditBuilder (package:analyzer_plugin/src/utilities/change_builder/change_builder_core.dart:287:33)
+[WrapWithConsumer] 2024-06-29T21:47:28.011604 #3      ChangeBuilderImpl.addDartFileEdit (package:analyzer_plugin/src/utilities/change_builder/change_builder_core.dart:136:23)
+[WrapWithConsumer] 2024-06-29T21:47:28.011604 #4      _ChangeBuilderImpl.addDartFileEdit (package:custom_lint_core/src/change_reporter.dart:134:33)
+[WrapWithConsumer] 2024-06-29T21:47:28.011604 #5      FunctionalToClassBasedProvider.run.<anonymous closure> (package:riverpod_lint/src/assists/functional_to_class_based_provider.dart:35:21)
+[WrapWithConsumer] 2024-06-29T21:47:28.011604 #6      _RiverpodAstRegistryVisitor._runSubscriptions (package:riverpod_analyzer_utils/src/riverpod_ast/visitor.dart:961:12)
+[WrapWithConsumer] 2024-06-29T21:47:28.011604 #7      _RiverpodAstRegistryVisitor.visitFunctionalProviderDeclaration (package:riverpod_analyzer_utils/src/riverpod_ast/visitor.dart:923:5)
+[WrapWithConsumer] 2024-06-29T21:47:28.011604 #8      FunctionalProviderDeclaration.accept (package:riverpod_analyzer_utils/src/riverpod_ast/generator_provider_declaration.dart:386:13)
+[WrapWithConsumer] 2024-06-29T21:47:28.011604 #9      ResolvedRiverpodLibraryResult.visitChildren (package:riverpod_analyzer_utils/src/riverpod_ast/resolve_riverpod.dart:72:19)
+[WrapWithConsumer] 2024-06-29T21:47:28.011604 #10     _RiverpodAstRegistryVisitor.visitResolvedRiverpodUnit (package:riverpod_analyzer_utils/src/riverpod_ast/visitor.dart:870:12)
+[WrapWithConsumer] 2024-06-29T21:47:28.011604 #11     ResolvedRiverpodLibraryResult.accept (package:riverpod_analyzer_utils/src/riverpod_ast/resolve_riverpod.dart:59:13)
+[WrapWithConsumer] 2024-06-29T21:47:28.011604 #12     RiverpodAstRegistry.run (package:riverpod_analyzer_utils/src/riverpod_ast/visitor.dart:517:10)
+[WrapWithConsumer] 2024-06-29T21:47:28.011604 #13     _ParseRiverpod._setupRiverpod.<anonymous closure> (package:riverpod_lint/src/riverpod_custom_lint.dart:92:47)
+[WrapWithConsumer] 2024-06-29T21:47:28.011604 #14     _rootRun (dart:async/zone.dart:1399:13)
+[WrapWithConsumer] 2024-06-29T21:47:28.011604 #15     _CustomZone.run (dart:async/zone.dart:1301:19)
+[WrapWithConsumer] 2024-06-29T21:47:28.011604 #16     _CustomZone.bindCallback.<anonymous closure> (dart:async/zone.dart:1233:23)
+[WrapWithConsumer] 2024-06-29T21:47:28.011604 #17     runPostRunCallbacks (package:custom_lint_core/src/plugin_base.dart:16:19)
+[WrapWithConsumer] 2024-06-29T21:47:28.011604 #18     _ClientAnalyzerPlugin.handleEditGetAssists (package:custom_lint_builder/src/client.dart:510:5)
+[WrapWithConsumer] 2024-06-29T21:47:28.011604 <asynchronous suspension>
+[WrapWithConsumer] 2024-06-29T21:47:28.011604 #19     ServerPlugin._getResponse (package:analyzer_plugin/plugin/plugin.dart:556:18)
+[WrapWithConsumer] 2024-06-29T21:47:28.011604 <asynchronous suspension>
+[WrapWithConsumer] 2024-06-29T21:47:28.011604 #20     ServerPlugin._onRequest (package:analyzer_plugin/plugin/plugin.dart:599:18)
+[WrapWithConsumer] 2024-06-29T21:47:28.011604 <asynchronous suspension>
+[WrapWithConsumer] 2024-06-29T21:47:28.011604
