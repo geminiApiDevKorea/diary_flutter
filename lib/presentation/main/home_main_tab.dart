@@ -3,6 +3,7 @@ import 'package:diary_flutter/presentation/main/home_main_generative_text.dart';
 import 'package:diary_flutter/presentation/main/home_main_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nil/nil.dart';
 
 class HomeMainTab extends ConsumerStatefulWidget {
   const HomeMainTab({super.key});
@@ -49,7 +50,7 @@ class _HomeMainTabState extends ConsumerState<HomeMainTab> {
                 LoadingFeedbackState _ => const HomeMainLoading(),
                 ReceivedFeedbackState state =>
                   HomeMainGenerativeText(state.message),
-                _ => const SizedBox(),
+                _ => const Nil(),
               },
             ),
           ],

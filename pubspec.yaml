@@ -42,6 +42,7 @@ dependencies:
   riverpod_annotation: ^2.3.5
   auto_size_text: ^3.0.0
   envied: ^0.5.4+1
+  nil: ^1.1.1
 
 dev_dependencies:
   flutter_test:
