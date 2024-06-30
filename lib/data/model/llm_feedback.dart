@@ -7,6 +7,8 @@ part 'llm_feedback.g.dart';
 class LLMFeedback {
   final String comment;
   final Song song;
+  String get queryString => '${song.singer}, ${song.title}';
+
   LLMFeedback(this.comment, this.song);
 
   factory LLMFeedback.fromJson(Map<String, dynamic> json) =>

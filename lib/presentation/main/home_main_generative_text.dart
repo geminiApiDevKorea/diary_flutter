@@ -13,13 +13,14 @@ class HomeMainGenerativeText extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SelectableText(feedback.comment),
+          SelectionArea(child: Text(feedback.comment)),
           const HomeGenerativeTextSeperator(),
-          SelectableText('🎤 ${feedback.song.singer}'),
+          SelectionArea(child: Text('🎤 ${feedback.song.singer}')),
           const HomeGenerativeTextSeperator(),
-          SelectableText('🎵 ${feedback.song.title}'),
+          SelectionArea(child: Text('🎵 ${feedback.song.title}')),
           const HomeGenerativeTextSeperator(),
-          SelectableText('😇 ${feedback.song.reason}'),
+          SelectionArea(child: Text('😇 ${feedback.song.reason}')),
+          const HomeGenerativeTextSeperator(),
         ],
       ),
     );

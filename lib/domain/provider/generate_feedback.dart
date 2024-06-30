@@ -62,7 +62,6 @@ I've been feeling really overwhelmed at work lately. There are so many deadlines
       ),
     );
     final result = await geminiRepository.request(diary);
-    print(result.message);
     state = ReceivedFeedbackState(
       LLMFeedback.fromJson(
         jsonDecode(

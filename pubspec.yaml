@@ -43,6 +43,9 @@ dependencies:
   auto_size_text: ^3.0.0
   envied: ^0.5.4+1
   nil: ^1.1.1
+  dio: ^5.4.3+1
+  retrofit: ^4.1.0
+  url_launcher: ^6.3.0
 
 dev_dependencies:
   flutter_test:
@@ -60,6 +63,7 @@ dev_dependencies:
   custom_lint: ^0.6.4
   riverpod_lint: ^2.3.10
   envied_generator: ^0.5.4+1
+  retrofit_generator: ^8.1.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

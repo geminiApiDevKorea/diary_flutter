@@ -1,6 +1,7 @@
 import 'package:diary_flutter/domain/provider/generate_feedback.dart';
 import 'package:diary_flutter/presentation/main/home_main_generative_text.dart';
 import 'package:diary_flutter/presentation/main/home_main_loading.dart';
+import 'package:diary_flutter/presentation/main/home_main_music.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -46,8 +47,10 @@ class _HomeMainTabState extends ConsumerState<HomeMainTab> {
             ),
             if (generateFeedbackState is LoadingFeedbackState)
               const HomeMainLoading(),
-            if (generateFeedbackState is ReceivedFeedbackState)
+            if (generateFeedbackState is ReceivedFeedbackState) ...[
               HomeMainGenerativeText(generateFeedbackState.feedback),
+              HomeMainMusic(feedback: generateFeedbackState.feedback),
+            ],
           ],
         ),
       ),

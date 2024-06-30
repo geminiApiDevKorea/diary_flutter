@@ -6,4 +6,7 @@ part 'env.g.dart';
 abstract class Env {
   @EnviedField(varName: 'GEMENI_API_KEY')
   static const String geminiApiKey = _Env.geminiApiKey;
+
+  @EnviedField(varName: 'YOUTUBE_DATA_API_KEY')
+  static const String youtubeDataApiKey = _Env.youtubeDataApiKey;
 }
