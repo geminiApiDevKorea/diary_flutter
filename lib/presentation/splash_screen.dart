@@ -36,7 +36,7 @@ class SplashScreen extends StatelessWidget {
                 onPressed: () => Navigator.pushReplacementNamed(
                   context,
                   HomeScreen.routeName,
-                  arguments: HomeNavigations.home,
+                  arguments: HomeNavigations.main,
                 ),
                 child: Text(
                   'Get started',

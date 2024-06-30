@@ -16,7 +16,7 @@ class SettingNotifier extends _$SettingNotifier {
     final storedSetting =
         ref.read(persistanceStorageProvider).getValue<String>(key);
     if (storedSetting == null) {
-      return Setting(HomeNavigations.home);
+      return Setting(HomeNavigations.main);
     } else {
       return Setting.fromJson(jsonDecode(storedSetting));
     }

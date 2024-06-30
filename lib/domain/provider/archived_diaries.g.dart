@@ -6,7 +6,7 @@ part of 'archived_diaries.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$archivedDiariesHash() => r'17a2207bb3ca4151d356edf0e1f8b777b1a043c6';
+String _$archivedDiariesHash() => r'95cf84625853f4a7f869fc96afb2f101c950b6cd';
 
 /// See also [ArchivedDiaries].
 @ProviderFor(ArchivedDiaries)

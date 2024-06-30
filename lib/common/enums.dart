@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 enum HomeNavigations {
-  home,
+  main,
   calendar,
   write,
   diary,
@@ -10,14 +10,14 @@ enum HomeNavigations {
 
 extension HomeNavigationsExtension on HomeNavigations {
   String get name => switch (this) {
-        HomeNavigations.home => 'Home',
+        HomeNavigations.main => 'Home',
         HomeNavigations.calendar => 'Calendar',
         HomeNavigations.write => 'Write',
         HomeNavigations.diary => 'Diary',
         HomeNavigations.setting => 'Setting',
       };
   IconData get iconData => switch (this) {
-        HomeNavigations.home => Icons.home_outlined,
+        HomeNavigations.main => Icons.home_outlined,
         HomeNavigations.calendar => Icons.calendar_month_outlined,
         HomeNavigations.write => Icons.add_outlined,
         HomeNavigations.diary => Icons.book_outlined,
@@ -44,5 +44,15 @@ extension MoodsExtension on Moods {
         Moods.sad => Icons.sentiment_neutral,
         Moods.angry => Icons.sentiment_very_dissatisfied,
         Moods.neutral => Icons.sentiment_satisfied
+      };
+}
+
+enum GeminiModels {
+  flash,
+}
+
+extension GeminiModelsExtension on GeminiModels {
+  String get name => switch (this) {
+        GeminiModels.flash => 'gemini-1.5-flash-latest',
       };
 }

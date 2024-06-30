@@ -4,13 +4,10 @@ A new Flutter project.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+1. GEMENI_API_KEY가 입력된 .env 파일을 프로젝트의 root에 복사합니다
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+2. FVM으로 프로젝트 환경을 구성합니다
+fvm install 3.22.2
+fvm use 3.22.2
+fvm flutter pub get
+fvm dart run build_runner build

@@ -15,7 +15,7 @@ Map<String, dynamic> _$SettingToJson(Setting instance) => <String, dynamic>{
     };
 
 const _$HomeNavigationsEnumMap = {
-  HomeNavigations.home: 'home',
+  HomeNavigations.main: 'main',
   HomeNavigations.calendar: 'calendar',
   HomeNavigations.write: 'write',
   HomeNavigations.diary: 'diary',
