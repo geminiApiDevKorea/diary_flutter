@@ -6,7 +6,7 @@ part of 'gemini_repository_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$geminiRepositoryHash() => r'6ffe98b62849983aeb058bc19190fe54e9e63eab';
+String _$geminiRepositoryHash() => r'53f4c5224c947b4ed707b78adce6b63b44385b64';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -43,11 +43,13 @@ class GeminiRepositoryFamily extends Family<GeminiRepository> {
     required GeminiModels model,
     required String apiKey,
     required String systemPrompt,
+    GeminiResponseMimeTypes responseMimeType = GeminiResponseMimeTypes.text,
   }) {
     return GeminiRepositoryProvider(
       model: model,
       apiKey: apiKey,
       systemPrompt: systemPrompt,
+      responseMimeType: responseMimeType,
     );
   }
 
@@ -59,6 +61,7 @@ class GeminiRepositoryFamily extends Family<GeminiRepository> {
       model: provider.model,
       apiKey: provider.apiKey,
       systemPrompt: provider.systemPrompt,
+      responseMimeType: provider.responseMimeType,
     );
   }
 
@@ -84,12 +87,14 @@ class GeminiRepositoryProvider extends AutoDisposeProvider<GeminiRepository> {
     required GeminiModels model,
     required String apiKey,
     required String systemPrompt,
+    GeminiResponseMimeTypes responseMimeType = GeminiResponseMimeTypes.text,
   }) : this._internal(
           (ref) => geminiRepository(
             ref as GeminiRepositoryRef,
             model: model,
             apiKey: apiKey,
             systemPrompt: systemPrompt,
+            responseMimeType: responseMimeType,
           ),
           from: geminiRepositoryProvider,
           name: r'geminiRepositoryProvider',
@@ -103,6 +108,7 @@ class GeminiRepositoryProvider extends AutoDisposeProvider<GeminiRepository> {
           model: model,
           apiKey: apiKey,
           systemPrompt: systemPrompt,
+          responseMimeType: responseMimeType,
         );
 
   GeminiRepositoryProvider._internal(
@@ -115,11 +121,13 @@ class GeminiRepositoryProvider extends AutoDisposeProvider<GeminiRepository> {
     required this.model,
     required this.apiKey,
     required this.systemPrompt,
+    required this.responseMimeType,
   }) : super.internal();
 
   final GeminiModels model;
   final String apiKey;
   final String systemPrompt;
+  final GeminiResponseMimeTypes responseMimeType;
 
   @override
   Override overrideWith(
@@ -137,6 +145,7 @@ class GeminiRepositoryProvider extends AutoDisposeProvider<GeminiRepository> {
         model: model,
         apiKey: apiKey,
         systemPrompt: systemPrompt,
+        responseMimeType: responseMimeType,
       ),
     );
   }
@@ -151,7 +160,8 @@ class GeminiRepositoryProvider extends AutoDisposeProvider<GeminiRepository> {
     return other is GeminiRepositoryProvider &&
         other.model == model &&
         other.apiKey == apiKey &&
-        other.systemPrompt == systemPrompt;
+        other.systemPrompt == systemPrompt &&
+        other.responseMimeType == responseMimeType;
   }
 
   @override
@@ -160,6 +170,7 @@ class GeminiRepositoryProvider extends AutoDisposeProvider<GeminiRepository> {
     hash = _SystemHash.combine(hash, model.hashCode);
     hash = _SystemHash.combine(hash, apiKey.hashCode);
     hash = _SystemHash.combine(hash, systemPrompt.hashCode);
+    hash = _SystemHash.combine(hash, responseMimeType.hashCode);
 
     return _SystemHash.finish(hash);
   }
@@ -174,6 +185,9 @@ mixin GeminiRepositoryRef on AutoDisposeProviderRef<GeminiRepository> {
 
   /// The parameter `systemPrompt` of this provider.
   String get systemPrompt;
+
+  /// The parameter `responseMimeType` of this provider.
+  GeminiResponseMimeTypes get responseMimeType;
 }
 
 class _GeminiRepositoryProviderElement
@@ -187,6 +201,9 @@ class _GeminiRepositoryProviderElement
   String get apiKey => (origin as GeminiRepositoryProvider).apiKey;
   @override
   String get systemPrompt => (origin as GeminiRepositoryProvider).systemPrompt;
+  @override
+  GeminiResponseMimeTypes get responseMimeType =>
+      (origin as GeminiRepositoryProvider).responseMimeType;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

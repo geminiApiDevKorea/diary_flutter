@@ -3,7 +3,6 @@ import 'package:diary_flutter/presentation/main/home_main_generative_text.dart';
 import 'package:diary_flutter/presentation/main/home_main_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nil/nil.dart';
 
 class HomeMainTab extends ConsumerStatefulWidget {
   const HomeMainTab({super.key});
@@ -19,6 +18,7 @@ class _HomeMainTabState extends ConsumerState<HomeMainTab> {
 
   @override
   Widget build(BuildContext context) {
+    final generateFeedbackState = ref.watch(generateFeedbackProvider);
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: SingleChildScrollView(
@@ -44,15 +44,10 @@ class _HomeMainTabState extends ConsumerState<HomeMainTab> {
                 ),
               ],
             ),
-            Consumer(
-              builder: (_, ref, child) =>
-                  switch (ref.watch(generateFeedbackProvider)) {
-                LoadingFeedbackState _ => const HomeMainLoading(),
-                ReceivedFeedbackState state =>
-                  HomeMainGenerativeText(state.message),
-                _ => const Nil(),
-              },
-            ),
+            if (generateFeedbackState is LoadingFeedbackState)
+              const HomeMainLoading(),
+            if (generateFeedbackState is ReceivedFeedbackState)
+              HomeMainGenerativeText(generateFeedbackState.feedback),
           ],
         ),
       ),

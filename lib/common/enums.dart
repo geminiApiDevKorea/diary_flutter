@@ -56,3 +56,15 @@ extension GeminiModelsExtension on GeminiModels {
         GeminiModels.flash => 'gemini-1.5-flash-latest',
       };
 }
+
+enum GeminiResponseMimeTypes {
+  text,
+  json,
+}
+
+extension GeminiResponseMimeTypesExtension on GeminiResponseMimeTypes {
+  String get parameter => switch (this) {
+        GeminiResponseMimeTypes.text => 'text/plain',
+        GeminiResponseMimeTypes.json => 'application/json',
+      };
+}
