@@ -11,12 +11,16 @@ GeminiRepository geminiRepository(
   required GeminiModels model,
   required String apiKey,
   required String systemPrompt,
+  GeminiResponseMimeTypes responseMimeType = GeminiResponseMimeTypes.text,
 }) {
   return GeminiRepository(
     model: GenerativeModel(
       model: model.name,
       apiKey: apiKey,
       systemInstruction: Content.system(systemPrompt),
+      generationConfig: GenerationConfig(
+        responseMimeType: responseMimeType.parameter,
+      ),
     ),
   );
 }
