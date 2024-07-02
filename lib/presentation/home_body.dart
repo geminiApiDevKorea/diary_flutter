@@ -1,5 +1,6 @@
 import 'package:diary_flutter/common/enums.dart';
 import 'package:diary_flutter/domain/provider/setting_notifier.dart';
+import 'package:diary_flutter/presentation/chat/home_chat_tab.dart';
 import 'package:diary_flutter/presentation/diary/home_diary_tab.dart';
 import 'package:diary_flutter/presentation/common/home_under_construction_tab.dart';
 import 'package:diary_flutter/presentation/main/home_main_tab.dart';
@@ -19,6 +20,8 @@ class HomeBody extends ConsumerWidget {
       return const HomeDiaryTab();
     } else if (setting.homeNavigation == HomeNavigations.main) {
       return const HomeMainTab();
+    } else if (setting.homeNavigation == HomeNavigations.chat) {
+      return const HomeChatTab();
     } else {
       return const HomeUnderConstruction();
     }
