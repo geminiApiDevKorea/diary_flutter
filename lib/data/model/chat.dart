@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:diary_flutter/common/enums.dart';
 
 class Chat {
@@ -16,6 +18,12 @@ class Chat {
 
   factory Chat.fromMessage({required Role role, required String message}) {
     return Chat(role: role, message: message);
+  }
+  factory Chat.dummy(int index) {
+    return Chat(
+      role: Random().nextInt(2) == 0 ? Role.ai : Role.user,
+      message: 'Hello, World! $index' * (Random().nextInt(5) + 1),
+    );
   }
 
   Chat copyWithException(String errorMessage) {

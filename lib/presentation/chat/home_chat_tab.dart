@@ -1,5 +1,3 @@
-import 'dart:math';
-import 'package:diary_flutter/common/enums.dart';
 import 'package:diary_flutter/data/model/chat.dart';
 import 'package:diary_flutter/presentation/chat/chat_item.dart';
 import 'package:diary_flutter/presentation/common/text_theme_getter_mixin.dart';
@@ -16,12 +14,7 @@ class HomeChatTab extends StatelessWidget with TextThemeGetterMixin {
           child: ListView.builder(
             itemCount: 100,
             itemBuilder: (context, index) {
-              return ChatItem(
-                chat: Chat(
-                  role: Random().nextInt(2) == 0 ? Role.ai : Role.user,
-                  message: 'Hello, World! $index' * (Random().nextInt(5) + 1),
-                ),
-              );
+              return ChatItem(chat: Chat.dummy(index));
             },
           ),
         ),
