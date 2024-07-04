@@ -1,5 +1,6 @@
 import 'package:diary_flutter/data/model/chat.dart';
-import 'package:diary_flutter/presentation/chat/chat_item.dart';
+import 'package:diary_flutter/presentation/chat/bot_chat_item.dart';
+import 'package:diary_flutter/presentation/chat/user_chat_item.dart';
 import 'package:diary_flutter/presentation/common/text_theme_getter_mixin.dart';
 import 'package:flutter/material.dart';
 
@@ -14,7 +15,10 @@ class HomeChatTab extends StatelessWidget with TextThemeGetterMixin {
           child: ListView.builder(
             itemCount: 100,
             itemBuilder: (context, index) {
-              return ChatItem(chat: Chat.dummy(index));
+              final chat = Chat.dummy(index);
+              return chat.isUser
+                  ? UserChatItem(chat: chat)
+                  : BotChatItem(chat: chat);
             },
           ),
         ),
