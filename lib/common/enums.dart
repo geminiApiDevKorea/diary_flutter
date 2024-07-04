@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 enum HomeNavigations {
   main,
-  calendar,
+  chat,
   write,
   diary,
   setting,
@@ -11,14 +11,14 @@ enum HomeNavigations {
 extension HomeNavigationsExtension on HomeNavigations {
   String get name => switch (this) {
         HomeNavigations.main => 'Home',
-        HomeNavigations.calendar => 'Calendar',
+        HomeNavigations.chat => 'Chat',
         HomeNavigations.write => 'Write',
         HomeNavigations.diary => 'Diary',
         HomeNavigations.setting => 'Setting',
       };
   IconData get iconData => switch (this) {
         HomeNavigations.main => Icons.home_outlined,
-        HomeNavigations.calendar => Icons.calendar_month_outlined,
+        HomeNavigations.chat => Icons.chat_rounded,
         HomeNavigations.write => Icons.add_outlined,
         HomeNavigations.diary => Icons.book_outlined,
         HomeNavigations.setting => Icons.settings_outlined,
@@ -67,4 +67,9 @@ extension GeminiResponseMimeTypesExtension on GeminiResponseMimeTypes {
         GeminiResponseMimeTypes.text => 'text/plain',
         GeminiResponseMimeTypes.json => 'application/json',
       };
+}
+
+enum Role {
+  ai,
+  user,
 }

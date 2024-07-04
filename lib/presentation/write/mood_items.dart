@@ -17,12 +17,15 @@ class MoodItem extends ConsumerWidget {
     return GestureDetector(
       onTap: () => ref.read(temporaryDiaryProvider.notifier).change(mood: mood),
       child: SizedBox(
-        width: 50,
-        height: 60,
+        width: 60,
+        height: 70,
         child: Column(
           children: [
-            Icon(mood.iconData,
-                size: 40, color: isSelectedMood ? Colors.blue : Colors.grey),
+            Icon(
+              mood.iconData,
+              size: 40,
+              color: isSelectedMood ? Colors.blue : Colors.grey,
+            ),
             Text(
               mood.name,
               style: TextStyle(
