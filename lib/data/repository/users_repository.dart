@@ -4,16 +4,17 @@ import 'package:retrofit/retrofit.dart';
 
 part 'users_repository.g.dart';
 
-@RestApi(baseUrl: "/users")
+@RestApi()
 abstract class UsersRepository {
   factory UsersRepository(Dio dio) = _UsersRepository;
 
-  @Headers({
-    'idToken': 'true',
-  })
-  @POST('/')
-  Future<dynamic> login(@Body() Map<String, dynamic> body);
+  // @Headers({
+  //   'idToken': 'true',
+  // })
+  @POST('/users')
+  Future<dynamic> login(
+      {@Header('Authorization') required String bearerIdToken});
 
-  @GET('/me')
+  @GET('/users/me')
   Future<dynamic> me();
 }

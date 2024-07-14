@@ -12,22 +12,19 @@ class _UsersRepository implements UsersRepository {
   _UsersRepository(
     this._dio, {
     this.baseUrl,
-  }) {
-    baseUrl ??= '/users';
-  }
+  });
 
   final Dio _dio;
 
   String? baseUrl;
 
   @override
-  Future<dynamic> login(Map<String, dynamic> body) async {
+  Future<dynamic> login({required String bearerIdToken}) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{r'idToken': 'true'};
+    final _headers = <String, dynamic>{r'Authorization': bearerIdToken};
     _headers.removeWhere((k, v) => v == null);
-    final _data = <String, dynamic>{};
-    _data.addAll(body);
+    const Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch(_setStreamType<dynamic>(Options(
       method: 'POST',
       headers: _headers,
@@ -35,7 +32,7 @@ class _UsersRepository implements UsersRepository {
     )
         .compose(
           _dio.options,
-          '/',
+          '/users',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -61,7 +58,7 @@ class _UsersRepository implements UsersRepository {
     )
         .compose(
           _dio.options,
-          '/me',
+          '/users/me',
           queryParameters: queryParameters,
           data: _data,
         )

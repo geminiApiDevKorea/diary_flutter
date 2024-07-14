@@ -1,4 +1,5 @@
 import 'package:diary_flutter/data/provider/persistance_storage_provider.dart';
+import 'package:diary_flutter/data/provider/users_repository_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -35,10 +36,17 @@ class GoogleSignIn extends _$GoogleSignIn {
       if (user != null) {
         final idToken = await user.getIdToken();
         if (idToken != null) {
+          final resp = ref
+              .read(usersRepositoryProvider)
+              .login(bearerIdToken: "Bearer $idToken");
+          print(resp.toString());
           _storeIdToken(idToken);
+          // final resp = ref.read(usersRepositoryProvider).login(idToken);
+          // print(resp.toString());
+
           state = SignInState(isSignedIn: true);
         }
-        print('id token : ${idToken}');
+        print('id token : $idToken');
       }
       print(user);
     } catch (e) {
