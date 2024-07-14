@@ -12,28 +12,6 @@ Dio dio(DioRef ref, {required String baseUrl}) {
       baseUrl: baseUrl,
     ),
   );
-  // dio.interceptors.addAll([AuthInterceptor(ref)]);
+  dio.interceptors.addAll([]);
   return dio;
-}
-
-class AuthInterceptor extends Interceptor {
-  final Ref ref;
-
-  AuthInterceptor(this.ref);
-
-  @override
-  void onRequest(
-      RequestOptions options, RequestInterceptorHandler handler) async {
-    if (options.headers['idToken'] == 'true') {
-      final persistanceStroage = ref.read(persistanceStorageProvider);
-
-      final token = persistanceStroage.getValue<String>('id_token');
-
-      if (token != null && token.isNotEmpty) {
-        options.headers['Authorization'] = "Bearer $token";
-      }
-    }
-
-    return handler.next(options);
-  }
 }

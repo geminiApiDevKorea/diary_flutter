@@ -38,7 +38,7 @@ class GoogleSignIn extends _$GoogleSignIn {
         if (idToken != null) {
           final resp = ref
               .read(usersRepositoryProvider)
-              .login(bearerIdToken: "Bearer $idToken");
+              .createUser(bearerIdToken: "Bearer $idToken");
           print(resp.toString());
           _storeIdToken(idToken);
           // final resp = ref.read(usersRepositoryProvider).login(idToken);
