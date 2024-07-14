@@ -19,20 +19,48 @@ class _UsersRepository implements UsersRepository {
   String? baseUrl;
 
   @override
-  Future<dynamic> login({required String bearerIdToken}) async {
+  Future<UserPostResponse> login({required String bearerIdToken}) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{r'Authorization': bearerIdToken};
     _headers.removeWhere((k, v) => v == null);
     const Map<String, dynamic>? _data = null;
-    final _result = await _dio.fetch(_setStreamType<dynamic>(Options(
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<UserPostResponse>(Options(
       method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/users',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final _value = UserPostResponse.fromJson(_result.data!);
+    return _value;
+  }
+
+  @override
+  Future<dynamic> putAgreement({required Map<String, dynamic> body}) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(body);
+    final _result = await _dio.fetch(_setStreamType<dynamic>(Options(
+      method: 'PUT',
       headers: _headers,
       extra: _extra,
     )
         .compose(
           _dio.options,
-          '/users',
+          '/users/agreement',
           queryParameters: queryParameters,
           data: _data,
         )
