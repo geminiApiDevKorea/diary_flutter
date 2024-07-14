@@ -9,4 +9,7 @@ abstract class Env {
 
   @EnviedField(varName: 'YOUTUBE_DATA_API_KEY')
   static const String youtubeDataApiKey = _Env.youtubeDataApiKey;
+
+  @EnviedField(varName: 'BASE_URL')
+  static const String baseUrl = _Env.baseUrl;
 }

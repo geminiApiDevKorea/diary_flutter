@@ -6,7 +6,7 @@ part of 'google_sign_in.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$googleSignInHash() => r'c4ea2797e5d52b906b777c729cb737e1223e569a';
+String _$googleSignInHash() => r'7264bf2dc91a21489d45903fc8a575f44ad7920e';
 
 /// See also [GoogleSignIn].
 @ProviderFor(GoogleSignIn)
