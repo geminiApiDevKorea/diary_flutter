@@ -48,7 +48,7 @@ class StoredChats extends _$StoredChats {
   @override
   List<Chat> build() {
     final persistanceStorage = ref.read(persistanceStorageProvider);
-    var jsonStringList = persistanceStorage.getValue<List<String>>(key);
+    final jsonStringList = persistanceStorage.getValue<List<String>>(key);
     if (jsonStringList == null) {
       return List.empty();
     } else {

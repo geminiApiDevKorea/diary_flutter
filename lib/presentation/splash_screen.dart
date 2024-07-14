@@ -1,28 +1,13 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:diary_flutter/domain/provider/auth/google_sign_in.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SplashScreen extends StatelessWidget {
+class SplashScreen extends ConsumerWidget {
+  static const String routeName = '/';
   const SplashScreen({super.key});
 
-  _login(BuildContext context) async {
-    User? user;
-    FirebaseAuth auth = FirebaseAuth.instance;
-    GoogleAuthProvider authProvider = GoogleAuthProvider();
-    try {
-      final UserCredential userCredential =
-          await auth.signInWithPopup(authProvider);
-      user = userCredential.user;
-      if (user != null) {
-        print('id token : ${await user.getIdToken()}');
-      }
-      print(user);
-    } catch (e) {
-      print(e);
-    }
-  }
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final textTheme = Theme.of(context).textTheme;
     return Scaffold(
       body: Padding(
@@ -49,7 +34,7 @@ class SplashScreen extends StatelessWidget {
               width: double.infinity,
               height: 60,
               child: ElevatedButton(
-                onPressed: () => _login(context),
+                onPressed: ref.read(googleSignInProvider.notifier).signIn,
                 child: Text(
                   'Get started',
                   style: textTheme.labelLarge,
