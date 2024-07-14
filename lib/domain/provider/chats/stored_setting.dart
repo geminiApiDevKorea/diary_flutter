@@ -5,10 +5,10 @@ import 'package:diary_flutter/data/model/setting.dart';
 import 'package:diary_flutter/data/provider/persistance_storage_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'setting_notifier.g.dart';
+part 'stored_setting.g.dart';
 
 @Riverpod(keepAlive: true)
-class SettingNotifier extends _$SettingNotifier {
+class StoredSetting extends _$StoredSetting {
   static String key = "setting";
 
   @override

@@ -1,26 +1,25 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'setting_notifier.dart';
+part of 'stored_setting.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$settingNotifierHash() => r'19f2b56dc8b4e6510131ef1e4daa039a225fe166';
+String _$storedSettingHash() => r'5db7d1c21f7825486d9e4862cfab85b809eac674';
 
-/// See also [SettingNotifier].
-@ProviderFor(SettingNotifier)
-final settingNotifierProvider =
-    NotifierProvider<SettingNotifier, Setting>.internal(
-  SettingNotifier.new,
-  name: r'settingNotifierProvider',
+/// See also [StoredSetting].
+@ProviderFor(StoredSetting)
+final storedSettingProvider = NotifierProvider<StoredSetting, Setting>.internal(
+  StoredSetting.new,
+  name: r'storedSettingProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$settingNotifierHash,
+      : _$storedSettingHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$SettingNotifier = Notifier<Setting>;
+typedef _$StoredSetting = Notifier<Setting>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

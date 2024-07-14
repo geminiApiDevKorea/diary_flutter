@@ -1,5 +1,5 @@
 import 'package:diary_flutter/common/enums.dart';
-import 'package:diary_flutter/domain/provider/setting_notifier.dart';
+import 'package:diary_flutter/domain/provider/chats/stored_setting.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -15,13 +15,13 @@ class _HomeBottomNavigationBarState
     extends ConsumerState<HomeBottomNavigationBar> {
   _onTap(int index) {
     ref
-        .read(settingNotifierProvider.notifier)
+        .read(storedSettingProvider.notifier)
         .update(homeNavigation: HomeNavigations.values[index]);
   }
 
   @override
   Widget build(BuildContext context) {
-    final setting = ref.watch(settingNotifierProvider);
+    final setting = ref.watch(storedSettingProvider);
     return BottomNavigationBar(
       onTap: _onTap,
       currentIndex: setting.homeNavigation.index,

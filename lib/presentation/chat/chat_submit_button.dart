@@ -13,9 +13,9 @@ class ChatSubmitButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton.icon(
       onPressed: isEnable ? onSubmit : null,
-      icon: const Icon(
+      icon: Icon(
         Icons.send,
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.primary,
       ),
       label: const Text(
         'send',
