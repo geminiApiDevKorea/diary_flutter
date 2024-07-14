@@ -35,22 +35,9 @@ class UserChatItem extends StatelessWidget {
                 text: TextSpan(
                   text: chat.message,
                   style: TextStyle(
-                    decoration: chat.hasError
-                        ? TextDecoration.lineThrough
-                        : TextDecoration.none,
                     fontSize: 18,
-                    color: chat.hasError ? Colors.grey[300] : Colors.blue[700],
+                    color: Colors.blue[700],
                   ),
-                  children: [
-                    if (chat.hasError)
-                      TextSpan(
-                        text: '\n${chat.errorMessage}',
-                        style: const TextStyle(
-                          decoration: TextDecoration.none,
-                          color: Colors.red,
-                        ),
-                      ),
-                  ],
                 ),
               ),
             ),

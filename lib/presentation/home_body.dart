@@ -1,5 +1,5 @@
 import 'package:diary_flutter/common/enums.dart';
-import 'package:diary_flutter/domain/provider/setting_notifier.dart';
+import 'package:diary_flutter/domain/provider/chats/stored_setting.dart';
 import 'package:diary_flutter/presentation/chat/home_chat_tab.dart';
 import 'package:diary_flutter/presentation/diary/home_diary_tab.dart';
 import 'package:diary_flutter/presentation/common/home_under_construction_tab.dart';
@@ -13,7 +13,7 @@ class HomeBody extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final setting = ref.watch(settingNotifierProvider);
+    final setting = ref.watch(storedSettingProvider);
     if (setting.homeNavigation == HomeNavigations.write) {
       return const HomeWriteTab();
     } else if (setting.homeNavigation == HomeNavigations.diary) {
