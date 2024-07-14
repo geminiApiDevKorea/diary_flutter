@@ -1,0 +1,82 @@
+{
+  "project_info": {
+    "project_number": "246956142166",
+    "project_id": "gems-gemini-api-competition",
+    "storage_bucket": "gems-gemini-api-competition.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:246956142166:android:99d2e681909afffd90d5f7",
+        "android_client_info": {
+          "package_name": "com.gem.diary_flutter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "246956142166-21lj72g0sbdqfkqr1nop8pgb8n3hfhoh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAzMJDsubnP01HQBLvEpg7AzKrf61uh2sI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "246956142166-21lj72g0sbdqfkqr1nop8pgb8n3hfhoh.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "246956142166-7jrkoidqltdgd7fj060lrpoh2ovrvf68.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.gems.gemini-competition"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:246956142166:android:9879817ae8fce31f90d5f7",
+        "android_client_info": {
+          "package_name": "com.gems.gemini_competition"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "246956142166-21lj72g0sbdqfkqr1nop8pgb8n3hfhoh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAzMJDsubnP01HQBLvEpg7AzKrf61uh2sI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "246956142166-21lj72g0sbdqfkqr1nop8pgb8n3hfhoh.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "246956142166-7jrkoidqltdgd7fj060lrpoh2ovrvf68.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.gems.gemini-competition"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

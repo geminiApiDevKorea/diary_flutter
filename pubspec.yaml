@@ -48,6 +48,9 @@ dependencies:
   url_launcher: ^6.3.0
   flutter_hooks: ^0.20.5
   hooks_riverpod: ^2.5.1
+  firebase_auth: ^5.1.2
+  firebase_core: ^3.2.0
+  google_sign_in: ^6.2.1
 
 dev_dependencies:
   flutter_test:
