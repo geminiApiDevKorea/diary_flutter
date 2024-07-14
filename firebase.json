@@ -1,16 +1,1 @@
-{
-  "hosting": {
-    "public": "build/web",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
-    "rewrites": [
-      {
-        "source": "**",
-        "destination": "/index.html"
-      }
-    ]
-  }
-}
+{"flutter":{"platforms":{"android":{"default":{"projectId":"gems-gemini-api-competition","appId":"1:246956142166:android:99d2e681909afffd90d5f7","fileOutput":"android/app/google-services.json"}},"ios":{"default":{"projectId":"gems-gemini-api-competition","appId":"1:246956142166:ios:ae7009aa489d9a1b90d5f7","uploadDebugSymbols":false,"fileOutput":"ios/Runner/GoogleService-Info.plist"}},"dart":{"lib/firebase_options.dart":{"projectId":"gems-gemini-api-competition","configurations":{"android":"1:246956142166:android:99d2e681909afffd90d5f7","ios":"1:246956142166:ios:ae7009aa489d9a1b90d5f7","web":"1:246956142166:web:8393665eb9b23a4090d5f7"}}}}}}

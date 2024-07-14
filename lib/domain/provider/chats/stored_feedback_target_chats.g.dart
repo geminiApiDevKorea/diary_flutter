@@ -7,7 +7,7 @@ part of 'stored_feedback_target_chats.dart';
 // **************************************************************************
 
 String _$storedFeedbackTargetChatsHash() =>
-    r'30afb5990403aad8c6008d9bc591178b50ca28b8';
+    r'28e747575f27261795c262bde15f2843a0ed3beb';
 
 /// See also [StoredFeedbackTargetChats].
 @ProviderFor(StoredFeedbackTargetChats)
