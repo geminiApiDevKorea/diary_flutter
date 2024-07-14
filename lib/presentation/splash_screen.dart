@@ -1,9 +1,25 @@
-import 'package:diary_flutter/common/enums.dart';
-import 'package:diary_flutter/presentation/home_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
+
+  _login(BuildContext context) async {
+    User? user;
+    FirebaseAuth auth = FirebaseAuth.instance;
+    GoogleAuthProvider authProvider = GoogleAuthProvider();
+    try {
+      final UserCredential userCredential =
+          await auth.signInWithPopup(authProvider);
+      user = userCredential.user;
+      if (user != null) {
+        print('id token : ${await user.getIdToken()}');
+      }
+      print(user);
+    } catch (e) {
+      print(e);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,11 +49,7 @@ class SplashScreen extends StatelessWidget {
               width: double.infinity,
               height: 60,
               child: ElevatedButton(
-                onPressed: () => Navigator.pushReplacementNamed(
-                  context,
-                  HomeScreen.routeName,
-                  arguments: HomeNavigations.main,
-                ),
+                onPressed: () => _login(context),
                 child: Text(
                   'Get started',
                   style: textTheme.labelLarge,
