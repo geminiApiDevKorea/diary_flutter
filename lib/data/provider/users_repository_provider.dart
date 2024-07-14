@@ -1,3 +1,4 @@
+import 'package:diary_flutter/data/model/user_post_response.dart';
 import 'package:diary_flutter/data/provider/dio_provider.dart';
 import 'package:diary_flutter/data/repository/users_repository.dart';
 import 'package:diary_flutter/env/env.dart';
@@ -13,7 +14,7 @@ class UsersRepositoryImpl implements UsersRepository {
   final Dio _dio;
 
   @override
-  Future<dynamic> login({required String bearerIdToken}) async {
+  Future<UserPostResponse> login({required String bearerIdToken}) async {
     // final headers = <String, dynamic>{};
     // if (bererIdToken != null) {
     //   headers['Authorization'] = 'Bearer $_idToken';
@@ -31,6 +32,11 @@ class UsersRepositoryImpl implements UsersRepository {
   @override
   Future<dynamic> me() async {
     return await UsersRepository(_dio).me();
+  }
+
+  @override
+  Future<dynamic> putAgreement({required Map<String, dynamic> body}) async {
+    return await UsersRepository(_dio).putAgreement(body: body);
   }
 }
 
