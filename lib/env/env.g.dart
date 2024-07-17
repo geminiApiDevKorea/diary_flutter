@@ -14,5 +14,5 @@ final class _Env {
   static const String youtubeDataApiKey =
       'AIzaSyB1H1MbWeWUV60o0p8BwGxSqdCqq5ey164';
 
-  static const String baseUrl = 'http://192.168.31.132:8080/';
+  static const String baseUrl = 'http://192.168.31.132:8080';
 }
