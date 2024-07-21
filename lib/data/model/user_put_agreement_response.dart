@@ -6,7 +6,7 @@ class UserPutAgreementResponse {
   String? name;
   String? email;
   bool? agreement;
-  String? code;
+  int? code;
 
   UserPutAgreementResponse({
     this.name,
@@ -19,18 +19,4 @@ class UserPutAgreementResponse {
       _$UserPutAgreementResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$UserPutAgreementResponseToJson(this);
-
-  UserPutAgreementResponse copyWith({
-    String? name,
-    String? email,
-    bool? agreement,
-    String? code,
-  }) {
-    return UserPutAgreementResponse(
-      name: name ?? this.name,
-      email: email ?? this.email,
-      agreement: agreement ?? this.agreement,
-      code: code ?? this.code,
-    );
-  }
 }

@@ -1,17 +1,26 @@
+import 'package:diary_flutter/domain/provider/user/agreed_user.dart';
 import 'package:diary_flutter/presentation/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class TermsScreen extends HookWidget {
-  static const String routeName = '/terms';
+class TermsScreen extends HookConsumerWidget {
+  static const String path = '/terms';
   const TermsScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final scrollController = useScrollController();
     final isBottomReached = useState(false);
     final isChecked = useState(false);
+    final user = ref.watch(agreedUserProvider);
+    useEffect(() {
+      if (user.isAgreed ?? false) {
+        context.pushReplacement(HomeScreen.path);
+      }
+      return () {};
+    }, [user]);
 
     useEffect(() {
       void checkScrollPosition() {
@@ -84,10 +93,7 @@ class TermsScreen extends HookWidget {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: isChecked.value
-                  ? () {
-                      context.go(HomeScreen.routeName);
-                      // 동의 버튼 클릭 시 수행할 동작
-                    }
+                  ? () => ref.read(agreedUserProvider.notifier).agree()
                   : null,
               child: const Text('Agree'),
             ),

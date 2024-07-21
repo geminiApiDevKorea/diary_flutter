@@ -1,4 +1,4 @@
-import 'package:diary_flutter/domain/provider/auth/google_sign_in.dart';
+import 'package:diary_flutter/domain/provider/auth/auth.dart';
 import 'package:diary_flutter/presentation/home_screen.dart';
 import 'package:diary_flutter/presentation/terms_screen.dart';
 import 'package:diary_flutter/presentation/splash_screen.dart';
@@ -10,20 +10,26 @@ part 'router.g.dart';
 @Riverpod(keepAlive: true)
 GoRouter router(RouterRef ref) {
   return GoRouter(
-    initialLocation: ref.watch(googleSignInProvider).isSignedIn
-        ? HomeScreen.routeName
-        : SplashScreen.routeName,
+    initialLocation: ref.watch(authProvider).when(
+          data: (state) => switch (state) {
+            SignedInState signedInState =>
+              signedInState.isAgreed ? HomeScreen.path : TermsScreen.path,
+            _ => SplashScreen.path,
+          },
+          loading: () => SplashScreen.path,
+          error: (error, _) => SplashScreen.path,
+        ),
     routes: [
       GoRoute(
-        path: SplashScreen.routeName,
+        path: SplashScreen.path,
         builder: (context, state) => const SplashScreen(),
       ),
       GoRoute(
-        path: HomeScreen.routeName,
+        path: HomeScreen.path,
         builder: (context, state) => const HomeScreen(),
       ),
       GoRoute(
-        path: TermsScreen.routeName,
+        path: TermsScreen.path,
         builder: (context, state) => const TermsScreen(),
       )
     ],

@@ -1,4 +1,3 @@
-import 'package:diary_flutter/data/model/user_post_response.dart';
 import 'package:diary_flutter/data/provider/dio_provider.dart';
 import 'package:diary_flutter/data/repository/users_repository.dart';
 import 'package:diary_flutter/env/env.dart';

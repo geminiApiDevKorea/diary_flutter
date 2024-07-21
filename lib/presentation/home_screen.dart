@@ -3,7 +3,7 @@ import 'package:diary_flutter/presentation/home_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
-  static const String routeName = '/home';
+  static const String path = '/home';
   const HomeScreen({super.key});
 
   @override
