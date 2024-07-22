@@ -1,9 +1,9 @@
-import 'package:diary_flutter/domain/provider/auth/google_sign_in.dart';
+import 'package:diary_flutter/domain/provider/auth/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class SplashScreen extends ConsumerWidget {
-  static const String routeName = '/';
+  static const String path = '/';
   const SplashScreen({super.key});
 
   @override
@@ -34,7 +34,7 @@ class SplashScreen extends ConsumerWidget {
               width: double.infinity,
               height: 60,
               child: ElevatedButton(
-                onPressed: ref.read(googleSignInProvider.notifier).signIn,
+                onPressed: ref.read(authProvider.notifier).signIn,
                 child: Text(
                   'Get started',
                   style: textTheme.labelLarge,

@@ -6,7 +6,7 @@ part of 'youtube_rest_client.dart';
 // RetrofitGenerator
 // **************************************************************************
 
-// ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers,unused_element
+// ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers
 
 class _YoutubeRestClient implements YoutubeRestClient {
   _YoutubeRestClient(
@@ -55,8 +55,8 @@ class _YoutubeRestClient implements YoutubeRestClient {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final _value = YoutubeSearchResponse.fromJson(_result.data!);
-    return _value;
+    final value = YoutubeSearchResponse.fromJson(_result.data!);
+    return value;
   }
 
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {

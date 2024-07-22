@@ -12,7 +12,7 @@ UserPutAgreementResponse _$UserPutAgreementResponseFromJson(
       name: json['name'] as String?,
       email: json['email'] as String?,
       agreement: json['agreement'] as bool?,
-      code: json['code'] as String?,
+      code: (json['code'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$UserPutAgreementResponseToJson(

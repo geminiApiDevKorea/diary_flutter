@@ -3,10 +3,24 @@
 part of 'users_repository.dart';
 
 // **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+UsersAgreementBody _$UsersAgreementBodyFromJson(Map<String, dynamic> json) =>
+    UsersAgreementBody(
+      agreement: json['agreement'] as bool,
+    );
+
+Map<String, dynamic> _$UsersAgreementBodyToJson(UsersAgreementBody instance) =>
+    <String, dynamic>{
+      'agreement': instance.agreement,
+    };
+
+// **************************************************************************
 // RetrofitGenerator
 // **************************************************************************
 
-// ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers,unused_element
+// ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers
 
 class _UsersRepository implements UsersRepository {
   _UsersRepository(
@@ -19,14 +33,14 @@ class _UsersRepository implements UsersRepository {
   String? baseUrl;
 
   @override
-  Future<UserPostResponse> createUser({required String bearerIdToken}) async {
+  Future<UserResponse> postUsers({required String bearerToken}) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{r'Authorization': bearerIdToken};
+    final _headers = <String, dynamic>{r'Authorization': bearerToken};
     _headers.removeWhere((k, v) => v == null);
     const Map<String, dynamic>? _data = null;
     final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<UserPostResponse>(Options(
+        .fetch<Map<String, dynamic>>(_setStreamType<UserResponse>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
@@ -42,20 +56,23 @@ class _UsersRepository implements UsersRepository {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final _value = UserPostResponse.fromJson(_result.data!);
-    return _value;
+    final value = UserResponse.fromJson(_result.data!);
+    return value;
   }
 
   @override
-  Future<UserPutAgreementResponse> updateUserAgreement(
-      {required Map<String, dynamic> body}) async {
+  Future<UserResponse> putUsersAgreement({
+    required String bearerToken,
+    required UsersAgreementBody body,
+  }) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'Authorization': bearerToken};
+    _headers.removeWhere((k, v) => v == null);
     final _data = <String, dynamic>{};
-    _data.addAll(body);
-    final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<UserPutAgreementResponse>(Options(
+    _data.addAll(body.toJson());
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<UserResponse>(Options(
       method: 'PUT',
       headers: _headers,
       extra: _extra,
@@ -71,8 +88,8 @@ class _UsersRepository implements UsersRepository {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final _value = UserPutAgreementResponse.fromJson(_result.data!);
-    return _value;
+    final value = UserResponse.fromJson(_result.data!);
+    return value;
   }
 
   @override
@@ -97,8 +114,8 @@ class _UsersRepository implements UsersRepository {
           _dio.options.baseUrl,
           baseUrl,
         ))));
-    final _value = _result.data;
-    return _value;
+    final value = _result.data;
+    return value;
   }
 
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {
