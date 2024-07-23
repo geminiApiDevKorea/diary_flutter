@@ -1,0 +1,47 @@
+# https://pub.dev/packages/flutter_gen
+# fluttergen -c flutter_gen.yaml
+
+flutter_gen:
+  output: lib/common/gen/
+  line_length: 80
+
+  # Optional
+  integrations:
+    flutter_svg: true
+    flare_flutter: true
+    rive: true
+    lottie: true
+
+# The following section is specific to Flutter packages.
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/fonts/
+
+  fonts:
+    - family: Adamina
+      fonts:
+        - asset: assets/fonts/Adamina-Regular.ttf
+          weight: 400
+    - family: Texgyreheros
+      fonts:
+        - asset: assets/fonts/texgyreheros-regular.otf
+          weight: 400
+        - asset: assets/fonts/texgyreheros-bold.otf
+          weight: 700
+        - asset: assets/fonts/texgyreheros-italic.otf
+          style: italic
+        - asset: assets/fonts/texgyreheros-bolditalic.otf
+          weight: 700
+          style: italic
+    - family: Texgyreheroscn
+      fonts:
+        - asset: assets/fonts/texgyreheroscn-regular.otf
+          weight: 400
+        - asset: assets/fonts/texgyreheroscn-bold.otf
+          weight: 700
+        - asset: assets/fonts/texgyreheroscn-italic.otf
+          style: italic
+        - asset: assets/fonts/texgyreheroscn-bolditalic.otf
+          weight: 700
+          style: italic
