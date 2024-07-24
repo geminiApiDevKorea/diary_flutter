@@ -2,6 +2,9 @@ import 'package:diary_flutter/common/gen/fonts.gen.dart';
 import 'package:flutter/material.dart';
 
 class GemTextStyle {
+  /// Serif (Adamina) 48/120%
+  final TextStyle h1;
+
   /// Sans (Texgyreheros) 28/120%
   final TextStyle h2;
 
@@ -17,62 +20,50 @@ class GemTextStyle {
   /// Sans (Texgyreheros) 16/120%
   final TextStyle paragraph;
 
-  /// Serif (Adamina) 48/120%
-  final TextStyle h1;
+  const GemTextStyle({
+    this.h1 = const TextStyle(
+        fontFamily: FontFamily.adamina,
+        fontSize: 48,
+        height: 1.2,
+        fontWeight: FontWeight.w400),
+    this.h2 = const TextStyle(
+        fontFamily: FontFamily.texgyreheros,
+        fontSize: 28,
+        height: 1.2,
+        fontWeight: FontWeight.w400),
+    this.h4 = const TextStyle(
+        fontFamily: FontFamily.texgyreheros,
+        fontSize: 20,
+        height: 1.2,
+        fontWeight: FontWeight.w400),
+    this.h5 = const TextStyle(
+        fontFamily: FontFamily.texgyreheros,
+        fontSize: 18,
+        height: 1.2,
+        fontWeight: FontWeight.w400),
+    this.captionBold = const TextStyle(
+        fontFamily: FontFamily.texgyreheros,
+        fontSize: 12,
+        height: 1.2,
+        fontWeight: FontWeight.bold),
+    this.paragraph = const TextStyle(
+        fontFamily: FontFamily.texgyreheros,
+        fontSize: 16,
+        height: 1.2,
+        fontWeight: FontWeight.w400),
+  });
+}
 
-  GemTextStyle({
-    TextStyle? h2,
-    TextStyle? h4,
-    TextStyle? h5,
-    TextStyle? captionBold,
-    TextStyle? paragraph,
-    TextStyle? h1,
-  })  : h2 = const TextStyle(
-            fontFamily: FontFamily.texgyreheros,
-            fontSize: 28,
-            height: 1.2,
-            fontWeight: FontWeight.w400),
-        h4 = const TextStyle(
-            fontFamily: FontFamily.texgyreheros,
-            fontSize: 20,
-            height: 1.2,
-            fontWeight: FontWeight.w400),
-        h5 = const TextStyle(
-            fontFamily: FontFamily.texgyreheros,
-            fontSize: 18,
-            height: 1.2,
-            fontWeight: FontWeight.w400),
-        captionBold = const TextStyle(
-            fontFamily: FontFamily.texgyreheros,
-            fontSize: 12,
-            height: 1.2,
-            fontWeight: FontWeight.bold),
-        paragraph = const TextStyle(
-            fontFamily: FontFamily.texgyreheros,
-            fontSize: 16,
-            height: 1.2,
-            fontWeight: FontWeight.w400),
-        h1 = const TextStyle(
-            fontFamily: FontFamily.adamina,
-            fontSize: 48,
-            height: 1.2,
-            fontWeight: FontWeight.w400);
+extension GemTextStyleExtension on TextStyle {
+  TextStyle withColor(Color color) => copyWith(color: color);
+  TextStyle withFontSize(double fontSize) => copyWith(fontSize: fontSize);
+  TextStyle withFontWeight(FontWeight fontWeight) =>
+      copyWith(fontWeight: fontWeight);
+  TextStyle withLetterSpacing(double letterSpacing) =>
+      copyWith(letterSpacing: letterSpacing);
+  TextStyle withHeight(double height) => copyWith(height: height);
 
-  GemTextStyle copyWith({
-    TextStyle? h2,
-    TextStyle? h4,
-    TextStyle? h5,
-    TextStyle? captionBold,
-    TextStyle? paragraph,
-    TextStyle? h1,
-  }) {
-    return GemTextStyle(
-      h2: h2 ?? this.h2,
-      h4: h4 ?? this.h4,
-      h5: h5 ?? this.h5,
-      captionBold: captionBold ?? this.captionBold,
-      paragraph: paragraph ?? this.paragraph,
-      h1: h1 ?? this.h1,
-    );
-  }
+  TextStyle get bold => copyWith(fontWeight: FontWeight.bold);
+  TextStyle get italic => copyWith(fontStyle: FontStyle.italic);
+  TextStyle get underline => copyWith(decoration: TextDecoration.underline);
 }
