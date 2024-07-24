@@ -1,11 +1,10 @@
 import 'package:diary_flutter/data/provider/persistance_storage_provider.dart';
 import 'package:diary_flutter/data/storage/persistance_storage.dart';
+import 'package:diary_flutter/presentation/style/enums.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'gem_theme.dart';
 
 part 'gem_theme_notifier_provider.g.dart';
-
-enum GemThemeMode { light, dark }
 
 @riverpod
 class GemThemeNotifier extends _$GemThemeNotifier {
@@ -13,43 +12,29 @@ class GemThemeNotifier extends _$GemThemeNotifier {
   GemTheme build() {
     final persistanceStorage = ref.read(persistanceStorageProvider);
     final gemThemeMode = _getGemThemeModeFromStorage(persistanceStorage);
-    return _getThemeFromMode(gemThemeMode);
+    return gemThemeMode.theme;
   }
 
-  void setLightTheme() {
-    state = GemTheme.light();
-    _updateThemeStorage(GemThemeMode.light);
-  }
-
-  void setDarkTheme() {
-    state = GemTheme.dark();
-    _updateThemeStorage(GemThemeMode.dark);
+  void setTheme(GemThemeMode mode) {
+    state = mode.theme;
+    _updateThemeStorage(mode);
   }
 
   void toggleTheme() {
     final newMode =
         state == GemTheme.light() ? GemThemeMode.dark : GemThemeMode.light;
-    state = _getThemeFromMode(newMode);
-    _updateThemeStorage(newMode);
+    setTheme(newMode);
   }
 
   GemThemeMode _getGemThemeModeFromStorage(PersistanceStorage storage) {
     final themeString = storage.getValue<String>('gemThemeMode');
-    return themeString == 'light' ? GemThemeMode.light : GemThemeMode.dark;
-  }
-
-  GemTheme _getThemeFromMode(GemThemeMode mode) {
-    switch (mode) {
-      case GemThemeMode.light:
-        return GemTheme.light();
-      case GemThemeMode.dark:
-        return GemTheme.dark();
-    }
+    return themeString == GemThemeMode.light.value
+        ? GemThemeMode.light
+        : GemThemeMode.dark;
   }
 
   void _updateThemeStorage(GemThemeMode mode) {
     final persistanceStorage = ref.read(persistanceStorageProvider);
-    persistanceStorage.setValue(
-        'gemThemeMode', mode.toString().split('.').last);
+    persistanceStorage.setValue('gemThemeMode', mode.value);
   }
 }
