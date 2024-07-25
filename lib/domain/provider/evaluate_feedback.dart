@@ -88,7 +88,7 @@ User's Diaries:
       jsonDecode(response.message),
     );
     ref.read(storedChatsProvider.notifier).store(Chat(
-          role: Role.ai,
+          role: Role.assistant,
           message: feedbackEvaluateResult.react,
           createdAt: DateTime.now(),
           chatMetadata: feedbackEvaluateResult.canFeedback
