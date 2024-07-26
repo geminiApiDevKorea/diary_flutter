@@ -1,11 +1,11 @@
-import 'package:diary_flutter/data/model/llm_feedback.dart';
+import 'package:diary_flutter/data/repository/chats_repository.dart';
 import 'package:diary_flutter/domain/provider/query_youtube_music_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class HomeMainMusic extends ConsumerStatefulWidget {
-  final LLMFeedback feedback;
+  final ChatsContent feedback;
   const HomeMainMusic({
     super.key,
     required this.feedback,

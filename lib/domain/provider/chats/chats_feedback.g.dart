@@ -6,7 +6,7 @@ part of 'chats_feedback.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$chatsFeedbackHash() => r'c15e6914b59ce1bebf84ce11cac87bfc37552385';
+String _$chatsFeedbackHash() => r'8c3ffce3d7664c7563d3ac829f5a4c3832e80030';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -34,16 +34,16 @@ class _SystemHash {
 const chatsFeedbackProvider = ChatsFeedbackFamily();
 
 /// See also [chatsFeedback].
-class ChatsFeedbackFamily extends Family<AsyncValue<dynamic>> {
+class ChatsFeedbackFamily extends Family<AsyncValue<ChatsFeedbackResponse>> {
   /// See also [chatsFeedback].
   const ChatsFeedbackFamily();
 
   /// See also [chatsFeedback].
-  ChatsFeedbackProvider call(
-    List<Chat> chats,
-  ) {
+  ChatsFeedbackProvider call({
+    required List<Chat> chats,
+  }) {
     return ChatsFeedbackProvider(
-      chats,
+      chats: chats,
     );
   }
 
@@ -52,7 +52,7 @@ class ChatsFeedbackFamily extends Family<AsyncValue<dynamic>> {
     covariant ChatsFeedbackProvider provider,
   ) {
     return call(
-      provider.chats,
+      chats: provider.chats,
     );
   }
 
@@ -72,14 +72,15 @@ class ChatsFeedbackFamily extends Family<AsyncValue<dynamic>> {
 }
 
 /// See also [chatsFeedback].
-class ChatsFeedbackProvider extends AutoDisposeFutureProvider<dynamic> {
+class ChatsFeedbackProvider
+    extends AutoDisposeFutureProvider<ChatsFeedbackResponse> {
   /// See also [chatsFeedback].
-  ChatsFeedbackProvider(
-    List<Chat> chats,
-  ) : this._internal(
+  ChatsFeedbackProvider({
+    required List<Chat> chats,
+  }) : this._internal(
           (ref) => chatsFeedback(
             ref as ChatsFeedbackRef,
-            chats,
+            chats: chats,
           ),
           from: chatsFeedbackProvider,
           name: r'chatsFeedbackProvider',
@@ -107,7 +108,7 @@ class ChatsFeedbackProvider extends AutoDisposeFutureProvider<dynamic> {
 
   @override
   Override overrideWith(
-    FutureOr<dynamic> Function(ChatsFeedbackRef provider) create,
+    FutureOr<ChatsFeedbackResponse> Function(ChatsFeedbackRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -124,7 +125,7 @@ class ChatsFeedbackProvider extends AutoDisposeFutureProvider<dynamic> {
   }
 
   @override
-  AutoDisposeFutureProviderElement<dynamic> createElement() {
+  AutoDisposeFutureProviderElement<ChatsFeedbackResponse> createElement() {
     return _ChatsFeedbackProviderElement(this);
   }
 
@@ -142,13 +143,14 @@ class ChatsFeedbackProvider extends AutoDisposeFutureProvider<dynamic> {
   }
 }
 
-mixin ChatsFeedbackRef on AutoDisposeFutureProviderRef<dynamic> {
+mixin ChatsFeedbackRef on AutoDisposeFutureProviderRef<ChatsFeedbackResponse> {
   /// The parameter `chats` of this provider.
   List<Chat> get chats;
 }
 
 class _ChatsFeedbackProviderElement
-    extends AutoDisposeFutureProviderElement<dynamic> with ChatsFeedbackRef {
+    extends AutoDisposeFutureProviderElement<ChatsFeedbackResponse>
+    with ChatsFeedbackRef {
   _ChatsFeedbackProviderElement(super.provider);
 
   @override

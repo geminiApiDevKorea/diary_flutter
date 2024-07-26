@@ -20,6 +20,49 @@ Map<String, dynamic> _$ChatsFeedbackBodyToJson(ChatsFeedbackBody instance) =>
       'history': instance.histories,
     };
 
+ChatsContent _$ChatsContentFromJson(Map<String, dynamic> json) => ChatsContent(
+      comment: json['comment'] as String,
+      song: Song.fromJson(json['song'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$ChatsContentToJson(ChatsContent instance) =>
+    <String, dynamic>{
+      'comment': instance.comment,
+      'song': instance.song,
+    };
+
+ChatsOutput _$ChatsOutputFromJson(Map<String, dynamic> json) => ChatsOutput(
+      messageType: json['messageType'] as String,
+      content: ChatsContent.fromJson(json['content'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$ChatsOutputToJson(ChatsOutput instance) =>
+    <String, dynamic>{
+      'messageType': instance.messageType,
+      'content': instance.content,
+    };
+
+ChatsResult _$ChatsResultFromJson(Map<String, dynamic> json) => ChatsResult(
+      output: ChatsOutput.fromJson(json['output'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$ChatsResultToJson(ChatsResult instance) =>
+    <String, dynamic>{
+      'output': instance.output,
+    };
+
+ChatsFeedbackResponse _$ChatsFeedbackResponseFromJson(
+        Map<String, dynamic> json) =>
+    ChatsFeedbackResponse(
+      result: ChatsResult.fromJson(json['result'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$ChatsFeedbackResponseToJson(
+        ChatsFeedbackResponse instance) =>
+    <String, dynamic>{
+      'result': instance.result,
+    };
+
 // **************************************************************************
 // RetrofitGenerator
 // **************************************************************************
@@ -37,7 +80,7 @@ class _ChatsRepository implements ChatsRepository {
   String? baseUrl;
 
   @override
-  Future<dynamic> postChatsFeedback({
+  Future<ChatsFeedbackResponse> postChatsFeedback({
     required String bearerToken,
     required ChatsFeedbackBody body,
   }) async {
@@ -47,23 +90,24 @@ class _ChatsRepository implements ChatsRepository {
     _headers.removeWhere((k, v) => v == null);
     final _data = <String, dynamic>{};
     _data.addAll(body.toJson());
-    final _result = await _dio.fetch(_setStreamType<dynamic>(Options(
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<ChatsFeedbackResponse>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
     )
-        .compose(
-          _dio.options,
-          '/chats/feedback',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        ))));
-    final value = _result.data;
+            .compose(
+              _dio.options,
+              'chats/feedback',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = ChatsFeedbackResponse.fromJson(_result.data!);
     return value;
   }
 

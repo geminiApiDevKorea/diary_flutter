@@ -7,8 +7,13 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'chats_feedback.g.dart';
 
+// class ChatFeedbackRequest extends _ChatFeedbackRequ
+
 @riverpod
-Future<dynamic> chatsFeedback(ChatsFeedbackRef ref, List<Chat> chats) {
+Future<ChatsFeedbackResponse> chatsFeedback(
+  ChatsFeedbackRef ref, {
+  required List<Chat> chats,
+}) {
   final user = ref.read(authProvider).value;
   if (user != null && user is SignedInState) {
     try {
@@ -18,7 +23,8 @@ Future<dynamic> chatsFeedback(ChatsFeedbackRef ref, List<Chat> chats) {
               userInput: 'yes, please',
               histories: chats
                   .map(
-                      (chat) => History(role: chat.role, message: chat.message))
+                    (chat) => History(role: chat.role, message: chat.message),
+                  )
                   .toList(),
             ),
           );

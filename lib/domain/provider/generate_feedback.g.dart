@@ -6,7 +6,7 @@ part of 'generate_feedback.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$generateFeedbackHash() => r'6ba15767aaed747d42c583e2ab8e1b32d4895085';
+String _$generateFeedbackHash() => r'840d9ae973a149bdaefbc155bafd16c724d3f135';
 
 /// See also [GenerateFeedback].
 @ProviderFor(GenerateFeedback)

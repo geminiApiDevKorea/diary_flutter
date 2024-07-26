@@ -1,6 +1,11 @@
+import 'package:diary_flutter/common/enums.dart';
 import 'package:diary_flutter/data/model/chat.dart';
-import 'package:diary_flutter/domain/provider/chats/chats_feedback.dart';
+import 'package:diary_flutter/data/model/history.dart';
+import 'package:diary_flutter/data/provider/chats_repository_provider.dart';
+import 'package:diary_flutter/data/repository/chats_repository.dart';
+import 'package:diary_flutter/domain/provider/auth/auth.dart';
 import 'package:diary_flutter/domain/provider/chats/stored_chats.dart';
+import 'package:diary_flutter/domain/provider/chats/stored_feedback_target_chats.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -11,14 +16,49 @@ class BotChatItem extends ConsumerWidget {
     super.key,
   });
 
-  _onAccept(WidgetRef ref, bool isAccept) {
+  _onAccept(WidgetRef ref, bool isAccept) async {
     ref.read(storedChatsProvider.notifier).accept(chat, isAccept);
-    var storedChats = ref.read(storedChatsProvider);
-    ref.read(chatsFeedbackProvider(storedChats)).when(
-          data: (value) => print(value),
-          loading: () => print('chat feedback loading'),
-          error: (error, stackTrace) => print(error),
-        );
+    ref.read(storedFeedbackTargetChatsProvider.notifier).reset();
+    // TODO: 인증 정보와 저장된 채팅 히스토리를 가져와 일기에 대한 피드백을 요청합니다.
+    // 디자인 적용 과정에서 presentation 레이어에서 domain 레이어로 이동해야 합니다.
+    if (isAccept) {
+      final state = ref.read(authProvider).value;
+      if (state != null && state is SignedInState) {
+        try {
+          final response =
+              await ref.read(chatsRepositoryProvider).postChatsFeedback(
+                    bearerToken: 'Bearer ${state.idToken}',
+                    body: ChatsFeedbackBody(
+                      userInput: 'yes, please',
+                      histories: ref
+                          .read(storedChatsProvider)
+                          .map(
+                            (chat) =>
+                                History(role: chat.role, message: chat.message),
+                          )
+                          .toList(),
+                    ),
+                  );
+          final content = response.content;
+          ref.read(storedChatsProvider.notifier).store(
+                Chat(
+                  role: Role.assistant,
+                  message: content.comment,
+                  createdAt: DateTime.now(),
+                ),
+              );
+          ref.read(storedChatsProvider.notifier).store(
+                Chat(
+                  role: Role.assistant,
+                  message: '${content.song.singer} - ${content.song.title}',
+                  createdAt: DateTime.now(),
+                ),
+              );
+        } catch (e) {
+          print(e);
+        }
+      }
+    }
   }
 
   @override

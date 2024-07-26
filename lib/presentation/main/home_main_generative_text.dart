@@ -1,9 +1,9 @@
-import 'package:diary_flutter/data/model/llm_feedback.dart';
+import 'package:diary_flutter/data/repository/chats_repository.dart';
 import 'package:diary_flutter/presentation/main/home_generative_text_seperator.dart';
 import 'package:flutter/material.dart';
 
 class HomeMainGenerativeText extends StatelessWidget {
-  final LLMFeedback feedback;
+  final ChatsContent feedback;
   const HomeMainGenerativeText(this.feedback, {super.key});
 
   @override

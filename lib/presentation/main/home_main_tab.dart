@@ -13,9 +13,7 @@ class HomeMainTab extends ConsumerStatefulWidget {
 }
 
 class _HomeMainTabState extends ConsumerState<HomeMainTab> {
-  final TextEditingController _controller = TextEditingController(text: '''
-어제 새벽까지 개발을 하느라 엄청 피곤해. 개발자들 만나 모각코도 해야하고, 공모전 프로젝트의 킥오프를 제대로 해야 하는데, 이 컨디션을 잘 할 수 있을까?
-''');
+  final TextEditingController _controller = TextEditingController(text: '');
 
   @override
   Widget build(BuildContext context) {
@@ -48,8 +46,8 @@ class _HomeMainTabState extends ConsumerState<HomeMainTab> {
             if (generateFeedbackState is LoadingFeedbackState)
               const HomeMainLoading(),
             if (generateFeedbackState is ReceivedFeedbackState) ...[
-              HomeMainGenerativeText(generateFeedbackState.feedback),
-              HomeMainMusic(feedback: generateFeedbackState.feedback),
+              HomeMainGenerativeText(generateFeedbackState.content),
+              HomeMainMusic(feedback: generateFeedbackState.content),
             ],
           ],
         ),
