@@ -21,9 +21,7 @@ class _ChatInputFieldState extends State<ChatInputField> {
   }
 
   _onSubmit() {
-    // var text = _textEditingController.text;
     _textEditingController.clear();
-    // ChatInheritedNotifier.read(context).submit(message: text);
   }
 
   @override

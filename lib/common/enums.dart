@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 enum HomeNavigations {
   main,
@@ -70,6 +71,8 @@ extension GeminiResponseMimeTypesExtension on GeminiResponseMimeTypes {
 }
 
 enum Role {
-  ai,
+  @JsonValue('assistant')
+  assistant,
+  @JsonValue('user')
   user,
 }
