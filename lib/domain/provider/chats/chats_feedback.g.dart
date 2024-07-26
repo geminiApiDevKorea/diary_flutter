@@ -6,7 +6,7 @@ part of 'chats_feedback.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$chatsFeedbackHash() => r'8c3ffce3d7664c7563d3ac829f5a4c3832e80030';
+String _$chatsFeedbackHash() => r'c9c6eef244850e4efd03076a22905e822708737d';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -34,7 +34,8 @@ class _SystemHash {
 const chatsFeedbackProvider = ChatsFeedbackFamily();
 
 /// See also [chatsFeedback].
-class ChatsFeedbackFamily extends Family<AsyncValue<ChatsFeedbackResponse>> {
+class ChatsFeedbackFamily
+    extends Family<AsyncValue<DiaryMusicFeedbackResponse>> {
   /// See also [chatsFeedback].
   const ChatsFeedbackFamily();
 
@@ -73,7 +74,7 @@ class ChatsFeedbackFamily extends Family<AsyncValue<ChatsFeedbackResponse>> {
 
 /// See also [chatsFeedback].
 class ChatsFeedbackProvider
-    extends AutoDisposeFutureProvider<ChatsFeedbackResponse> {
+    extends AutoDisposeFutureProvider<DiaryMusicFeedbackResponse> {
   /// See also [chatsFeedback].
   ChatsFeedbackProvider({
     required List<Chat> chats,
@@ -108,7 +109,8 @@ class ChatsFeedbackProvider
 
   @override
   Override overrideWith(
-    FutureOr<ChatsFeedbackResponse> Function(ChatsFeedbackRef provider) create,
+    FutureOr<DiaryMusicFeedbackResponse> Function(ChatsFeedbackRef provider)
+        create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -125,7 +127,7 @@ class ChatsFeedbackProvider
   }
 
   @override
-  AutoDisposeFutureProviderElement<ChatsFeedbackResponse> createElement() {
+  AutoDisposeFutureProviderElement<DiaryMusicFeedbackResponse> createElement() {
     return _ChatsFeedbackProviderElement(this);
   }
 
@@ -143,13 +145,14 @@ class ChatsFeedbackProvider
   }
 }
 
-mixin ChatsFeedbackRef on AutoDisposeFutureProviderRef<ChatsFeedbackResponse> {
+mixin ChatsFeedbackRef
+    on AutoDisposeFutureProviderRef<DiaryMusicFeedbackResponse> {
   /// The parameter `chats` of this provider.
   List<Chat> get chats;
 }
 
 class _ChatsFeedbackProviderElement
-    extends AutoDisposeFutureProviderElement<ChatsFeedbackResponse>
+    extends AutoDisposeFutureProviderElement<DiaryMusicFeedbackResponse>
     with ChatsFeedbackRef {
   _ChatsFeedbackProviderElement(super.provider);
 

@@ -25,6 +25,7 @@ class BotChatItem extends ConsumerWidget {
       final state = ref.read(authProvider).value;
       if (state != null && state is SignedInState) {
         try {
+          // 유저가 yes를 선택했을 때, 챗봇에게 피드백 요청
           final response =
               await ref.read(chatsRepositoryProvider).postChatsFeedback(
                     bearerToken: 'Bearer ${state.idToken}',
@@ -40,6 +41,7 @@ class BotChatItem extends ConsumerWidget {
                     ),
                   );
           final content = response.content;
+          // 응답 결과를 화면에 표시하기 위해 Chat 아이템 추가
           ref.read(storedChatsProvider.notifier).store(
                 Chat(
                   role: Role.assistant,

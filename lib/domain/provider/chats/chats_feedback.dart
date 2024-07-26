@@ -10,7 +10,7 @@ part 'chats_feedback.g.dart';
 // class ChatFeedbackRequest extends _ChatFeedbackRequ
 
 @riverpod
-Future<ChatsFeedbackResponse> chatsFeedback(
+Future<DiaryMusicFeedbackResponse> chatsFeedback(
   ChatsFeedbackRef ref, {
   required List<Chat> chats,
 }) {
