@@ -69,6 +69,7 @@ dev_dependencies:
   riverpod_lint: ^2.3.10
   envied_generator: ^0.5.4+1
   retrofit_generator: ^8.1.0
+  flutter_gen_runner: ^5.6.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -79,6 +80,37 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+  assets:
+    - assets/fonts/
+
+  fonts:
+    - family: Adamina
+      fonts:
+        - asset: assets/fonts/Adamina-Regular.ttf
+          weight: 400
+    - family: Texgyreheros
+      fonts:
+        - asset: assets/fonts/texgyreheros-regular.otf
+          weight: 400
+        - asset: assets/fonts/texgyreheros-bold.otf
+          weight: 700
+        - asset: assets/fonts/texgyreheros-italic.otf
+          style: italic
+        - asset: assets/fonts/texgyreheros-bolditalic.otf
+          weight: 700
+          style: italic
+    - family: Texgyreheroscn
+      fonts:
+        - asset: assets/fonts/texgyreheroscn-regular.otf
+          weight: 400
+        - asset: assets/fonts/texgyreheroscn-bold.otf
+          weight: 700
+        - asset: assets/fonts/texgyreheroscn-italic.otf
+          style: italic
+        - asset: assets/fonts/texgyreheroscn-bolditalic.otf
+          weight: 700
+          style: italic
 
   # To add assets to your application, add an assets section, like this:
   # assets:

@@ -1,5 +1,6 @@
 import 'package:diary_flutter/domain/provider/auth/auth.dart';
 import 'package:diary_flutter/presentation/home_screen.dart';
+import 'package:diary_flutter/presentation/onbording/onbording_screen.dart';
 import 'package:diary_flutter/presentation/terms_screen.dart';
 import 'package:diary_flutter/presentation/splash_screen.dart';
 import 'package:go_router/go_router.dart';
@@ -14,12 +15,20 @@ GoRouter router(RouterRef ref) {
           data: (state) => switch (state) {
             SignedInState signedInState =>
               signedInState.isAgreed ? HomeScreen.path : TermsScreen.path,
-            _ => SplashScreen.path,
+            _ => OnboardingScreen.path,
           },
-          loading: () => SplashScreen.path,
-          error: (error, _) => SplashScreen.path,
+          loading: () => OnboardingScreen.path,
+          error: (error, _) => OnboardingScreen.path,
         ),
     routes: [
+      GoRoute(
+        path: SplashScreen.path,
+        builder: (context, state) => const SplashScreen(),
+      ),
+      GoRoute(
+        path: OnboardingScreen.path,
+        builder: (context, state) => const OnboardingScreen(),
+      ),
       GoRoute(
         path: SplashScreen.path,
         builder: (context, state) => const SplashScreen(),

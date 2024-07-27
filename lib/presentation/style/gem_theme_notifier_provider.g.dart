@@ -6,7 +6,21 @@ part of 'gem_theme_notifier_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$gemThemeNotifierHash() => r'ef6ca38de3fc0114a956b695e37300feac0a417b';
+String _$gemColorsHash() => r'5c9417a682a40a5b9d32024dcaec52934896d2e1';
+
+/// See also [gemColors].
+@ProviderFor(gemColors)
+final gemColorsProvider = AutoDisposeProvider<GemColors>.internal(
+  gemColors,
+  name: r'gemColorsProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$gemColorsHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef GemColorsRef = AutoDisposeProviderRef<GemColors>;
+String _$gemThemeNotifierHash() => r'12329954af8cace94a2a6d4cec288729ee16145c';
 
 /// See also [GemThemeNotifier].
 @ProviderFor(GemThemeNotifier)

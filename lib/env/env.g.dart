@@ -14,5 +14,5 @@ final class _Env {
   static const String youtubeDataApiKey =
       'AIzaSyB1H1MbWeWUV60o0p8BwGxSqdCqq5ey164';
 
-  static const String baseUrl = 'https://gem-api-xphhnkqc6a-du.a.run.app/';
+  static const String baseUrl = 'https://gem-api-xphhnkqc6a-du.a.run.app';
 }
