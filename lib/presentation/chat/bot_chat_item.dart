@@ -29,7 +29,7 @@ class BotChatItem extends ConsumerWidget {
           final response =
               await ref.read(chatsRepositoryProvider).postChatsFeedback(
                     bearerToken: 'Bearer ${state.idToken}',
-                    body: ChatsFeedbackBody(
+                    body: ChatsRequestBody(
                       userInput: 'yes, please',
                       histories: ref
                           .read(storedChatsProvider)

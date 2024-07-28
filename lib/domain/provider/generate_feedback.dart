@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:diary_flutter/common/enums.dart';
-import 'package:diary_flutter/data/model/diary/diary_music_feedback_content.dart';
+import 'package:diary_flutter/data/model/diary/generated_feedback_content.dart';
 import 'package:diary_flutter/data/provider/gemini_repository_provider.dart';
 import 'package:diary_flutter/env/env.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -14,7 +14,7 @@ class NeverFeedbackState extends FeedbackState {}
 class LoadingFeedbackState extends FeedbackState {}
 
 class ReceivedFeedbackState extends FeedbackState {
-  final DiaryMusicFeedbackContent content;
+  final GeneratedFeedbackContent content;
   ReceivedFeedbackState(this.content);
 }
 
@@ -62,7 +62,7 @@ I've been feeling really overwhelmed at work lately. There are so many deadlines
     );
     final result = await geminiRepository.request(diary);
     state = ReceivedFeedbackState(
-      DiaryMusicFeedbackContent.fromJson(
+      GeneratedFeedbackContent.fromJson(
         jsonDecode(
           result.message,
         ),
