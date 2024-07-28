@@ -15,10 +15,10 @@ GoRouter router(RouterRef ref) {
           data: (state) => switch (state) {
             SignedInState signedInState =>
               signedInState.isAgreed ? HomeScreen.path : TermsScreen.path,
-            _ => OnboardingScreen.path,
+            _ => SplashScreen.path,
           },
-          loading: () => OnboardingScreen.path,
-          error: (error, _) => OnboardingScreen.path,
+          loading: () => SplashScreen.path,
+          error: (error, _) => SplashScreen.path,
         ),
     routes: [
       GoRoute(
@@ -28,10 +28,6 @@ GoRouter router(RouterRef ref) {
       GoRoute(
         path: OnboardingScreen.path,
         builder: (context, state) => const OnboardingScreen(),
-      ),
-      GoRoute(
-        path: SplashScreen.path,
-        builder: (context, state) => const SplashScreen(),
       ),
       GoRoute(
         path: HomeScreen.path,
