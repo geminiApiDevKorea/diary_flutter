@@ -1,6 +1,7 @@
 import 'package:diary_flutter/domain/provider/auth/auth.dart';
 import 'package:diary_flutter/presentation/home_screen.dart';
 import 'package:diary_flutter/presentation/onbording/onbording_screen.dart';
+import 'package:diary_flutter/presentation/main_screen.dart';
 import 'package:diary_flutter/presentation/terms_screen.dart';
 import 'package:diary_flutter/presentation/splash_screen.dart';
 import 'package:go_router/go_router.dart';
@@ -20,6 +21,8 @@ GoRouter router(RouterRef ref) {
           loading: () => SplashScreen.path,
           error: (error, _) => SplashScreen.path,
         ),
+    // initialLocation: MainScreen.path,
+    debugLogDiagnostics: true,
     routes: [
       GoRoute(
         path: SplashScreen.path,
@@ -36,7 +39,11 @@ GoRouter router(RouterRef ref) {
       GoRoute(
         path: TermsScreen.path,
         builder: (context, state) => const TermsScreen(),
-      )
+      ),
+      GoRoute(
+          path: MainScreen.path,
+          pageBuilder: (context, state) =>
+              const NoTransitionPage(child: MainScreen())),
     ],
   );
 }
