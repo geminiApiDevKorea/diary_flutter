@@ -20,6 +20,12 @@ class GemTextStyle {
   /// Sans (Texgyreheros) 16/120%
   final TextStyle paragraph;
 
+  /// Sans (Texgyreheros) 14/20%
+  final TextStyle button;
+
+  /// Sans (Texgyreheros) 12/120%
+  final TextStyle caption;
+
   const GemTextStyle({
     this.h1 = const TextStyle(
         fontFamily: FontFamily.adamina,
@@ -49,6 +55,16 @@ class GemTextStyle {
     this.paragraph = const TextStyle(
         fontFamily: FontFamily.texgyreheros,
         fontSize: 16,
+        height: 1.2,
+        fontWeight: FontWeight.w400),
+    this.button = const TextStyle(
+        fontFamily: FontFamily.texgyreheros,
+        fontSize: 14,
+        height: 0.2,
+        fontWeight: FontWeight.w400),
+    this.caption = const TextStyle(
+        fontFamily: FontFamily.texgyreheros,
+        fontSize: 12,
         height: 1.2,
         fontWeight: FontWeight.w400),
   });

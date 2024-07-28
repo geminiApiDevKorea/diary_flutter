@@ -17,6 +17,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/fonts/
+    - assets/images/Onboarding/
 
   fonts:
     - family: Adamina
