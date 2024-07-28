@@ -1,20 +1,20 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'diary_music_feedback_content.dart';
+part of 'generated_feedback_content.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-DiaryMusicFeedbackContent _$DiaryMusicFeedbackContentFromJson(
+GeneratedFeedbackContent _$GeneratedFeedbackContentFromJson(
         Map<String, dynamic> json) =>
-    DiaryMusicFeedbackContent(
+    GeneratedFeedbackContent(
       comment: json['comment'] as String,
       song: Song.fromJson(json['song'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$DiaryMusicFeedbackContentToJson(
-        DiaryMusicFeedbackContent instance) =>
+Map<String, dynamic> _$GeneratedFeedbackContentToJson(
+        GeneratedFeedbackContent instance) =>
     <String, dynamic>{
       'comment': instance.comment,
       'song': instance.song,
