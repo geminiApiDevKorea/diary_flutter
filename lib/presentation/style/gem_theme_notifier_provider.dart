@@ -1,10 +1,16 @@
 import 'package:diary_flutter/data/provider/persistance_storage_provider.dart';
 import 'package:diary_flutter/data/storage/persistance_storage.dart';
 import 'package:diary_flutter/presentation/style/enums.dart';
+import 'package:diary_flutter/presentation/style/gem_colors.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'gem_theme.dart';
 
 part 'gem_theme_notifier_provider.g.dart';
+
+@riverpod
+GemColors gemColors(GemColorsRef ref) {
+  return ref.watch(gemThemeNotifierProvider.select((theme) => theme.colors));
+}
 
 @riverpod
 class GemThemeNotifier extends _$GemThemeNotifier {
@@ -28,9 +34,9 @@ class GemThemeNotifier extends _$GemThemeNotifier {
 
   GemThemeMode _getGemThemeModeFromStorage(PersistanceStorage storage) {
     final themeString = storage.getValue<String>('gemThemeMode');
-    return themeString == GemThemeMode.light.value
-        ? GemThemeMode.light
-        : GemThemeMode.dark;
+    return themeString == GemThemeMode.dark.value
+        ? GemThemeMode.dark
+        : GemThemeMode.light;
   }
 
   void _updateThemeStorage(GemThemeMode mode) {
