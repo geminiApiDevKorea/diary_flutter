@@ -84,7 +84,7 @@ flutter:
 
   assets:
     - assets/fonts/
-    - assets/images/Onboarding/
+    - assets/images/
 
   fonts:
     - family: Adamina

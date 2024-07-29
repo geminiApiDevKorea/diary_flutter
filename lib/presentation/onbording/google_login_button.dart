@@ -1,3 +1,4 @@
+import 'package:diary_flutter/common/gem_assets.dart';
 import 'package:diary_flutter/presentation/onbording/agreement_modal_bottom_sheet.dart';
 import 'package:diary_flutter/presentation/style/index.dart';
 import 'package:flutter/material.dart';
@@ -40,10 +41,7 @@ class GoogleLoginButton extends HookConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Image.asset(
-                  'images/Onboarding/icon.png',
-                  scale: 2,
-                ),
+                GemAssets.images.iconGoogle.image(scale: 2),
                 const SizedBox(width: 8),
                 Text('Sign in with Google', style: textStyle.h4),
               ],
