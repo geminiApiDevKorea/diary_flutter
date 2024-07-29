@@ -76,3 +76,8 @@ enum Role {
   @JsonValue('user')
   user,
 }
+
+enum FeedbackType {
+  chat,
+  post,
+}
