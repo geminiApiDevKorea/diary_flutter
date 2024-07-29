@@ -23,24 +23,35 @@ Map<String, dynamic> _$ChatsRequestBodyToJson(ChatsRequestBody instance) =>
 ChatsFeedbackResponse _$ChatsFeedbackResponseFromJson(
         Map<String, dynamic> json) =>
     ChatsFeedbackResponse(
-      result: ChatsResult.fromJson(json['result'] as Map<String, dynamic>),
+      chatResponse:
+          ChatResponse.fromJson(json['chatResponse'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$ChatsFeedbackResponseToJson(
         ChatsFeedbackResponse instance) =>
+    <String, dynamic>{
+      'chatResponse': instance.chatResponse,
+    };
+
+ChatResponse _$ChatResponseFromJson(Map<String, dynamic> json) => ChatResponse(
+      result: ChatsResult.fromJson(json['result'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$ChatResponseToJson(ChatResponse instance) =>
     <String, dynamic>{
       'result': instance.result,
     };
 
 ChatsPromptResponse _$ChatsPromptResponseFromJson(Map<String, dynamic> json) =>
     ChatsPromptResponse(
-      result: ChatsResult.fromJson(json['result'] as Map<String, dynamic>),
+      chatResponse:
+          ChatResponse.fromJson(json['chatResponse'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$ChatsPromptResponseToJson(
         ChatsPromptResponse instance) =>
     <String, dynamic>{
-      'result': instance.result,
+      'chatResponse': instance.chatResponse,
     };
 
 // **************************************************************************
@@ -62,10 +73,11 @@ class _ChatsRepository implements ChatsRepository {
   @override
   Future<ChatsFeedbackResponse> postChatsFeedback({
     required String bearerToken,
+    required FeedbackType type,
     required ChatsRequestBody body,
   }) async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'type': type.name};
     final _headers = <String, dynamic>{r'Authorization': bearerToken};
     _headers.removeWhere((k, v) => v == null);
     final _data = <String, dynamic>{};

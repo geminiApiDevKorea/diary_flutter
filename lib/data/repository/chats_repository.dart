@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:diary_flutter/common/enums.dart';
 import 'package:diary_flutter/data/model/diary/chats_result.dart';
 import 'package:diary_flutter/data/model/diary/evaluated_prompt_content.dart';
 import 'package:diary_flutter/data/model/diary/generated_feedback_content.dart';
@@ -20,14 +21,14 @@ class ChatsRequestBody {
 
 @JsonSerializable()
 class ChatsFeedbackResponse {
-  final ChatsResult result;
+  final ChatResponse chatResponse;
 
-  ChatsFeedbackResponse({required this.result});
+  ChatsFeedbackResponse({required this.chatResponse});
 
   GeneratedFeedbackContent get content {
-    print(result.output.content);
+    print(chatResponse.result.output.content);
     return GeneratedFeedbackContent.fromJson(
-      jsonDecode(result.output.content) as Map<String, dynamic>,
+      jsonDecode(chatResponse.result.output.content) as Map<String, dynamic>,
     );
   }
 
@@ -36,14 +37,74 @@ class ChatsFeedbackResponse {
       _$ChatsFeedbackResponseFromJson(json);
 }
 
+// {
+//    "chatResponse":{
+//       "result":{
+//          "metadata":{
+//             "contentFilterMetadata":null,
+//             "finishReason":null
+//          },
+//          "output":{
+//             "messageType":"ASSISTANT",
+//             "media":[
+
+//             ],
+//             "metadata":{
+//                "messageType":"ASSISTANT"
+//             },
+//             "content":{
+//                "canFeedback":false,
+//                "react":"잘 지냈어요?"
+//             }
+//          }
+//       },
+//       "metadata":{
+
+//       },
+//       "results":[
+//          {
+//             "metadata":{
+//                "contentFilterMetadata":null,
+//                "finishReason":null
+//             },
+//             "output":{
+//                "messageType":"ASSISTANT",
+//                "media":[
+
+//                ],
+//                "metadata":{
+//                   "messageType":"ASSISTANT"
+//                },
+//                "content":{
+//                   "canFeedback":false,
+//                   "react":"잘 지냈어요?"
+//                }
+//             }
+//          }
+//       ]
+//    },
+//    "music":null,
+//    "code":-200
+// }
 @JsonSerializable()
-class ChatsPromptResponse {
+class ChatResponse {
   final ChatsResult result;
 
-  ChatsPromptResponse({required this.result});
+  ChatResponse({required this.result});
 
-  EvaluatedPromptContent get content =>
-      EvaluatedPromptContent.fromJson(jsonDecode(result.output.content));
+  Map<String, dynamic> toJson() => _$ChatResponseToJson(this);
+  factory ChatResponse.fromJson(Map<String, dynamic> json) =>
+      _$ChatResponseFromJson(json);
+}
+
+@JsonSerializable()
+class ChatsPromptResponse {
+  final ChatResponse chatResponse;
+
+  ChatsPromptResponse({required this.chatResponse});
+
+  EvaluatedPromptContent get content => EvaluatedPromptContent.fromJson(
+      jsonDecode(chatResponse.result.output.content));
 
   Map<String, dynamic> toJson() => _$ChatsPromptResponseToJson(this);
   factory ChatsPromptResponse.fromJson(Map<String, dynamic> json) =>
@@ -57,6 +118,7 @@ abstract class ChatsRepository {
   @POST('/chats/feedback')
   Future<ChatsFeedbackResponse> postChatsFeedback({
     @Header('Authorization') required String bearerToken,
+    @Query('type') required FeedbackType type,
     @Body() required ChatsRequestBody body,
   });
 
