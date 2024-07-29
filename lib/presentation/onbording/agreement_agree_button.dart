@@ -5,7 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class AgreementAgreeButton extends ConsumerWidget {
-  const AgreementAgreeButton({super.key});
+  final double bottomPadding;
+  final bool isAllRequiredAgreed;
+  const AgreementAgreeButton({
+    super.key,
+    required this.bottomPadding,
+    required this.isAllRequiredAgreed,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -14,23 +20,23 @@ class AgreementAgreeButton extends ConsumerWidget {
     return Align(
       alignment: Alignment.bottomCenter,
       child: SizedBox(
-        height: 50,
+        height: 50 + bottomPadding,
         child: Material(
-          color: colors.primary50,
+          color: isAllRequiredAgreed ? colors.primary50 : colors.grayScale70,
           child: InkWell(
             onTap: ref.read(authProvider.notifier).signIn,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 12.0,
-                vertical: 8.0,
-              ),
-              child: SizedBox(
-                height: 24,
-                width: double.infinity,
-                child: Center(
-                  child: Text(
-                    'Agree and Continue',
-                    style: textStyle.h4.withColor(colors.background),
+            child: Container(
+              padding: const EdgeInsets.only(top: 16),
+              height: 24,
+              width: double.infinity,
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: Text(
+                  'Agree and Continue',
+                  style: textStyle.h4.withColor(
+                    isAllRequiredAgreed
+                        ? colors.background
+                        : colors.grayScale60,
                   ),
                 ),
               ),

@@ -6,11 +6,15 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class AgreementCheckBox extends ConsumerWidget {
   final String title;
+  final bool isChecked;
+  final Function() onTap;
   final bool? isRequired;
   final String? url;
   const AgreementCheckBox({
     super.key,
     required this.title,
+    required this.isChecked,
+    required this.onTap,
     this.isRequired,
     this.url,
   });
@@ -25,14 +29,16 @@ class AgreementCheckBox extends ConsumerWidget {
         child: Row(
           children: [
             Material(
-              color: colors.grayScale70,
+              color: isChecked ? colors.primary50 : colors.grayScale70,
               borderRadius: GemRadius.smallRadius,
               child: InkWell(
-                onTap: () {},
+                onTap: onTap,
                 child: SizedBox(
                   width: 20,
                   height: 20,
-                  child: GemAssets.images.unchecked.image(scale: 2),
+                  child: isChecked
+                      ? GemAssets.images.checked.image(scale: 2)
+                      : GemAssets.images.unchecked.image(scale: 2),
                 ),
               ),
             ),
