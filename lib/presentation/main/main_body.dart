@@ -1,12 +1,15 @@
 import 'dart:ui';
 
+import 'package:diary_flutter/presentation/journal/journal_body.dart';
 import 'package:diary_flutter/presentation/style/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_carousel/flutter_custom_carousel.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class MainBody extends ConsumerWidget {
+  static const String path = '/main';
+  static const String name = 'main';
   const MainBody({super.key});
 
   @override
@@ -19,8 +22,8 @@ class MainBody extends ConsumerWidget {
           child: Align(
             alignment: Alignment.topLeft,
             child: Container(
-              height: 260,
-              padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
+              height: 314,
+              padding: const EdgeInsets.fromLTRB(16, 64, 16, 10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -40,7 +43,8 @@ class MainBody extends ConsumerWidget {
                           borderRadius: BorderRadius.circular(
                               32), // InkWell의 모서리도 같게 설정합니다.
                           onTap: () {
-                            print('Calendar');
+                            context.goNamed(JournalBody.name,
+                                queryParameters: {'type': 'chat'});
                           },
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
@@ -70,7 +74,8 @@ class MainBody extends ConsumerWidget {
                           borderRadius: BorderRadius.circular(
                               32), // InkWell의 모서리도 같게 설정합니다.
                           onTap: () {
-                            print('Calendar');
+                            context.goNamed(JournalBody.name,
+                                queryParameters: {'type': 'post'});
                           },
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
@@ -104,7 +109,7 @@ class MainBody extends ConsumerWidget {
           delegate: _SliverAppBarDelegate(
             minHeight: carouselHeight,
             maxHeight: carouselHeight,
-            child: const CustomVerticalCarousel(),
+            child: const CustomHorizontalCarousel(),
           ),
         ),
         SliverToBoxAdapter(
@@ -148,8 +153,8 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   }
 }
 
-class CustomVerticalCarousel extends StatelessWidget {
-  const CustomVerticalCarousel({super.key});
+class CustomHorizontalCarousel extends StatelessWidget {
+  const CustomHorizontalCarousel({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -162,7 +167,7 @@ class CustomVerticalCarousel extends StatelessWidget {
         itemCountBefore: 0,
         itemCountAfter: 2,
         alignment: Alignment.bottomCenter,
-        scrollDirection: Axis.vertical,
+        scrollDirection: Axis.horizontal,
         tapToSelect: false,
         effectsBuilder: (index, ratio, child) {
           // print('index: $index, ratio: $ratio');
