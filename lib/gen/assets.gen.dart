@@ -58,32 +58,28 @@ class $AssetsFontsGen {
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
-  /// Directory path: assets/images/Onboarding
-  $AssetsImagesOnboardingGen get onboarding =>
-      const $AssetsImagesOnboardingGen();
-}
+  /// File path: assets/images/back_button.png
+  AssetGenImage get backButton =>
+      const AssetGenImage('assets/images/back_button.png');
 
-class $AssetsImagesOnboardingGen {
-  const $AssetsImagesOnboardingGen();
+  /// File path: assets/images/checked.png
+  AssetGenImage get checked => const AssetGenImage('assets/images/checked.png');
 
-  /// File path: assets/images/Onboarding/checked.png
-  AssetGenImage get checked =>
-      const AssetGenImage('assets/images/Onboarding/checked.png');
+  /// File path: assets/images/icon_action_right.png
+  AssetGenImage get iconActionRight =>
+      const AssetGenImage('assets/images/icon_action_right.png');
 
-  /// File path: assets/images/Onboarding/icon.png
-  AssetGenImage get icon =>
-      const AssetGenImage('assets/images/Onboarding/icon.png');
+  /// File path: assets/images/icon_google.png
+  AssetGenImage get iconGoogle =>
+      const AssetGenImage('assets/images/icon_google.png');
 
-  /// File path: assets/images/Onboarding/iconActionright.png
-  AssetGenImage get iconActionright =>
-      const AssetGenImage('assets/images/Onboarding/iconActionright.png');
-
-  /// File path: assets/images/Onboarding/unchecked.png
+  /// File path: assets/images/unchecked.png
   AssetGenImage get unchecked =>
-      const AssetGenImage('assets/images/Onboarding/unchecked.png');
+      const AssetGenImage('assets/images/unchecked.png');
 
   /// List of all assets
-  List<AssetGenImage> get values => [checked, icon, iconActionright, unchecked];
+  List<AssetGenImage> get values =>
+      [backButton, checked, iconActionRight, iconGoogle, unchecked];
 }
 
 class Assets {

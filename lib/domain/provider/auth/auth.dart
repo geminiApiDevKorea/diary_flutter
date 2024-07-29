@@ -46,7 +46,7 @@ class Auth extends _$Auth {
       return;
     }
     _persistanceStorage.setValue(key, idToken);
-    _postUser(idToken);
+    await _postUser(idToken);
   }
 
   _postUser(String idToken) async {

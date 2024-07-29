@@ -37,55 +37,6 @@ class ChatsFeedbackResponse {
       _$ChatsFeedbackResponseFromJson(json);
 }
 
-// {
-//    "chatResponse":{
-//       "result":{
-//          "metadata":{
-//             "contentFilterMetadata":null,
-//             "finishReason":null
-//          },
-//          "output":{
-//             "messageType":"ASSISTANT",
-//             "media":[
-
-//             ],
-//             "metadata":{
-//                "messageType":"ASSISTANT"
-//             },
-//             "content":{
-//                "canFeedback":false,
-//                "react":"잘 지냈어요?"
-//             }
-//          }
-//       },
-//       "metadata":{
-
-//       },
-//       "results":[
-//          {
-//             "metadata":{
-//                "contentFilterMetadata":null,
-//                "finishReason":null
-//             },
-//             "output":{
-//                "messageType":"ASSISTANT",
-//                "media":[
-
-//                ],
-//                "metadata":{
-//                   "messageType":"ASSISTANT"
-//                },
-//                "content":{
-//                   "canFeedback":false,
-//                   "react":"잘 지냈어요?"
-//                }
-//             }
-//          }
-//       ]
-//    },
-//    "music":null,
-//    "code":-200
-// }
 @JsonSerializable()
 class ChatResponse {
   final ChatsResult result;

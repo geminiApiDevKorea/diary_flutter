@@ -2,7 +2,7 @@
 # fluttergen -c flutter_gen.yaml
 
 flutter_gen:
-  output: lib/common/gen/
+  output: lib/gen/
   line_length: 80
 
   # Optional
@@ -17,7 +17,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/fonts/
-    - assets/images/Onboarding/
+    - assets/images/
 
   fonts:
     - family: Adamina
