@@ -83,6 +83,12 @@ class AgreementModalBottomSheet extends ConsumerWidget {
             AgreementAgreeButton(
               bottomPadding: viewPadding.bottom,
               isAllRequiredAgreed: agreementState.isAllRequiredAgreed,
+              onAgreeResult: (result) {
+                if (result == AgreeResult.confirm) {
+                  // TODO : 이름 입력 페이지로 이동
+                  // Navigator.pop(context);
+                }
+              },
             ),
           ],
         ),
