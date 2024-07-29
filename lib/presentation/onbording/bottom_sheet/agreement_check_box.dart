@@ -1,4 +1,4 @@
-import 'package:diary_flutter/common/gem_assets.dart';
+import 'package:diary_flutter/gen/gen_assets.dart';
 import 'package:diary_flutter/presentation/style/enums.dart';
 import 'package:diary_flutter/presentation/style/gem_theme.dart';
 import 'package:flutter/material.dart';
@@ -37,8 +37,8 @@ class AgreementCheckBox extends ConsumerWidget {
                   width: 20,
                   height: 20,
                   child: isChecked
-                      ? GemAssets.images.checked.image(scale: 2)
-                      : GemAssets.images.unchecked.image(scale: 2),
+                      ? GenAssets.images.checked.image(scale: 2)
+                      : GenAssets.images.unchecked.image(scale: 2),
                 ),
               ),
             ),
@@ -64,7 +64,7 @@ class AgreementCheckBox extends ConsumerWidget {
                   child: SizedBox(
                     width: 30,
                     height: 30,
-                    child: GemAssets.images.iconActionRight.image(scale: 2),
+                    child: GenAssets.images.iconActionRight.image(scale: 2),
                   ),
                 ),
               )

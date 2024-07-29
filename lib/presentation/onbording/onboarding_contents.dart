@@ -83,7 +83,6 @@ class OnboardingContents extends HookConsumerWidget {
                     content: onboardingState.content,
                   ),
                   const Spacer(),
-                  // const GoogleLoginButton(), // TODO: 로그인 테스트 편의를 위해 버튼 추가
                   if (onboardingState.isLast) const GoogleLoginButton(),
                 ],
               ),

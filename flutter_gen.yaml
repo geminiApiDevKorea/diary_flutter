@@ -2,7 +2,7 @@
 # fluttergen -c flutter_gen.yaml
 
 flutter_gen:
-  output: lib/common/gen/
+  output: lib/gen/
   line_length: 80
 
   # Optional

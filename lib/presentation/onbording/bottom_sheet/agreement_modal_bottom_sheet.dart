@@ -1,12 +1,56 @@
+import 'package:diary_flutter/domain/provider/auth/auth.dart';
 import 'package:diary_flutter/domain/provider/onboarding/agreement_notifier.dart';
-import 'package:diary_flutter/presentation/onbording/agreement_agree_button.dart';
-import 'package:diary_flutter/presentation/onbording/agreement_check_box.dart';
+import 'package:diary_flutter/presentation/common/bottom_fulfilled_button.dart';
+import 'package:diary_flutter/presentation/common/popup/confirm_popup.dart';
+import 'package:diary_flutter/presentation/common/popup/popup_button_param.dart';
+import 'package:diary_flutter/presentation/onbording/bottom_sheet/agreement_check_box.dart';
+import 'package:diary_flutter/presentation/settings/setting_screen.dart';
+import 'package:diary_flutter/presentation/style/gem_colors.dart';
 import 'package:diary_flutter/presentation/style/gem_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+enum AgreeResult {
+  cancel,
+  confirm,
+}
 
 class AgreementModalBottomSheet extends ConsumerWidget {
   const AgreementModalBottomSheet({super.key});
+
+  Future<AgreeResult?> _showConfirmDialog(
+    BuildContext context,
+    GemColors colors,
+  ) {
+    return showDialog<AgreeResult>(
+      barrierColor: colors.modalBackground,
+      context: context,
+      builder: (context) {
+        return GemsConfirmPopup(
+          title: 'Agree to\nRequired Terms',
+          description:
+              'After agreeing to the required terms, you can use the app.',
+          popupButtonParams: [
+            PopupButtonParam(
+              title: 'Close',
+              isPrimary: false,
+              onTap: (popupContext) {
+                Navigator.pop(popupContext, AgreeResult.cancel);
+              },
+            ),
+            PopupButtonParam(
+              title: 'Confirm',
+              isPrimary: true,
+              onTap: (popupContext) {
+                Navigator.pop(popupContext, AgreeResult.confirm);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   createAgreementCheckBox({
     required AgreementType type,
@@ -20,6 +64,12 @@ class AgreementModalBottomSheet extends ConsumerWidget {
       isRequired: type.isRequired,
       url: type.url,
     );
+  }
+
+  _signIn(BuildContext context, WidgetRef ref) async {
+    ref.read(authProvider.notifier).signIn().then((value) {
+      context.push(SettingScreen.path);
+    });
   }
 
   @override
@@ -80,13 +130,20 @@ class AgreementModalBottomSheet extends ConsumerWidget {
                 ],
               ),
             ),
-            AgreementAgreeButton(
-              bottomPadding: viewPadding.bottom,
-              isAllRequiredAgreed: agreementState.isAllRequiredAgreed,
-              onAgreeResult: (result) {
-                if (result == AgreeResult.confirm) {
-                  // TODO : 이름 입력 페이지로 이동
-                  // Navigator.pop(context);
+            BottomFulfilledButton(
+              title: 'Agree and Continue',
+              isEnabled: agreementState.isAllRequiredAgreed,
+              onTap: (isEnabled) async {
+                if (isEnabled) {
+                  _signIn(context, ref);
+                } else {
+                  _showConfirmDialog(context, colors).then(
+                    (result) {
+                      if (result == AgreeResult.confirm) {
+                        _signIn(context, ref);
+                      }
+                    },
+                  );
                 }
               },
             ),

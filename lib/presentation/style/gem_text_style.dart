@@ -1,4 +1,4 @@
-import 'package:diary_flutter/common/gen/fonts.gen.dart';
+import 'package:diary_flutter/gen/fonts.gen.dart';
 import 'package:flutter/material.dart';
 
 class GemTextStyle {

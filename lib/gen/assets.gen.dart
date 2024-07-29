@@ -58,6 +58,10 @@ class $AssetsFontsGen {
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
+  /// File path: assets/images/back_button.png
+  AssetGenImage get backButton =>
+      const AssetGenImage('assets/images/back_button.png');
+
   /// File path: assets/images/checked.png
   AssetGenImage get checked => const AssetGenImage('assets/images/checked.png');
 
@@ -75,7 +79,7 @@ class $AssetsImagesGen {
 
   /// List of all assets
   List<AssetGenImage> get values =>
-      [checked, iconActionRight, iconGoogle, unchecked];
+      [backButton, checked, iconActionRight, iconGoogle, unchecked];
 }
 
 class Assets {

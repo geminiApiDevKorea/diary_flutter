@@ -2,8 +2,10 @@ import 'package:diary_flutter/domain/provider/auth/auth.dart';
 import 'package:diary_flutter/presentation/home_screen.dart';
 import 'package:diary_flutter/presentation/onbording/onbording_screen.dart';
 import 'package:diary_flutter/presentation/main_screen.dart';
+import 'package:diary_flutter/presentation/settings/setting_screen.dart';
 import 'package:diary_flutter/presentation/terms_screen.dart';
 import 'package:diary_flutter/presentation/splash_screen.dart';
+import 'package:diary_flutter/presentation/welcome/welcome_screen.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -21,7 +23,6 @@ GoRouter router(RouterRef ref) {
           loading: () => SplashScreen.path,
           error: (error, _) => SplashScreen.path,
         ),
-    // initialLocation: MainScreen.path,
     debugLogDiagnostics: true,
     routes: [
       GoRoute(
@@ -44,6 +45,14 @@ GoRouter router(RouterRef ref) {
           path: MainScreen.path,
           pageBuilder: (context, state) =>
               const NoTransitionPage(child: MainScreen())),
+      GoRoute(
+        path: SettingScreen.path,
+        builder: (context, state) => const SettingScreen(),
+      ),
+      GoRoute(
+        path: WelcomeScreen.path,
+        builder: (context, state) => const WelcomeScreen(),
+      ),
     ],
   );
 }

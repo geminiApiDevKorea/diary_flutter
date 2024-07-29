@@ -1,4 +1,4 @@
-import 'package:diary_flutter/presentation/style/gem_theme_notifier_provider.dart';
+import 'package:diary_flutter/presentation/style/gem_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -7,13 +7,13 @@ class OnbordingTitle extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final gemTheme = ref.watch(gemThemeNotifierProvider);
+    final textStyle = GemTheme.of(ref).textStyle;
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.only(left: 16, top: 92),
         child: Text(
           'Record\nYour Day',
-          style: gemTheme.textStyle.h1,
+          style: textStyle.h1,
         ),
       ),
     );
