@@ -4,8 +4,8 @@
 # This file should be version controlled and should not be manually edited.
 
 version:
-  revision: "70e9b4185e3d539c04abb73240d8830c93290470"
-  channel: "master"
+  revision: "761747bfc538b5af34aa0d3fac380f1bc331ec49"
+  channel: "stable"
 
 project_type: app
 
@@ -13,26 +13,11 @@ project_type: app
 migration:
   platforms:
     - platform: root
-      create_revision: 70e9b4185e3d539c04abb73240d8830c93290470
-      base_revision: 70e9b4185e3d539c04abb73240d8830c93290470
-    - platform: android
-      create_revision: 70e9b4185e3d539c04abb73240d8830c93290470
-      base_revision: 70e9b4185e3d539c04abb73240d8830c93290470
+      create_revision: 761747bfc538b5af34aa0d3fac380f1bc331ec49
+      base_revision: 761747bfc538b5af34aa0d3fac380f1bc331ec49
     - platform: ios
-      create_revision: 70e9b4185e3d539c04abb73240d8830c93290470
-      base_revision: 70e9b4185e3d539c04abb73240d8830c93290470
-    - platform: linux
-      create_revision: 70e9b4185e3d539c04abb73240d8830c93290470
-      base_revision: 70e9b4185e3d539c04abb73240d8830c93290470
-    - platform: macos
-      create_revision: 70e9b4185e3d539c04abb73240d8830c93290470
-      base_revision: 70e9b4185e3d539c04abb73240d8830c93290470
-    - platform: web
-      create_revision: 70e9b4185e3d539c04abb73240d8830c93290470
-      base_revision: 70e9b4185e3d539c04abb73240d8830c93290470
-    - platform: windows
-      create_revision: 70e9b4185e3d539c04abb73240d8830c93290470
-      base_revision: 70e9b4185e3d539c04abb73240d8830c93290470
+      create_revision: 761747bfc538b5af34aa0d3fac380f1bc331ec49
+      base_revision: 761747bfc538b5af34aa0d3fac380f1bc331ec49
 
   # User provided section
 
