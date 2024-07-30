@@ -19,10 +19,10 @@ final GlobalKey<NavigatorState> mainKey = GlobalKey<NavigatorState>();
 @Riverpod(keepAlive: true)
 GoRouter router(RouterRef ref) {
   return GoRouter(
-    initialLocation: ref.watch(authProvider).when(
+    initialLocation: ref.read(authProvider).when(
           data: (state) => switch (state) {
             SignedInState signedInState =>
-              signedInState.isAgreed ? HomeScreen.path : TermsScreen.path,
+              signedInState.isAgreed ? MainBody.path : SplashScreen.path,
             _ => SplashScreen.path,
           },
           loading: () => SplashScreen.path,

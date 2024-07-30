@@ -12,20 +12,24 @@ class SplashScreen extends HookConsumerWidget {
   static const String path = '/';
   const SplashScreen({super.key});
 
+  _moveNext(BuildContext context, String path) {
+    Future.delayed(const Duration(seconds: 2), () {
+      context.pushReplacement(path);
+    });
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final colors = GemTheme.of(ref).colors;
     final authState = ref.watch(authProvider);
     useEffect(() {
-      Future.delayed(const Duration(seconds: 2), () {
-        if (authState.value is NeedSigninState) {
-          context.pushReplacement(OnboardingScreen.path);
-        } else if (authState.value is SignedInState) {
-          context.pushReplacement(HomeScreen.path);
-        }
-      });
+      if (authState.value is NeedSigninState) {
+        _moveNext(context, OnboardingScreen.path);
+      } else if (authState.value is SignedInState) {
+        _moveNext(context, HomeScreen.path);
+      }
       return () {};
-    }, []);
+    }, [authState]);
 
     return Scaffold(
       backgroundColor: colors.background,

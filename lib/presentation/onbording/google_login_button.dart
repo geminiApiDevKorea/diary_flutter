@@ -1,3 +1,4 @@
+import 'package:diary_flutter/domain/provider/auth/auth.dart';
 import 'package:diary_flutter/gen/gen_assets.dart';
 import 'package:diary_flutter/presentation/onbording/bottom_sheet/agreement_modal_bottom_sheet.dart';
 import 'package:diary_flutter/presentation/style/index.dart';
@@ -8,13 +9,15 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 class GoogleLoginButton extends HookConsumerWidget {
   const GoogleLoginButton({super.key});
 
-  _onLogin(BuildContext context, WidgetRef ref) {
-    final colors = GemTheme.of(ref).colors;
-    showModalBottomSheet(
-      backgroundColor: colors.modalBackground,
-      context: context,
-      builder: (context) => const AgreementModalBottomSheet(),
-    );
+  _onLogin(BuildContext context, WidgetRef ref) async {
+    ref.read(authProvider.notifier).signIn().then((value) {
+      final colors = GemTheme.of(ref).colors;
+      showModalBottomSheet(
+        backgroundColor: colors.modalBackground,
+        context: context,
+        builder: (context) => const AgreementModalBottomSheet(),
+      );
+    });
   }
 
   @override

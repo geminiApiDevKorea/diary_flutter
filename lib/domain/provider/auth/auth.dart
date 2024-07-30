@@ -26,18 +26,18 @@ class Auth extends _$Auth {
       ref.read(persistanceStorageProvider);
 
   @override
-  AsyncValue<AuthState> build() {
+  FutureOr<AuthState> build() async {
     final storedIdToken = _persistanceStorage.getValue<String>(key);
     if (storedIdToken?.isEmpty ?? true) {
-      return AsyncValue.data(NeedSigninState());
+      return NeedSigninState();
     } else {
-      _postUser(storedIdToken!);
-      return const AsyncValue.loading();
+      return await _postUser(storedIdToken!);
     }
   }
 
   signIn() async {
-    final user = await ref.read(googleAuthRepositoryProvider).signIn();
+    final user =
+        await ref.read(googleAuthRepositoryProvider).signInWithGoogle();
     if (user == null) {
       return;
     }
@@ -46,21 +46,21 @@ class Auth extends _$Auth {
       return;
     }
     _persistanceStorage.setValue(key, idToken);
-    await _postUser(idToken);
+    state = AsyncValue.data(await _postUser(idToken));
   }
 
-  _postUser(String idToken) async {
+  Future<AuthState> _postUser(String idToken) async {
     try {
       final response = await ref
           .read(usersRepositoryProvider)
           .postUsers(bearerToken: 'Bearer $idToken');
-      final signedInState = SignedInState(
+      return SignedInState(
         idToken: idToken,
         isAgreed: response.isAgreed,
       );
-      state = AsyncValue.data(signedInState);
     } catch (e) {
       print(e);
+      return NeedSigninState();
     }
   }
 }
