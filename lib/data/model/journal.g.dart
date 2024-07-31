@@ -6,38 +6,31 @@ part of 'journal.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-MusicJournal _$MusicJournalFromJson(Map<String, dynamic> json) => MusicJournal(
+Journal _$JournalFromJson(Map<String, dynamic> json) => Journal(
+      idToken: json['idToken'] as String,
       createdAt: DateTime.parse(json['createdAt'] as String),
-      title: json['title'] as String,
+      userInput: json['userInput'] as String?,
       music: json['music'] == null
           ? null
           : Music.fromJson(json['music'] as Map<String, dynamic>),
       tags: (json['tags'] as List<dynamic>?)?.map((e) => e as String).toList(),
+      history: (json['history'] as List<dynamic>?)
+          ?.map((e) => History.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      journalType: $enumDecode(_$JournalTypeEnumMap, json['type']),
     );
 
-Map<String, dynamic> _$MusicJournalToJson(MusicJournal instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$JournalToJson(Journal instance) => <String, dynamic>{
+      'idToken': instance.idToken,
       'createdAt': instance.createdAt.toIso8601String(),
-      'title': instance.title,
+      'userInput': instance.userInput,
       'music': instance.music?.toJson(),
       'tags': instance.tags,
+      'history': instance.history?.map((e) => e.toJson()).toList(),
+      'type': _$JournalTypeEnumMap[instance.journalType]!,
     };
 
-PostJournal _$PostJournalFromJson(Map<String, dynamic> json) => PostJournal(
-      createdAt: DateTime.parse(json['createdAt'] as String),
-      title: json['title'] as String,
-      music: json['music'] == null
-          ? null
-          : Music.fromJson(json['music'] as Map<String, dynamic>),
-      tags: (json['tags'] as List<dynamic>?)?.map((e) => e as String).toList(),
-      post: json['post'] as String?,
-    );
-
-Map<String, dynamic> _$PostJournalToJson(PostJournal instance) =>
-    <String, dynamic>{
-      'createdAt': instance.createdAt.toIso8601String(),
-      'title': instance.title,
-      'music': instance.music?.toJson(),
-      'tags': instance.tags,
-      'post': instance.post,
-    };
+const _$JournalTypeEnumMap = {
+  JournalType.post: 'post',
+  JournalType.chat: 'chat',
+};
