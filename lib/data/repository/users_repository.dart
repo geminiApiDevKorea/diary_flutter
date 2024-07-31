@@ -26,5 +26,7 @@ abstract class UsersRepository {
     @Body() required UsersAgreementBody body,
   });
   @GET('/users/me')
-  Future<dynamic> getCurrentUser();
+  Future<UserResponse> getCurrentUser({
+    @Header('Authorization') required String bearerToken,
+  });
 }
