@@ -66,10 +66,33 @@ class AgreementModalBottomSheet extends ConsumerWidget {
     );
   }
 
-  _signIn(BuildContext context, WidgetRef ref) async {
-    ref.read(authProvider.notifier).signIn().then((value) {
-      context.push(SettingScreen.path);
-    });
+  _agree({
+    required BuildContext context,
+    required WidgetRef ref,
+    required bool isEnabledAgreement,
+  }) {
+    requestAgree() {
+      ref.read(authProvider.notifier).agree().then((isSuccess) {
+        if (isSuccess) {
+          context.push(SettingScreen.path);
+        }
+      });
+    }
+
+    if (isEnabledAgreement) {
+      requestAgree();
+    } else {
+      _showConfirmDialog(
+        context,
+        GemTheme.of(ref).colors,
+      ).then(
+        (result) {
+          if (result == AgreeResult.confirm) {
+            requestAgree();
+          }
+        },
+      );
+    }
   }
 
   @override
@@ -100,7 +123,9 @@ class AgreementModalBottomSheet extends ConsumerWidget {
                   const SizedBox(height: 18),
                   AgreementCheckBox(
                     title: 'Agree to all',
-                    isChecked: agreementState.isAllAgreed,
+                    isChecked: agreementState is SelectionAgreementState
+                        ? agreementState.isAllAgreed
+                        : false,
                     onTap: () => ref
                         .read(agreementNotifierProvider.notifier)
                         .toggleAllAgreements(),
@@ -132,20 +157,14 @@ class AgreementModalBottomSheet extends ConsumerWidget {
             ),
             BottomFulfilledButton(
               title: 'Agree and Continue',
-              isEnabled: agreementState.isAllRequiredAgreed,
-              onTap: (isEnabled) async {
-                if (isEnabled) {
-                  _signIn(context, ref);
-                } else {
-                  _showConfirmDialog(context, colors).then(
-                    (result) {
-                      if (result == AgreeResult.confirm) {
-                        _signIn(context, ref);
-                      }
-                    },
-                  );
-                }
-              },
+              isEnabled: agreementState is SelectionAgreementState
+                  ? agreementState.isAllRequiredAgreed
+                  : true,
+              onTap: (isEnabled) => _agree(
+                context: context,
+                ref: ref,
+                isEnabledAgreement: isEnabled,
+              ),
             ),
           ],
         ),

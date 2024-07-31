@@ -1,3 +1,4 @@
+import 'package:diary_flutter/domain/provider/auth/auth.dart';
 import 'package:diary_flutter/presentation/common/bottom_fulfilled_button.dart';
 import 'package:diary_flutter/presentation/common/input_field.dart';
 import 'package:diary_flutter/presentation/onbording/onbording_dot_indicator.dart';
@@ -47,13 +48,27 @@ class SettingScreen extends HookConsumerWidget {
                       style: textStyle.paragraph.withColor(colors.caption),
                     ),
                     const SizedBox(height: 16),
-                    CustomTextFormField(
-                      maxLength: 20,
-                      minLength: 2,
-                      onChangedInputText: (inputText) {
-                        isValidNickname.value = inputText.length >= 2;
-                      },
-                    ),
+                    ref.watch(authProvider).when(
+                          data: (authState) {
+                            final state = authState;
+                            if (state is SignedInState) {
+                              isValidNickname.value = state.name.length >= 2;
+                              return CustomTextFormField(
+                                initialText: state.name,
+                                isEditable: false,
+                                maxLength: 20,
+                                minLength: 2,
+                                onChangedInputText: (inputText) {
+                                  isValidNickname.value = inputText.length >= 2;
+                                },
+                              );
+                            } else {
+                              return const SizedBox();
+                            }
+                          },
+                          loading: () => const CircularProgressIndicator(),
+                          error: (error, _) => Text('Error: $error'),
+                        ),
                     const Spacer(),
                   ],
                 ),

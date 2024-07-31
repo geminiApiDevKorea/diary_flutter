@@ -1,10 +1,17 @@
 import 'package:diary_flutter/data/provider/google_auth_repository_provider.dart';
 import 'package:diary_flutter/data/provider/persistance_storage_provider.dart';
 import 'package:diary_flutter/data/provider/users_repository_provider.dart';
+import 'package:diary_flutter/data/repository/users_repository.dart';
 import 'package:diary_flutter/data/storage/persistance_storage.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'auth.g.dart';
+
+enum SignInState {
+  unsignedIn,
+  signedInCompleted,
+  needAgreement,
+}
 
 sealed class AuthState {}
 
@@ -12,10 +19,20 @@ class NeedSigninState extends AuthState {}
 
 class LoadingAuthState extends AuthState {}
 
+class ErrorAuthState extends AuthState {
+  final Exception exception;
+  ErrorAuthState({required this.exception});
+}
+
 class SignedInState extends AuthState {
   final bool isAgreed;
   final String idToken;
-  SignedInState({required this.idToken, required this.isAgreed});
+  final String name;
+  SignedInState({
+    required this.idToken,
+    required this.isAgreed,
+    required this.name,
+  });
 }
 
 @Riverpod(keepAlive: true)
@@ -26,41 +43,76 @@ class Auth extends _$Auth {
       ref.read(persistanceStorageProvider);
 
   @override
-  AsyncValue<AuthState> build() {
+  FutureOr<AuthState> build() async {
     final storedIdToken = _persistanceStorage.getValue<String>(key);
     if (storedIdToken?.isEmpty ?? true) {
-      return AsyncValue.data(NeedSigninState());
+      return NeedSigninState();
     } else {
-      _postUser(storedIdToken!);
-      return const AsyncValue.loading();
+      return await _postUser(storedIdToken!);
     }
   }
 
-  signIn() async {
-    final user = await ref.read(googleAuthRepositoryProvider).signIn();
+  Future<SignInState> signIn() async {
+    final user =
+        await ref.read(googleAuthRepositoryProvider).signInWithGoogle();
     if (user == null) {
-      return;
+      return SignInState.unsignedIn;
     }
     final idToken = await user.getIdToken();
     if (idToken == null || idToken.isEmpty) {
-      return;
+      return SignInState.unsignedIn;
     }
     _persistanceStorage.setValue(key, idToken);
-    await _postUser(idToken);
+    final authState = await _postUser(idToken);
+    state = AsyncValue.data(authState);
+    if (authState is SignedInState) {
+      return authState.isAgreed
+          ? SignInState.signedInCompleted
+          : SignInState.needAgreement;
+    } else {
+      return SignInState.unsignedIn;
+    }
   }
 
-  _postUser(String idToken) async {
+  Future<bool> agree() async {
+    try {
+      final currentState = state.value;
+      if (currentState is SignedInState) {
+        final response =
+            await ref.read(usersRepositoryProvider).putUsersAgreement(
+                  bearerToken: 'Bearer ${currentState.idToken}',
+                  body: UsersAgreementBody(agreement: true),
+                );
+        state = AsyncValue.data(
+          SignedInState(
+            idToken: currentState.idToken,
+            isAgreed: response.isAgreed,
+            name: response.name,
+          ),
+        );
+        return true;
+      } else {
+        return false;
+      }
+    } on Exception catch (e, stackTrace) {
+      state = AsyncValue.error(e, stackTrace);
+      return false;
+    }
+  }
+
+  Future<AuthState> _postUser(String idToken) async {
     try {
       final response = await ref
           .read(usersRepositoryProvider)
           .postUsers(bearerToken: 'Bearer $idToken');
-      final signedInState = SignedInState(
+
+      return SignedInState(
         idToken: idToken,
         isAgreed: response.isAgreed,
+        name: response.name,
       );
-      state = AsyncValue.data(signedInState);
-    } catch (e) {
-      print(e);
+    } on Exception catch (e) {
+      return ErrorAuthState(exception: e);
     }
   }
 }

@@ -1,4 +1,3 @@
-import 'package:diary_flutter/domain/provider/auth/auth.dart';
 import 'package:diary_flutter/presentation/base_screen.dart';
 import 'package:diary_flutter/presentation/common/custom_transitions.dart';
 import 'package:diary_flutter/presentation/home_screen.dart';
@@ -19,15 +18,7 @@ final GlobalKey<NavigatorState> mainKey = GlobalKey<NavigatorState>();
 @Riverpod(keepAlive: true)
 GoRouter router(RouterRef ref) {
   return GoRouter(
-    initialLocation: ref.watch(authProvider).when(
-          data: (state) => switch (state) {
-            SignedInState signedInState =>
-              signedInState.isAgreed ? HomeScreen.path : TermsScreen.path,
-            _ => SplashScreen.path,
-          },
-          loading: () => SplashScreen.path,
-          error: (error, _) => SplashScreen.path,
-        ),
+    initialLocation: SplashScreen.path,
     debugLogDiagnostics: true,
     routes: [
       GoRoute(
