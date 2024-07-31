@@ -6,9 +6,13 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 class CustomTextFormField extends HookConsumerWidget {
   final int maxLength;
   final int minLength;
+  final String initialText;
+  final bool isEditable;
   final Function(String value) onChangedInputText;
   const CustomTextFormField({
     super.key,
+    required this.initialText,
+    required this.isEditable,
     required this.maxLength,
     required this.minLength,
     required this.onChangedInputText,
@@ -18,8 +22,8 @@ class CustomTextFormField extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final colors = GemTheme.of(ref).colors;
     final textStyle = GemTheme.of(ref).textStyle;
-    final controller = useTextEditingController();
-    final input = useState('');
+    final controller = useTextEditingController(text: initialText);
+    final input = useState(initialText);
     useEffect(() {
       onChanged() {
         input.value = controller.text;
@@ -46,6 +50,7 @@ class CustomTextFormField extends HookConsumerWidget {
           child: Transform.translate(
             offset: const Offset(0, -4),
             child: TextFormField(
+              enabled: isEditable,
               controller: controller,
               decoration: InputDecoration(
                 border: InputBorder.none,

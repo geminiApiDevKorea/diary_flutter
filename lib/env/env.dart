@@ -12,4 +12,7 @@ abstract class Env {
 
   @EnviedField(varName: 'BASE_URL')
   static const String baseUrl = _Env.baseUrl;
+
+  @EnviedField(varName: 'GOOGLE_CLIENT_ID')
+  static const String googleClientId = _Env.googleClientId;
 }
