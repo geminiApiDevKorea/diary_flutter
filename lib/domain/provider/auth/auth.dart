@@ -1,6 +1,7 @@
 import 'package:diary_flutter/data/provider/google_auth_repository_provider.dart';
 import 'package:diary_flutter/data/provider/persistance_storage_provider.dart';
 import 'package:diary_flutter/data/provider/users_repository_provider.dart';
+import 'package:diary_flutter/data/repository/users_repository.dart';
 import 'package:diary_flutter/data/storage/persistance_storage.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -12,10 +13,20 @@ class NeedSigninState extends AuthState {}
 
 class LoadingAuthState extends AuthState {}
 
+class ErrorAuthState extends AuthState {
+  final Exception exception;
+  ErrorAuthState({required this.exception});
+}
+
 class SignedInState extends AuthState {
   final bool isAgreed;
   final String idToken;
-  SignedInState({required this.idToken, required this.isAgreed});
+  final String name;
+  SignedInState({
+    required this.idToken,
+    required this.isAgreed,
+    required this.name,
+  });
 }
 
 @Riverpod(keepAlive: true)
@@ -35,18 +46,45 @@ class Auth extends _$Auth {
     }
   }
 
-  signIn() async {
+  Future<bool> signIn() async {
     final user =
         await ref.read(googleAuthRepositoryProvider).signInWithGoogle();
     if (user == null) {
-      return;
+      return false;
     }
     final idToken = await user.getIdToken();
     if (idToken == null || idToken.isEmpty) {
-      return;
+      return false;
     }
     _persistanceStorage.setValue(key, idToken);
     state = AsyncValue.data(await _postUser(idToken));
+    return state.value is SignedInState;
+  }
+
+  Future<bool> agree() async {
+    try {
+      final currentState = state.value;
+      if (currentState is SignedInState) {
+        final response =
+            await ref.read(usersRepositoryProvider).putUsersAgreement(
+                  bearerToken: 'Bearer ${currentState.idToken}',
+                  body: UsersAgreementBody(agreement: true),
+                );
+        state = AsyncValue.data(
+          SignedInState(
+            idToken: currentState.idToken,
+            isAgreed: response.isAgreed,
+            name: response.name,
+          ),
+        );
+        return true;
+      } else {
+        return false;
+      }
+    } on Exception catch (e, stackTrace) {
+      state = AsyncValue.error(e, stackTrace);
+      return false;
+    }
   }
 
   Future<AuthState> _postUser(String idToken) async {
@@ -54,13 +92,14 @@ class Auth extends _$Auth {
       final response = await ref
           .read(usersRepositoryProvider)
           .postUsers(bearerToken: 'Bearer $idToken');
+
       return SignedInState(
         idToken: idToken,
         isAgreed: response.isAgreed,
+        name: response.name,
       );
-    } catch (e) {
-      print(e);
-      return NeedSigninState();
+    } on Exception catch (e) {
+      return ErrorAuthState(exception: e);
     }
   }
 }

@@ -3,7 +3,7 @@ part 'user_response.g.dart';
 
 @JsonSerializable()
 class UserResponse {
-  String? name;
+  String name;
   String? email;
   bool? agreement;
   int? code;
@@ -11,7 +11,7 @@ class UserResponse {
   bool get isAgreed => agreement ?? false;
 
   UserResponse({
-    this.name,
+    required this.name,
     this.email,
     this.agreement,
     this.code,

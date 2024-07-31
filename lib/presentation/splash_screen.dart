@@ -1,5 +1,6 @@
 import 'package:diary_flutter/domain/provider/auth/auth.dart';
 import 'package:diary_flutter/presentation/home_screen.dart';
+import 'package:diary_flutter/presentation/main/main_body.dart';
 import 'package:diary_flutter/presentation/onbording/onbording_screen.dart';
 import 'package:diary_flutter/presentation/onbording/onbording_title.dart';
 import 'package:diary_flutter/presentation/style/gem_theme.dart';
@@ -12,7 +13,7 @@ class SplashScreen extends HookConsumerWidget {
   static const String path = '/';
   const SplashScreen({super.key});
 
-  _moveNext(BuildContext context, String path) {
+  _moveNext(WidgetRef ref, BuildContext context, String path) {
     Future.delayed(const Duration(seconds: 2), () {
       context.pushReplacement(path);
     });
@@ -24,9 +25,9 @@ class SplashScreen extends HookConsumerWidget {
     final authState = ref.watch(authProvider);
     useEffect(() {
       if (authState.value is NeedSigninState) {
-        _moveNext(context, OnboardingScreen.path);
+        _moveNext(ref, context, OnboardingScreen.path);
       } else if (authState.value is SignedInState) {
-        _moveNext(context, HomeScreen.path);
+        _moveNext(ref, context, MainBody.path);
       }
       return () {};
     }, [authState]);

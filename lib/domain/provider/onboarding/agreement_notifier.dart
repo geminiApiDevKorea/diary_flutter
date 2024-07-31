@@ -1,3 +1,6 @@
+import 'package:diary_flutter/data/provider/users_repository_provider.dart';
+import 'package:diary_flutter/data/repository/users_repository.dart';
+import 'package:diary_flutter/domain/provider/auth/auth.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'agreement_notifier.g.dart';
@@ -35,8 +38,9 @@ extension AgreementTypeExtension on AgreementType {
   }
 }
 
-class AgreementState {
+sealed class AgreementState {
   final Map<AgreementType, bool> agreements;
+
   bool isChecked(AgreementType agreementType) =>
       agreements[agreementType] ?? false;
   bool get isAllAgreed => agreements.values.every((isAgreed) => isAgreed);
@@ -46,9 +50,23 @@ class AgreementState {
       .every((entry) => entry.value);
 
   AgreementState({required this.agreements});
+}
 
-  AgreementState copyWith(AgreementType type, bool newValue) {
-    return AgreementState(
+class AgreementedState extends AgreementState {
+  final bool isAgreed;
+  AgreementedState({
+    required super.agreements,
+    required this.isAgreed,
+  });
+}
+
+class SelectionAgreementState extends AgreementState {
+  SelectionAgreementState({
+    required super.agreements,
+  });
+
+  SelectionAgreementState copyWith(AgreementType type, bool newValue) {
+    return SelectionAgreementState(
       agreements: agreements.map(
         (key, val) =>
             key == type ? MapEntry(key, newValue) : MapEntry(key, val),
@@ -61,23 +79,48 @@ class AgreementState {
 class AgreementNotifier extends _$AgreementNotifier {
   @override
   AgreementState build() {
-    return AgreementState(agreements: {
+    return SelectionAgreementState(agreements: {
       AgreementType.termsOfService: false,
       AgreementType.privacyPolicy: false,
     });
   }
 
   void toggleAllAgreements() {
-    final newValue = !state.isAllAgreed;
-    state = AgreementState(
-      agreements: state.agreements.map(
-        (key, _) => MapEntry(key, newValue),
-      ),
-    );
+    var agreementState = state;
+    if (agreementState is SelectionAgreementState) {
+      final newValue = !agreementState.isAllAgreed;
+      state = SelectionAgreementState(
+        agreements: agreementState.agreements.map(
+          (key, _) => MapEntry(key, newValue),
+        ),
+      );
+    }
   }
 
   void toggleAgreement(AgreementType agreementType) {
-    final newValue = !state.isChecked(agreementType);
-    state = state.copyWith(agreementType, newValue);
+    var agreementState = state;
+    if (agreementState is SelectionAgreementState) {
+      final newValue = !agreementState.isChecked(agreementType);
+      state = agreementState.copyWith(agreementType, newValue);
+    }
+  }
+
+  agree() async {
+    try {
+      final user = ref.read(authProvider).value;
+      if (user != null && user is SignedInState) {
+        final response =
+            await ref.read(usersRepositoryProvider).putUsersAgreement(
+                  bearerToken: 'Bearer ${user.idToken}',
+                  body: UsersAgreementBody(agreement: true),
+                );
+        state = AgreementedState(
+          agreements: state.agreements,
+          isAgreed: response.isAgreed,
+        );
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 }
