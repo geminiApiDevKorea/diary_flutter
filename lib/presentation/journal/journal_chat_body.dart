@@ -1,4 +1,7 @@
+import 'package:diary_flutter/common/enums.dart';
 import 'package:diary_flutter/presentation/style/gem_theme.dart';
+import 'package:diary_flutter/presentation/style/index.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -15,7 +18,7 @@ class ChatJournalBody extends ConsumerWidget {
             Container(
                 height: 900,
                 color: colors.grayScale90,
-                child: const Center(child: Text('Chat Journal Body'))),
+                child: const Center(child: Text('Post Journal Body'))),
           ],
         ));
   }
