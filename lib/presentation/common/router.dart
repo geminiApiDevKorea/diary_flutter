@@ -1,8 +1,8 @@
 import 'package:diary_flutter/domain/provider/auth/auth.dart';
-import 'package:diary_flutter/presentation/base_screen.dart';
+import 'package:diary_flutter/presentation/journal_screen.dart';
+import 'package:diary_flutter/presentation/main_screen.dart';
 import 'package:diary_flutter/presentation/common/custom_transitions.dart';
 import 'package:diary_flutter/presentation/home_screen.dart';
-import 'package:diary_flutter/presentation/journal/journal_body.dart';
 import 'package:diary_flutter/presentation/main/main_body.dart';
 import 'package:diary_flutter/presentation/onbording/onbording_screen.dart';
 import 'package:diary_flutter/presentation/terms_screen.dart';
@@ -28,6 +28,7 @@ GoRouter router(RouterRef ref) {
           loading: () => SplashScreen.path,
           error: (error, _) => SplashScreen.path,
         ),
+    // initialLocation: MainScreen.path,
     debugLogDiagnostics: true,
     routes: [
       GoRoute(
@@ -54,45 +55,68 @@ GoRouter router(RouterRef ref) {
         path: WelcomeScreen.path,
         builder: (context, state) => const WelcomeScreen(),
       ),
-      StatefulShellRoute.indexedStack(
-        pageBuilder: (context, state, navigationShell) {
-          return NoTransitionPage(
-            child: BaseScreen(navigationShell: navigationShell),
-            key: state.pageKey,
-          );
-        },
-        branches: [
-          StatefulShellBranch(
-            navigatorKey: mainKey,
-            routes: [
-              GoRoute(
-                path: MainBody.path,
-                name: MainBody.name,
-                pageBuilder: (context, state) {
-                  const key = ValueKey('main');
-                  return const NoTransitionPage(
-                    child: MainBody(),
-                    key: key,
-                  );
-                },
-              ),
-              GoRoute(
-                path: JournalBody.path,
-                name: JournalBody.name,
-                pageBuilder: (context, state) {
-                  final type = state.uri.queryParameters['type'] ?? 'chat';
-                  final key = ValueKey('journal$type');
-                  return CustomTransitions.buildSlideTransitionPage(
-                    child: JournalBody(type: type),
-                    key: key,
-                    from: SlideDirection.right,
-                  );
-                },
-              ),
-            ],
-          ),
-        ],
-      ),
+      GoRoute(
+          path: MainScreen.path,
+          pageBuilder: (context, state) {
+            return CustomTransitions.buildSlideTransitionPage(
+                child: const MainScreen(),
+                key: state.pageKey,
+                from: SlideDirection.bottom);
+          }),
+      GoRoute(
+          path: JournalScreen.path,
+          name: JournalScreen.name,
+          pageBuilder: (context, state) {
+            final type = state.uri.queryParameters['type'] ?? 'chat';
+            const key = ValueKey('journal');
+
+            return CustomTransitions.buildSlideTransitionPage(
+              child: JournalScreen(type: type),
+              key: key,
+              from: SlideDirection.right,
+              transitionDuration: const Duration(milliseconds: 300),
+            );
+          }),
+
+      // StatefulShellRoute.indexedStack(
+      //   pageBuilder: (context, state, navigationShell) {
+      //     return NoTransitionPage(
+      //       child: BaseScreen(navigationShell: navigationShell),
+      //       key: state.pageKey,
+      //     );
+      //   },
+      //   branches: [
+      //     StatefulShellBranch(
+      //       navigatorKey: mainKey,
+      //       routes: [
+      //         GoRoute(
+      //           path: MainBody.path,
+      //           name: MainBody.name,
+      //           pageBuilder: (context, state) {
+      //             const key = ValueKey('main');
+      //             return const NoTransitionPage(
+      //               child: MainBody(),
+      //               key: key,
+      //             );
+      //           },
+      //         ),
+      //         GoRoute(
+      //           path: JournalBody.path,
+      //           name: JournalBody.name,
+      //           pageBuilder: (context, state) {
+      //             final type = state.uri.queryParameters['type'] ?? 'chat';
+      //             final key = ValueKey('journal$type');
+      //             return CustomTransitions.buildSlideTransitionPage(
+      //               child: JournalBody(type: type),
+      //               key: key,
+      //               from: SlideDirection.right,
+      //             );
+      //           },
+      //         ),
+      //       ],
+      //     ),
+      //   ],
+      // ),
     ],
   );
 }
