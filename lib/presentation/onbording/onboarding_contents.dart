@@ -1,10 +1,15 @@
+import 'package:diary_flutter/domain/provider/auth/auth.dart';
 import 'package:diary_flutter/domain/provider/onboarding/onbording_notifier.dart';
 import 'package:diary_flutter/presentation/common/horizontal_swipe_detector.dart';
+import 'package:diary_flutter/presentation/main/main_body.dart';
+import 'package:diary_flutter/presentation/onbording/bottom_sheet/agreement_modal_bottom_sheet.dart';
 import 'package:diary_flutter/presentation/onbording/google_login_button.dart';
 import 'package:diary_flutter/presentation/onbording/onboarding_animated_text.dart';
 import 'package:diary_flutter/presentation/onbording/onbording_dot_indicator.dart';
+import 'package:diary_flutter/presentation/style/gem_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class OnboardingContents extends HookConsumerWidget {
@@ -31,6 +36,20 @@ class OnboardingContents extends HookConsumerWidget {
     } else if (direction == HorizontalSwipeDirection.rightToleft) {
       onboardingNotifier.next();
     }
+  }
+
+  _onSignIn(BuildContext context, WidgetRef ref) {
+    final colors = GemTheme.of(ref).colors;
+    ref.read(authProvider.notifier).signIn().then((value) => switch (value) {
+          SignInState.needAgreement => showModalBottomSheet(
+              backgroundColor: colors.modalBackground,
+              context: context,
+              builder: (context) => const AgreementModalBottomSheet(),
+            ),
+          SignInState.signedInCompleted =>
+            context.pushReplacement(MainBody.path),
+          _ => null,
+        });
   }
 
   @override
@@ -83,7 +102,10 @@ class OnboardingContents extends HookConsumerWidget {
                     content: onboardingState.content,
                   ),
                   const Spacer(),
-                  if (onboardingState.isLast) const GoogleLoginButton(),
+                  if (onboardingState.isLast)
+                    GoogleLoginButton(
+                      onPressed: () => _onSignIn(context, ref),
+                    ),
                 ],
               ),
             ),

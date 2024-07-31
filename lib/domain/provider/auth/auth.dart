@@ -7,6 +7,12 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'auth.g.dart';
 
+enum SignInState {
+  unsignedIn,
+  signedInCompleted,
+  needAgreement,
+}
+
 sealed class AuthState {}
 
 class NeedSigninState extends AuthState {}
@@ -46,19 +52,26 @@ class Auth extends _$Auth {
     }
   }
 
-  Future<bool> signIn() async {
+  Future<SignInState> signIn() async {
     final user =
         await ref.read(googleAuthRepositoryProvider).signInWithGoogle();
     if (user == null) {
-      return false;
+      return SignInState.unsignedIn;
     }
     final idToken = await user.getIdToken();
     if (idToken == null || idToken.isEmpty) {
-      return false;
+      return SignInState.unsignedIn;
     }
     _persistanceStorage.setValue(key, idToken);
-    state = AsyncValue.data(await _postUser(idToken));
-    return state.value is SignedInState;
+    final authState = await _postUser(idToken);
+    state = AsyncValue.data(authState);
+    if (authState is SignedInState) {
+      return authState.isAgreed
+          ? SignInState.signedInCompleted
+          : SignInState.needAgreement;
+    } else {
+      return SignInState.unsignedIn;
+    }
   }
 
   Future<bool> agree() async {

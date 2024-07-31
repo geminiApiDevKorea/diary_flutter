@@ -1,24 +1,15 @@
-import 'package:diary_flutter/domain/provider/auth/auth.dart';
 import 'package:diary_flutter/gen/gen_assets.dart';
-import 'package:diary_flutter/presentation/onbording/bottom_sheet/agreement_modal_bottom_sheet.dart';
 import 'package:diary_flutter/presentation/style/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class GoogleLoginButton extends HookConsumerWidget {
-  const GoogleLoginButton({super.key});
-
-  _onLogin(BuildContext context, WidgetRef ref) async {
-    ref.read(authProvider.notifier).signIn().then((value) {
-      final colors = GemTheme.of(ref).colors;
-      showModalBottomSheet(
-        backgroundColor: colors.modalBackground,
-        context: context,
-        builder: (context) => const AgreementModalBottomSheet(),
-      );
-    });
-  }
+  final Function() onPressed;
+  const GoogleLoginButton({
+    super.key,
+    required this.onPressed,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -36,7 +27,7 @@ class GoogleLoginButton extends HookConsumerWidget {
       child: Material(
         color: Colors.white,
         child: InkWell(
-          onTap: () => _onLogin(context, ref),
+          onTap: onPressed,
           child: SizedBox(
             width: double.infinity,
             height: 52,
