@@ -18,12 +18,21 @@ class PostJournalBody extends HookConsumerWidget {
     final journalEvent =
         ref.watch(journalServiceProvider(journalType: JournalType.post));
     // final journalEventNotifer = ref.read(journalServiceProvider(
-    //         date: DateTime.now(), journalType: JournalType.post, idToken: '0')
+    //         date: DateTime.now(), journalType: JournalType.post)
     //     .notifier);
 
     final colors = ref.gemColors;
     final textStyle = ref.gemTextStyle;
     final textController = useTextEditingController();
+    // useEffect(() {
+    //   if (journalEvent is AsyncData) {
+    //     final state = journalEvent.value;
+    //     if (state is JournalLoaded && state.journal != null) {
+    //       textController.text = state.journal!.userInput ?? '';
+    //     }
+    //   }
+    //   return null;
+    // }, [journalEvent]);
     return SingleChildScrollView(
         physics: const ClampingScrollPhysics(),
         child: Container(
@@ -65,12 +74,19 @@ class PostJournalBody extends HookConsumerWidget {
                     maxLines: null,
                     keyboardType: TextInputType.multiline,
                     textInputAction: TextInputAction.done,
-                    onSubmitted: (_) {
+                    onSubmitted: (value) {
+                      // textController.text = value;
+                      // journalEventNotifer.setUserInput(value);
                       FocusScope.of(context).unfocus();
                     },
                     onChanged: (value) {
                       // 여기에 텍스트 변경 시 수행할 작업을 추가할 수 있습니다.
-                      // 예: ref.read(journalServiceProvider(...).notifier).setUserInput(value);
+                      ref
+                          .read(journalServiceProvider(
+                                  journalType: JournalType.post)
+                              .notifier)
+                          .setUserInput(value);
+                      // journalEventNotifer.setUserInput(value);
                     },
                   );
                 },

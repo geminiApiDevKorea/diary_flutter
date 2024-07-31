@@ -1,5 +1,6 @@
 import 'package:diary_flutter/domain/provider/auth/auth.dart';
 import 'package:diary_flutter/presentation/main/main_body.dart';
+import 'package:diary_flutter/presentation/main_screen.dart';
 import 'package:diary_flutter/presentation/onbording/onbording_screen.dart';
 import 'package:diary_flutter/presentation/onbording/onbording_title.dart';
 import 'package:diary_flutter/presentation/style/gem_theme.dart';
@@ -26,7 +27,7 @@ class SplashScreen extends HookConsumerWidget {
       if (authState.value is NeedSigninState) {
         _moveNext(ref, context, OnboardingScreen.path);
       } else if (authState.value is SignedInState) {
-        _moveNext(ref, context, MainBody.path);
+        _moveNext(ref, context, MainScreen.path);
       }
       return () {};
     }, [authState]);

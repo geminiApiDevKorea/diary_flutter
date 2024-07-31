@@ -67,7 +67,8 @@ class JournalService extends _$JournalService {
       Print.red('No token found');
       return const AsyncValue.data(JournalError('No token found'));
     }
-    return _initializeJournal(DateTime.now(), idToken);
+    final date = DateTime.now();
+    return _initializeJournal(date, idToken);
     // return const AsyncValue.data(JournalInitial());
   }
 
@@ -86,8 +87,13 @@ class JournalService extends _$JournalService {
           (journal) =>
               _isSameDay(journal.createdAt, date) && journal.idToken == idToken,
         );
+        if (journal == null) {
+          return const AsyncValue.data(JournalLoaded(null));
+        }
+        Print.white('journal: $journal');
         return AsyncValue.data(JournalLoaded(journal));
       } else {
+        Print.white('No journals found');
         return const AsyncValue.data(JournalLoaded(null));
       }
     } catch (e) {
@@ -105,10 +111,19 @@ class JournalService extends _$JournalService {
 
   // 사용자의 입력을 설정하는 메서드입니다.
   Future<void> setUserInput(String input) async {
+    final persistanceStorage = ref.read(persistanceStorageProvider);
+    final idToken = persistanceStorage.getValue<String>(idTokenKey);
+    final now = DateTime.now();
+
     state.whenData((journalState) {
-      if (journalState is JournalLoaded && journalState.journal != null) {
-        // 현재 저널을 복사하고 userInput을 업데이트합니다.
-        final updatedJournal = journalState.journal!.copyWith(userInput: input);
+      if (journalState is JournalLoaded) {
+        final updatedJournal = (journalState.journal ??
+                Journal(
+                  idToken: idToken!,
+                  createdAt: now,
+                  journalType: JournalType.post, // 기본 타입 설정
+                ))
+            .copyWith(userInput: input);
         state = AsyncValue.data(
             JournalLoaded(updatedJournal)); // 업데이트된 저널을 상태로 설정합니다.
       }
@@ -117,11 +132,19 @@ class JournalService extends _$JournalService {
 
   // 저널의 히스토리를 설정하는 메서드입니다.
   Future<void> setHistories(List<History> histories) async {
+    final persistanceStorage = ref.read(persistanceStorageProvider);
+    final idToken = persistanceStorage.getValue<String>(idTokenKey);
+    final now = DateTime.now();
+
     state.whenData((journalState) {
-      if (journalState is JournalLoaded && journalState.journal != null) {
-        // 현재 저널을 복사하고 히스토리를 업데이트합니다.
-        final updatedJournal =
-            journalState.journal!.copyWith(history: histories);
+      if (journalState is JournalLoaded) {
+        final updatedJournal = (journalState.journal ??
+                Journal(
+                  idToken: idToken!,
+                  createdAt: now,
+                  journalType: JournalType.post, // 기본 타입 설정
+                ))
+            .copyWith(history: histories);
         state = AsyncValue.data(
             JournalLoaded(updatedJournal)); // 업데이트된 저널을 상태로 설정합니다.
       }
@@ -130,12 +153,12 @@ class JournalService extends _$JournalService {
 
   // 현재 저널을 저장하는 메서드입니다.
   Future<void> saveJournal() async {
-    state.whenData((journalState) {
+    state.whenData((journalState) async {
       if (journalState is JournalLoaded) {
         final now = DateTime.now();
         final persistanceStorage = ref.read(persistanceStorageProvider);
         final idToken = persistanceStorage.getValue<String>(idTokenKey);
-        Print.white(idToken ?? 'No token found');
+        // Print.white(idToken ?? 'No token found');
         if (idToken == null) {
           state = const AsyncValue.data(JournalError('No token found'));
           return;
@@ -149,13 +172,14 @@ class JournalService extends _$JournalService {
             .copyWith(
           createdAt: now,
         );
-        _saveJournalToStorage(updatedJournal);
+        Print.blue(updatedJournal.toString());
+        await _saveJournalToStorage(updatedJournal);
       }
     });
   }
 
   // 저널을 저장소에 저장하는 실제 메서드입니다.
-  void _saveJournalToStorage(Journal journal) {
+  Future<void> _saveJournalToStorage(Journal journal) async {
     try {
       final storage = ref.read(persistanceStorageProvider); // 저장소 인스턴스를 가져옵니다.
       final journalsStringList = storage.getValue<List<String>>(journalKey) ??
@@ -184,6 +208,7 @@ class JournalService extends _$JournalService {
 
       // 저장소에 업데이트된 저널 리스트를 저장합니다.
       storage.setValue<List<String>>(journalKey, updatedJournalsStringList);
+      Print.cyan(journal.toString());
       state = AsyncValue.data(JournalLoaded(journal)); // 상태를 업데이트된 저널로 설정합니다.
     } catch (e) {
       Print.red(
@@ -193,7 +218,7 @@ class JournalService extends _$JournalService {
   }
 
   // 현재 저널을 삭제하는 메서드입니다.
-  void deleteJournal() {
+  Future<void> deleteJournal() async {
     state.whenData((journalState) {
       if (journalState is JournalLoaded && journalState.journal != null) {
         // 저널을 저장소에서 삭제합니다.
@@ -203,7 +228,7 @@ class JournalService extends _$JournalService {
   }
 
   // 저널을 저장소에서 삭제하는 실제 메서드입니다.
-  void _deleteJournalFromStorage(Journal journal) {
+  Future<void> _deleteJournalFromStorage(Journal journal) async {
     try {
       final storage = ref.read(persistanceStorageProvider); // 저장소 인스턴스를 가져옵니다.
       final journalsStringList = storage.getValue<List<String>>(journalKey) ??
@@ -292,10 +317,7 @@ class JournalService extends _$JournalService {
     }
   }
 
-  Future<void> submitFeedback({
-    required String feedback,
-    required FeedbackType type,
-  }) async {
+  Future<void> submitJournal() async {
     // 1. 먼저 현재 저널을 저장합니다.
     await saveJournal();
 
@@ -332,11 +354,17 @@ class JournalService extends _$JournalService {
       }
 
       // 4. 가져온 저널 데이터로 피드백을 제출합니다.
-      final response = await repository.postChatsFeedback(
-          bearerToken: 'Bearer $idToken',
-          type: type,
-          body: currentJournal.toChatsRequestBody());
-      Print.green(response.toString());
+      try {
+        final response = await repository.postChatsFeedback(
+            bearerToken: 'Bearer $idToken',
+            type: FeedbackType.post,
+            body: currentJournal.toChatsRequestBody());
+        Print.green(response.toString());
+      } catch (e) {
+        Print.red('Error in submitFeedback: $e');
+        state = AsyncValue.data(JournalError(e.toString()));
+        return;
+      }
 
       // 5. 성공적으로 피드백을 제출한 경우
       state = const AsyncValue.data(JournalFeedbackSubmitted());

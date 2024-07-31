@@ -95,12 +95,12 @@ class MainScreen extends HookConsumerWidget {
 
     return Animate(
       effects: [
-        BlurEffect(
-          begin: const Offset(0, 0),
-          end: const Offset(4, 4),
-          duration: 300.ms,
-          curve: Curves.easeInOut,
-        ),
+        // BlurEffect(
+        //   begin: const Offset(0, 0),
+        //   end: const Offset(4, 4),
+        //   duration: 300.ms,
+        //   curve: Curves.easeInOut,
+        // ),
         // ColorEffect(
         //   curve: Curves.bounceIn,
         //   begin: Colors.transparent,

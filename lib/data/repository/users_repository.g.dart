@@ -20,7 +20,7 @@ Map<String, dynamic> _$UsersAgreementBodyToJson(UsersAgreementBody instance) =>
 // RetrofitGenerator
 // **************************************************************************
 
-// ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers
+// ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers,unused_element
 
 class _UsersRepository implements UsersRepository {
   _UsersRepository(
@@ -56,8 +56,8 @@ class _UsersRepository implements UsersRepository {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = UserResponse.fromJson(_result.data!);
-    return value;
+    final _value = UserResponse.fromJson(_result.data!);
+    return _value;
   }
 
   @override
@@ -88,34 +88,36 @@ class _UsersRepository implements UsersRepository {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = UserResponse.fromJson(_result.data!);
-    return value;
+    final _value = UserResponse.fromJson(_result.data!);
+    return _value;
   }
 
   @override
-  Future<dynamic> getCurrentUser() async {
+  Future<UserResponse> getCurrentUser({required String bearerToken}) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'Authorization': bearerToken};
+    _headers.removeWhere((k, v) => v == null);
     const Map<String, dynamic>? _data = null;
-    final _result = await _dio.fetch(_setStreamType<dynamic>(Options(
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<UserResponse>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
     )
-        .compose(
-          _dio.options,
-          '/users/me',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        ))));
-    final value = _result.data;
-    return value;
+            .compose(
+              _dio.options,
+              '/users/me',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final _value = UserResponse.fromJson(_result.data!);
+    return _value;
   }
 
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {

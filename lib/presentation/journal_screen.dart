@@ -60,7 +60,6 @@ class JournalScreen extends HookConsumerWidget with DeleteConfirmDialogMixin {
                           ),
                         ),
                         onPressed: () async {
-                          await journalEventNotifer.setUserInput('dsadfasf');
                           await journalEventNotifer.saveJournal();
                           context.pop();
                         },
@@ -76,18 +75,29 @@ class JournalScreen extends HookConsumerWidget with DeleteConfirmDialogMixin {
                   ),
                   const Spacer(),
                   TextButton(
-                      onPressed: () => {
-                            showDeleteConfirmDialog(
-                                context: context,
-                                colors: colors,
-                                onConfirm: () => context.pop())
-                          },
+                      onPressed: () async {
+                        FocusScope.of(context).unfocus();
+                        // 키보드가 내려갈 시간을 줌
+                        showDeleteConfirmDialog(
+                            context: context,
+                            colors: colors,
+                            onConfirm: () async {
+                              FocusScope.of(context).unfocus();
+                              await journalEventNotifer.deleteJournal();
+                              if (context.mounted) {
+                                FocusScope.of(context).unfocus();
+                                context.pop();
+                              }
+                            });
+                      },
                       child: Text(
                         "Delete",
                         style: textStyle.button.copyWith(color: colors.error),
                       )),
                   TextButton(
-                      onPressed: () => {},
+                      onPressed: () async {
+                        await journalEventNotifer.submitJournal();
+                      },
                       child: Text(
                         "Finish",
                         style:
