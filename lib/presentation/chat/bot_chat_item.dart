@@ -42,7 +42,7 @@ class BotChatItem extends ConsumerWidget {
                           .toList(),
                     ),
                   );
-          final content = response.content;
+          final content = response.chatPromptResponse;
           // 응답 결과를 화면에 표시하기 위해 Chat 아이템 추가
           ref.read(storedChatsProvider.notifier).store(
                 Chat(

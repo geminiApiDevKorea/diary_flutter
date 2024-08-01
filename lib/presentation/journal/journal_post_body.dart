@@ -55,7 +55,12 @@ class PostJournalBody extends HookConsumerWidget {
               journalEvent.when(
                 data: (state) {
                   if (state is JournalLoaded && state.journal != null) {
-                    textController.text = state.journal!.userInput ?? '';
+                    if (state.journal!.music != null) {
+                      textController.text =
+                          '${state.journal!.userInput ?? ''}🎵 ${state.journal!.music!} - ${state.journal!.song}';
+                    } else {
+                      textController.text = state.journal!.userInput ?? '';
+                    }
                   } else {
                     textController.text = '';
                   }

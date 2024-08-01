@@ -13,6 +13,9 @@ Journal _$JournalFromJson(Map<String, dynamic> json) => Journal(
       music: json['music'] == null
           ? null
           : Music.fromJson(json['music'] as Map<String, dynamic>),
+      song: json['song'] == null
+          ? null
+          : Song.fromJson(json['song'] as Map<String, dynamic>),
       tags: (json['tags'] as List<dynamic>?)?.map((e) => e as String).toList(),
       history: (json['history'] as List<dynamic>?)
           ?.map((e) => History.fromJson(e as Map<String, dynamic>))
@@ -25,6 +28,7 @@ Map<String, dynamic> _$JournalToJson(Journal instance) => <String, dynamic>{
       'createdAt': instance.createdAt.toIso8601String(),
       'userInput': instance.userInput,
       'music': instance.music?.toJson(),
+      'song': instance.song?.toJson(),
       'tags': instance.tags,
       'history': instance.history?.map((e) => e.toJson()).toList(),
       'type': _$JournalTypeEnumMap[instance.journalType]!,

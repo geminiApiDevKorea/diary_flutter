@@ -16,11 +16,23 @@ Map<String, dynamic> _$UsersAgreementBodyToJson(UsersAgreementBody instance) =>
       'agreement': instance.agreement,
     };
 
+UsersRequestBody _$UsersRequestBodyFromJson(Map<String, dynamic> json) =>
+    UsersRequestBody(
+      nickname: json['nickname'] as String?,
+      gender: json['gender'] as String?,
+    );
+
+Map<String, dynamic> _$UsersRequestBodyToJson(UsersRequestBody instance) =>
+    <String, dynamic>{
+      'nickname': instance.nickname,
+      'gender': instance.gender,
+    };
+
 // **************************************************************************
 // RetrofitGenerator
 // **************************************************************************
 
-// ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers
+// ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers,unused_element
 
 class _UsersRepository implements UsersRepository {
   _UsersRepository(
@@ -33,12 +45,16 @@ class _UsersRepository implements UsersRepository {
   String? baseUrl;
 
   @override
-  Future<UserResponse> postUsers({required String bearerToken}) async {
+  Future<UserResponse> postUsers({
+    required String bearerToken,
+    required UsersRequestBody body,
+  }) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{r'Authorization': bearerToken};
     _headers.removeWhere((k, v) => v == null);
-    const Map<String, dynamic>? _data = null;
+    final _data = <String, dynamic>{};
+    _data.addAll(body.toJson());
     final _result = await _dio
         .fetch<Map<String, dynamic>>(_setStreamType<UserResponse>(Options(
       method: 'POST',
@@ -56,8 +72,8 @@ class _UsersRepository implements UsersRepository {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = UserResponse.fromJson(_result.data!);
-    return value;
+    final _value = UserResponse.fromJson(_result.data!);
+    return _value;
   }
 
   @override
@@ -88,8 +104,8 @@ class _UsersRepository implements UsersRepository {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = UserResponse.fromJson(_result.data!);
-    return value;
+    final _value = UserResponse.fromJson(_result.data!);
+    return _value;
   }
 
   @override
@@ -116,8 +132,8 @@ class _UsersRepository implements UsersRepository {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = UserResponse.fromJson(_result.data!);
-    return value;
+    final _value = UserResponse.fromJson(_result.data!);
+    return _value;
   }
 
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {

@@ -1,5 +1,6 @@
 import 'package:diary_flutter/data/model/history.dart';
 import 'package:diary_flutter/data/model/music.dart';
+import 'package:diary_flutter/data/model/song.dart';
 import 'package:diary_flutter/data/repository/chats_repository.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -19,6 +20,7 @@ class Journal {
   final DateTime createdAt;
   final String? userInput;
   final Music? music;
+  final Song? song;
   final List<String>? tags;
   final List<History>? history;
   @JsonKey(name: 'type')
@@ -29,6 +31,7 @@ class Journal {
     required this.createdAt,
     this.userInput,
     this.music,
+    this.song,
     this.tags,
     this.history,
     required this.journalType,
@@ -50,6 +53,7 @@ class Journal {
     DateTime? createdAt,
     String? userInput,
     Music? music,
+    Song? song,
     List<String>? tags,
     List<History>? history,
     JournalType? journalType,
@@ -59,6 +63,7 @@ class Journal {
       createdAt: createdAt ?? this.createdAt,
       userInput: userInput ?? this.userInput,
       music: music ?? this.music,
+      song: song ?? this.song,
       tags: tags ?? this.tags,
       history: history ?? this.history,
       journalType: journalType ?? this.journalType,
@@ -67,7 +72,7 @@ class Journal {
 
   @override
   String toString() {
-    return 'Journal(createdAt: $createdAt, userInput: $userInput, music: $music, tags: $tags, type: $journalType)';
+    return 'Journal(idToken: $idToken, createdAt: $createdAt, userInput: $userInput, music: $music, song: $song, tags: $tags, history: $history, type: $journalType)';
   }
 }
 
