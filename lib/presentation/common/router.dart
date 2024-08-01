@@ -1,3 +1,4 @@
+import 'package:diary_flutter/presentation/calendar/calendar_screen.dart';
 import 'package:diary_flutter/presentation/journal_screen.dart';
 import 'package:diary_flutter/presentation/main_screen.dart';
 import 'package:diary_flutter/presentation/common/custom_transitions.dart';
@@ -17,13 +18,18 @@ final GlobalKey<NavigatorState> mainKey = GlobalKey<NavigatorState>();
 @Riverpod(keepAlive: true)
 GoRouter router(RouterRef ref) {
   return GoRouter(
-    initialLocation: SplashScreen.path,
+    initialLocation: CalendarScreen.path,
+    // initialLocation: SplashScreen.path,
     // initialLocation: MainScreen.path,
     debugLogDiagnostics: true,
     routes: [
       GoRoute(
         path: SplashScreen.path,
         builder: (context, state) => const SplashScreen(),
+      ),
+      GoRoute(
+        path: CalendarScreen.path,
+        builder: (context, state) => const CalendarScreen(),
       ),
       GoRoute(
         path: OnboardingScreen.path,
