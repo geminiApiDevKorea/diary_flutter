@@ -1,7 +1,4 @@
-import 'package:diary_flutter/common/enums.dart';
-import 'package:diary_flutter/data/model/history.dart';
 import 'package:diary_flutter/data/model/journal.dart';
-import 'package:diary_flutter/data/provider/persistance_storage_provider.dart';
 import 'package:diary_flutter/presentation/journal/dialog/delete_confirmation_dialog_mixin.dart';
 import 'package:diary_flutter/presentation/journal/journal_chat_body.dart';
 import 'package:diary_flutter/presentation/journal/journal_post_body.dart';
@@ -11,7 +8,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:palestine_console/palestine_console.dart';
 
 class JournalScreen extends HookConsumerWidget with DeleteConfirmDialogMixin {
   const JournalScreen({super.key, required this.type});
@@ -59,10 +55,9 @@ class JournalScreen extends HookConsumerWidget with DeleteConfirmDialogMixin {
                             borderRadius: BorderRadius.circular(32),
                           ),
                         ),
-                        onPressed: () async {
-                          await journalEventNotifer.saveJournal();
-                          context.pop();
-                        },
+                        onPressed: () => journalEventNotifer
+                            .saveJournal()
+                            .then((_) => context.pop()),
                         label: Text(
                           'List',
                           style: textStyle.button

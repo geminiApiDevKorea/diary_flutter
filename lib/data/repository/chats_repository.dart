@@ -5,6 +5,7 @@ import 'package:diary_flutter/data/model/diary/evaluated_prompt_content.dart';
 import 'package:diary_flutter/data/model/diary/generated_feedback_content.dart';
 import 'package:diary_flutter/data/model/history.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:retrofit/retrofit.dart';
 
@@ -26,7 +27,9 @@ class ChatsFeedbackResponse {
   ChatsFeedbackResponse({required this.chatResponse});
 
   GeneratedFeedbackContent get content {
-    print(chatResponse.result.output.content);
+    if (kDebugMode) {
+      print(chatResponse.result.output.content);
+    }
     return GeneratedFeedbackContent.fromJson(
       jsonDecode(chatResponse.result.output.content) as Map<String, dynamic>,
     );

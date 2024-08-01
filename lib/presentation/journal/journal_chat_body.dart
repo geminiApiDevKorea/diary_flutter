@@ -1,4 +1,3 @@
-import 'package:diary_flutter/common/enums.dart';
 import 'package:diary_flutter/presentation/style/gem_theme.dart';
 import 'package:diary_flutter/presentation/style/index.dart';
 import 'package:flutter/cupertino.dart';

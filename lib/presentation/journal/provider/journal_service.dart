@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:diary_flutter/common/enums.dart';
 import 'package:diary_flutter/data/model/history.dart';
 import 'package:diary_flutter/data/provider/chats_repository_provider.dart';
-import 'package:diary_flutter/data/repository/chats_repository.dart';
 import 'package:diary_flutter/domain/provider/chats/chats_feedback_notifier.dart';
 import 'package:palestine_console/palestine_console.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';

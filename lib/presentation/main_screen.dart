@@ -1,15 +1,12 @@
 import 'dart:ui';
-
-import 'package:diary_flutter/presentation/common/router.dart';
 import 'package:diary_flutter/presentation/journal_screen.dart';
-import 'package:diary_flutter/presentation/main/main_body.dart';
 import 'package:diary_flutter/presentation/style/index.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_custom_carousel/flutter_custom_carousel.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -33,7 +30,9 @@ class MainScreen extends HookConsumerWidget {
       MainScreen.path: PathConfig(
           width: 140,
           text: 'Calendar',
-          onTap: () => print('Calendar'),
+          onTap: () {
+            if (kDebugMode) print('Calendar');
+          },
           backgroundColor: colors.primary100),
       JournalScreen.path: PathConfig(
           width: 100,
@@ -84,7 +83,9 @@ class MainScreen extends HookConsumerWidget {
     useEffect(() {
       if (isTopOfStack) {
         // 최상단에 있을 때 애니메이션 재생
-        print(isTopOfStack);
+        if (kDebugMode) {
+          print(isTopOfStack);
+        }
 
         Future.delayed(const Duration(milliseconds: 300), () {
           restartAnimation();
@@ -139,7 +140,9 @@ class MainScreen extends HookConsumerWidget {
                           height: 36,
                           child: ElevatedButton.icon(
                             onPressed: () {
-                              print("calendar로");
+                              if (kDebugMode) {
+                                print("calendar로");
+                              }
                             },
                             style: ElevatedButton.styleFrom(
                               overlayColor: Colors.transparent,
@@ -432,7 +435,6 @@ class CustomHorizontalCarousel extends ConsumerWidget {
 
   Widget _buildBlurredCircle(BuildContext context, WidgetRef ref) {
     final colors = ref.gemColors;
-    final textStyle = ref.gemTextStyle;
     return Container(
       width: 250,
       height: 250,

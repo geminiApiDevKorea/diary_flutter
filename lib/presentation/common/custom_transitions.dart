@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:json_annotation/json_annotation.dart';
 
-@JsonEnum()
+// @JsonEnum()
 enum SlideDirection {
-  @JsonValue('right')
+  // @JsonValue('right')
   right,
-  @JsonValue('left')
+  // @JsonValue('left')
   left,
-  @JsonValue('top')
+  // @JsonValue('top')
   top,
-  @JsonValue('bottom')
+  // @JsonValue('bottom')
   bottom
 }
 
