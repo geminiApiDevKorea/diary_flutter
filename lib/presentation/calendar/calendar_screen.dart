@@ -9,6 +9,7 @@ class CalendarScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final colors = GemTheme.of(ref).colors;
+    const weeks = 6;
     return Scaffold(
       backgroundColor: colors.background,
       body: Padding(
@@ -39,14 +40,23 @@ class CalendarScreen extends ConsumerWidget {
                 ),
               ),
             ),
-            Placeholder(
-              color: colors.placeholder,
-              child: const SizedBox(
-                width: double.infinity,
-                height: 52 * 6,
-                child: Center(
-                  child: Text('날짜 영역'),
-                ),
+            SizedBox(
+              width: double.infinity,
+              height: 52.0 * weeks,
+              child: Column(
+                children: [
+                  for (var i = 0; i < weeks; i++)
+                    Placeholder(
+                      color: colors.placeholder,
+                      child: const SizedBox(
+                        width: double.infinity,
+                        height: 52,
+                        child: Center(
+                          child: Text('주간 날짜 영역'),
+                        ),
+                      ),
+                    ),
+                ],
               ),
             ),
           ],
