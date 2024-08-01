@@ -2,7 +2,9 @@ import 'dart:convert';
 import 'package:diary_flutter/common/enums.dart';
 import 'package:diary_flutter/data/model/history.dart';
 import 'package:diary_flutter/data/provider/chats_repository_provider.dart';
+import 'package:diary_flutter/data/repository/chats_repository.dart';
 import 'package:diary_flutter/domain/provider/chats/chats_feedback_notifier.dart';
+import 'package:diary_flutter/domain/provider/chats/chats_prompt_notifier.dart';
 import 'package:palestine_console/palestine_console.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:diary_flutter/data/model/journal.dart';
@@ -59,6 +61,17 @@ class JournalService extends _$JournalService {
         Print.green('Feedback submitted successfully');
       });
     });
+
+    ref.listen<AsyncValue<ChatsPromptState>>(chatsPromptNotifierProvider,
+        (previous, next) {
+      next.whenData((state) {
+        if (state is ChatsPromptData) {
+          //채팅완료
+          _addHistoryToJournal(state.data);
+        }
+      });
+    });
+
     final persistanceStorage = ref.read(persistanceStorageProvider);
     final idToken = persistanceStorage.getValue<String>(idTokenKey);
     if (idToken == null) {
@@ -425,5 +438,80 @@ class JournalService extends _$JournalService {
       Print.red('Error in getJournalForDate: $e');
     }
     return null;
+  }
+
+  Future<void> requestChatPrompt(String userInput) async {
+    final chatsPromptNotifier = ref.read(chatsPromptNotifierProvider.notifier);
+    final persistanceStorage = ref.read(persistanceStorageProvider);
+    final idToken = persistanceStorage.getValue<String>(idTokenKey);
+
+    if (idToken == null) {
+      state = const AsyncValue.data(JournalError('No token found'));
+      return;
+    }
+
+    state.whenData((journalState) async {
+      if (journalState is JournalLoaded) {
+        final currentJournal = journalState.journal;
+        if (currentJournal != null) {
+          // 사용자 메시지를 history에 추가
+          final updatedJournalWithUserMessage =
+              await _addUserMessageToJournal(currentJournal, userInput);
+
+          final body = ChatsRequestBody(
+            userInput: userInput,
+            histories: updatedJournalWithUserMessage.history!,
+          );
+
+          await chatsPromptNotifier.postPrompt(body: body);
+        }
+      }
+    });
+  }
+
+  Future<Journal> _addUserMessageToJournal(
+      Journal journal, String userInput) async {
+    final newHistory = History(
+      role: Role.user,
+      message: userInput,
+    );
+
+    final updatedHistories = [
+      ...?journal.history,
+      newHistory,
+    ];
+
+    final updatedJournal = journal.copyWith(
+      history: updatedHistories,
+    );
+
+    state = AsyncValue.data(JournalLoaded(updatedJournal));
+    await _saveJournalToStorage(updatedJournal);
+    return updatedJournal;
+  }
+
+  Future<void> _addHistoryToJournal(ChatsPromptResponse response) async {
+    state.whenData((journalState) {
+      if (journalState is JournalLoaded) {
+        final currentJournal = journalState.journal;
+        if (currentJournal != null) {
+          final newHistory = History(
+              role: Role.assistant,
+              message: response.chatPromptResponse.react!);
+
+          final updatedHistories = [
+            ...?currentJournal.history,
+            newHistory,
+          ];
+
+          final updatedJournal = currentJournal.copyWith(
+            history: updatedHistories,
+          );
+
+          state = AsyncValue.data(JournalLoaded(updatedJournal));
+          _saveJournalToStorage(updatedJournal);
+        }
+      }
+    });
   }
 }
