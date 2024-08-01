@@ -54,6 +54,7 @@ dependencies:
   flutter_custom_carousel: ^0.1.0+1
   intl: ^0.19.0
   palestine_console: ^0.0.10
+  pretty_dio_logger: ^1.4.0
 
 dev_dependencies:
   flutter_test:

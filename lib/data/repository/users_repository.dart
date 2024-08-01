@@ -12,13 +12,44 @@ class UsersAgreementBody {
   UsersAgreementBody({required this.agreement});
 }
 
+@JsonSerializable()
+class UsersRequestBody {
+  String? nickname;
+  String? gender;
+
+  UsersRequestBody({
+    this.nickname,
+    this.gender,
+  });
+
+  factory UsersRequestBody.fromJson(Map<String, dynamic> json) =>
+      _$UsersRequestBodyFromJson(json);
+
+  Map<String, dynamic> toJson() => _$UsersRequestBodyToJson(this);
+
+  UsersRequestBody copyWith({
+    String? nickname,
+    String? gender,
+  }) {
+    return UsersRequestBody(
+      nickname: nickname ?? this.nickname,
+      gender: gender ?? this.gender,
+    );
+  }
+
+  @override
+  String toString() {
+    return 'UsersRequestBody(nickname: $nickname, gender: $gender)';
+  }
+}
+
 @RestApi()
 abstract class UsersRepository {
   factory UsersRepository(Dio dio) = _UsersRepository;
   @POST('/users')
-  Future<UserResponse> postUsers({
-    @Header('Authorization') required String bearerToken,
-  });
+  Future<UserResponse> postUsers(
+      {@Header('Authorization') required String bearerToken,
+      @Body() required UsersRequestBody body});
 
   @PUT('/users/agreement')
   Future<UserResponse> putUsersAgreement({

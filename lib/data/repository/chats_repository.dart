@@ -4,6 +4,8 @@ import 'package:diary_flutter/data/model/diary/chats_result.dart';
 import 'package:diary_flutter/data/model/diary/evaluated_prompt_content.dart';
 import 'package:diary_flutter/data/model/diary/generated_feedback_content.dart';
 import 'package:diary_flutter/data/model/history.dart';
+import 'package:diary_flutter/data/model/music.dart';
+import 'package:diary_flutter/data/model/song.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -16,28 +18,81 @@ class ChatsRequestBody {
   final String userInput;
   @JsonKey(name: 'history')
   final List<History> histories;
-  Map<String, dynamic> toJson() => _$ChatsRequestBodyToJson(this);
+
   ChatsRequestBody({required this.userInput, required this.histories});
+
+  Map<String, dynamic> toJson() => _$ChatsRequestBodyToJson(this);
+
+  @override
+  String toString() {
+    return 'ChatsRequestBody(userInput: $userInput, histories: $histories)';
+  }
 }
 
 @JsonSerializable()
 class ChatsFeedbackResponse {
-  final ChatResponse chatResponse;
+  ChatPromptResponse chatPromptResponse;
+  Music music;
+  int code;
 
-  ChatsFeedbackResponse({required this.chatResponse});
+  ChatsFeedbackResponse({
+    required this.chatPromptResponse,
+    required this.music,
+    required this.code,
+  });
 
-  GeneratedFeedbackContent get content {
-    if (kDebugMode) {
-      print(chatResponse.result.output.content);
-    }
-    return GeneratedFeedbackContent.fromJson(
-      jsonDecode(chatResponse.result.output.content) as Map<String, dynamic>,
+  factory ChatsFeedbackResponse.fromJson(Map<String, dynamic> json) =>
+      _$ChatsFeedbackResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ChatsFeedbackResponseToJson(this);
+
+  ChatsFeedbackResponse copyWith({
+    ChatPromptResponse? chatPromptResponse,
+    Music? music,
+    int? code,
+  }) {
+    return ChatsFeedbackResponse(
+      chatPromptResponse: chatPromptResponse ?? this.chatPromptResponse,
+      music: music ?? this.music,
+      code: code ?? this.code,
     );
   }
 
-  Map<String, dynamic> toJson() => _$ChatsFeedbackResponseToJson(this);
-  factory ChatsFeedbackResponse.fromJson(Map<String, dynamic> json) =>
-      _$ChatsFeedbackResponseFromJson(json);
+  @override
+  String toString() {
+    return 'ChatsFeedbackResponse(chatPromptResponse: $chatPromptResponse, music: $music, code: $code)';
+  }
+}
+
+@JsonSerializable()
+class ChatPromptResponse {
+  String comment;
+  Song song;
+
+  ChatPromptResponse({
+    required this.comment,
+    required this.song,
+  });
+
+  factory ChatPromptResponse.fromJson(Map<String, dynamic> json) =>
+      _$ChatPromptResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ChatPromptResponseToJson(this);
+
+  ChatPromptResponse copyWith({
+    String? comment,
+    Song? song,
+  }) {
+    return ChatPromptResponse(
+      comment: comment ?? this.comment,
+      song: song ?? this.song,
+    );
+  }
+
+  @override
+  String toString() {
+    return 'ChatPromptResponse(comment: $comment, song: $song)';
+  }
 }
 
 @JsonSerializable()
