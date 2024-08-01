@@ -6,7 +6,7 @@ part of 'agreed_user.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$agreedUserHash() => r'85e1bb0c3f7f598207f5d4071e506651c9daaf62';
+String _$agreedUserHash() => r'5f3dc7a65ecba065e1a99df9801b2119743029c5';
 
 /// See also [AgreedUser].
 @ProviderFor(AgreedUser)

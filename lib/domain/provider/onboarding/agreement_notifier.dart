@@ -1,6 +1,7 @@
 import 'package:diary_flutter/data/provider/users_repository_provider.dart';
 import 'package:diary_flutter/data/repository/users_repository.dart';
 import 'package:diary_flutter/domain/provider/auth/auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'agreement_notifier.g.dart';
@@ -120,7 +121,9 @@ class AgreementNotifier extends _$AgreementNotifier {
         );
       }
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
   }
 }

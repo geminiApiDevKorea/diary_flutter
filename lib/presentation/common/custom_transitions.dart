@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:json_annotation/json_annotation.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 
-@JsonEnum()
+// @JsonEnum()
 enum SlideDirection {
-  @JsonValue('right')
+  // @JsonValue('right')
   right,
-  @JsonValue('left')
+  // @JsonValue('left')
   left,
-  @JsonValue('top')
+  // @JsonValue('top')
   top,
-  @JsonValue('bottom')
+  // @JsonValue('bottom')
   bottom
 }
 
@@ -26,15 +24,12 @@ class CustomTransitions {
   static CustomTransitionPage buildSlideTransitionPage({
     required Widget child,
     required LocalKey key,
-    Duration? transitionDuration,
-    Curve? curve,
-
-    /// 슬라이드가 날라오는 시작점
     required SlideDirection from,
+    Duration transitionDuration = const Duration(milliseconds: 400),
+    Curve curve = Curves.easeInOut,
   }) {
     return CustomTransitionPage<void>(
-      transitionDuration:
-          transitionDuration ?? const Duration(milliseconds: 400),
+      transitionDuration: transitionDuration,
       key: key,
       child: child,
       transitionsBuilder: (context, animation, secondaryAnimation, child) =>
@@ -43,7 +38,7 @@ class CustomTransitions {
           Tween<Offset>(
             begin: _directionOffsets[from]!,
             end: Offset.zero,
-          ).chain(CurveTween(curve: curve ?? Curves.easeInOut)),
+          ).chain(CurveTween(curve: curve)),
         ),
         child: child,
       ),
@@ -53,19 +48,20 @@ class CustomTransitions {
   static CustomTransitionPage buildFadeTransitionPage({
     required Widget child,
     required LocalKey key,
-    Duration? transitionDuration,
-    Curve? curve,
+    Duration transitionDuration = const Duration(milliseconds: 300),
+    Curve curve = Curves.easeInOut,
   }) {
     return CustomTransitionPage<void>(
-      transitionDuration:
-          transitionDuration ?? const Duration(milliseconds: 300),
+      transitionDuration: transitionDuration,
       key: key,
       child: child,
       transitionsBuilder: (context, animation, secondaryAnimation, child) =>
           FadeTransition(
         opacity: animation.drive(
-          Tween<double>(begin: 0.0, end: 1.0)
-              .chain(CurveTween(curve: curve ?? Curves.easeInOut)),
+          Tween<double>(
+            begin: 0.0,
+            end: 1.0,
+          ).chain(CurveTween(curve: curve)),
         ),
         child: child,
       ),

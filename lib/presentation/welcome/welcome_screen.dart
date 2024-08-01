@@ -1,5 +1,4 @@
 import 'package:diary_flutter/presentation/common/bottom_fulfilled_button.dart';
-import 'package:diary_flutter/presentation/main/main_body.dart';
 import 'package:diary_flutter/presentation/main_screen.dart';
 import 'package:diary_flutter/presentation/style/index.dart';
 import 'package:flutter/material.dart';

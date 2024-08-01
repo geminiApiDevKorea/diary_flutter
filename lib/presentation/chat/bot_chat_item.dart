@@ -6,6 +6,7 @@ import 'package:diary_flutter/data/repository/chats_repository.dart';
 import 'package:diary_flutter/domain/provider/auth/auth.dart';
 import 'package:diary_flutter/domain/provider/chats/stored_chats.dart';
 import 'package:diary_flutter/domain/provider/chats/stored_feedback_target_chats.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -58,7 +59,9 @@ class BotChatItem extends ConsumerWidget {
                 ),
               );
         } catch (e) {
-          print(e);
+          if (kDebugMode) {
+            print(e);
+          }
         }
       }
     }

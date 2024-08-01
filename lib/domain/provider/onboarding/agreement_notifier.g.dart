@@ -6,7 +6,7 @@ part of 'agreement_notifier.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$agreementNotifierHash() => r'd09e9ff682c03f8f7822c507dd92f0c35f9041e5';
+String _$agreementNotifierHash() => r'f3d8c4fdcbea03a55944a5098b32f1e00108ba73';
 
 /// See also [AgreementNotifier].
 @ProviderFor(AgreementNotifier)
