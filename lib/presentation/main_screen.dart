@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:diary_flutter/presentation/calendar/calendar_screen.dart';
 import 'package:diary_flutter/presentation/journal_screen.dart';
 import 'package:diary_flutter/presentation/style/index.dart';
 import 'package:flutter/cupertino.dart';
@@ -143,6 +144,7 @@ class MainScreen extends HookConsumerWidget {
                               if (kDebugMode) {
                                 print("calendar로");
                               }
+                              context.go(CalendarScreen.path);
                             },
                             style: ElevatedButton.styleFrom(
                               overlayColor: Colors.transparent,

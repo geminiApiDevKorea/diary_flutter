@@ -73,46 +73,6 @@ GoRouter router(RouterRef ref) {
               transitionDuration: const Duration(milliseconds: 300),
             );
           }),
-
-      // StatefulShellRoute.indexedStack(
-      //   pageBuilder: (context, state, navigationShell) {
-      //     return NoTransitionPage(
-      //       child: BaseScreen(navigationShell: navigationShell),
-      //       key: state.pageKey,
-      //     );
-      //   },
-      //   branches: [
-      //     StatefulShellBranch(
-      //       navigatorKey: mainKey,
-      //       routes: [
-      //         GoRoute(
-      //           path: MainBody.path,
-      //           name: MainBody.name,
-      //           pageBuilder: (context, state) {
-      //             const key = ValueKey('main');
-      //             return const NoTransitionPage(
-      //               child: MainBody(),
-      //               key: key,
-      //             );
-      //           },
-      //         ),
-      //         GoRoute(
-      //           path: JournalBody.path,
-      //           name: JournalBody.name,
-      //           pageBuilder: (context, state) {
-      //             final type = state.uri.queryParameters['type'] ?? 'chat';
-      //             final key = ValueKey('journal$type');
-      //             return CustomTransitions.buildSlideTransitionPage(
-      //               child: JournalBody(type: type),
-      //               key: key,
-      //               from: SlideDirection.right,
-      //             );
-      //           },
-      //         ),
-      //       ],
-      //     ),
-      //   ],
-      // ),
     ],
   );
 }
