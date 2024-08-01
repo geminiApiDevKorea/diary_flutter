@@ -73,13 +73,17 @@ class $AssetsImagesGen {
   AssetGenImage get iconGoogle =>
       const AssetGenImage('assets/images/icon_google.png');
 
+  /// File path: assets/images/left_arrow.png
+  AssetGenImage get leftArrow =>
+      const AssetGenImage('assets/images/left_arrow.png');
+
   /// File path: assets/images/unchecked.png
   AssetGenImage get unchecked =>
       const AssetGenImage('assets/images/unchecked.png');
 
   /// List of all assets
   List<AssetGenImage> get values =>
-      [backButton, checked, iconActionRight, iconGoogle, unchecked];
+      [backButton, checked, iconActionRight, iconGoogle, leftArrow, unchecked];
 }
 
 class Assets {

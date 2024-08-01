@@ -13,7 +13,7 @@ class UsersAgreementBody {
 }
 
 @RestApi()
-abstract class UsersRepository {
+abstract interface class UsersRepository {
   factory UsersRepository(Dio dio) = _UsersRepository;
   @POST('/users')
   Future<UserResponse> postUsers({

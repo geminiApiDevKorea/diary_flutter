@@ -143,3 +143,25 @@ extension DateTimeFormatting on DateTime {
     return DateFormat('dd/M/yy HH:mm').format(this);
   }
 }
+
+enum Weekday {
+  sun,
+  mon,
+  tue,
+  wed,
+  thu,
+  fri,
+  sat,
+}
+
+extension WeekdayExtension on Weekday {
+  String get name => switch (this) {
+        Weekday.sun => '일',
+        Weekday.mon => '월',
+        Weekday.tue => '화',
+        Weekday.wed => '수',
+        Weekday.thu => '목',
+        Weekday.fri => '금',
+        Weekday.sat => '토',
+      };
+}
