@@ -77,13 +77,32 @@ class $AssetsImagesGen {
   AssetGenImage get leftArrow =>
       const AssetGenImage('assets/images/left_arrow.png');
 
+  /// File path: assets/images/lock.png
+  AssetGenImage get lock => const AssetGenImage('assets/images/lock.png');
+
+  /// File path: assets/images/music.png
+  AssetGenImage get music => const AssetGenImage('assets/images/music.png');
+
+  /// File path: assets/images/newjeans.png
+  AssetGenImage get newjeans =>
+      const AssetGenImage('assets/images/newjeans.png');
+
   /// File path: assets/images/unchecked.png
   AssetGenImage get unchecked =>
       const AssetGenImage('assets/images/unchecked.png');
 
   /// List of all assets
-  List<AssetGenImage> get values =>
-      [backButton, checked, iconActionRight, iconGoogle, leftArrow, unchecked];
+  List<AssetGenImage> get values => [
+        backButton,
+        checked,
+        iconActionRight,
+        iconGoogle,
+        leftArrow,
+        lock,
+        music,
+        newjeans,
+        unchecked
+      ];
 }
 
 class Assets {

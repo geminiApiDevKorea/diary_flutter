@@ -1,7 +1,7 @@
 import 'package:diary_flutter/presentation/calendar/calendar_days.dart';
 import 'package:diary_flutter/presentation/calendar/calendar_inherited_notifier.dart';
 import 'package:diary_flutter/presentation/calendar/calendar_header.dart';
-import 'package:diary_flutter/presentation/calendar/calendar_weekdays.dart';
+import 'package:diary_flutter/presentation/calendar/calendar_weekend.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 

@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:diary_flutter/presentation/calendar/calendar_music_thumbnail.dart';
 import 'package:diary_flutter/presentation/calendar/calendar_day.dart';
 import 'package:diary_flutter/presentation/calendar/calendar_inherited_notifier.dart';
 import 'package:diary_flutter/presentation/calendar/weekday_row_builder.dart';
@@ -22,10 +25,21 @@ class CalendarDays extends StatelessWidget {
             WeekdayRowBuilder(
               itemBuilder: (context, weekday) {
                 final day = calendarChangeNotifier.dayInMonth(i, weekday);
-                return SizedBox(
-                  width: 40,
-                  child: day == null ? null : CalendarDay(day: day),
-                );
+                if (day == null) {
+                  return const SizedBox(width: 40);
+                } else if (Random().nextInt(10) < 3) {
+                  return const SizedBox(
+                    width: 40,
+                    child: Center(
+                      child: CalendarMusicThumbnail(),
+                    ),
+                  );
+                } else {
+                  return SizedBox(
+                    width: 40,
+                    child: CalendarDay(day: day),
+                  );
+                }
               },
             ),
         ],
