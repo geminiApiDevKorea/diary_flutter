@@ -33,17 +33,18 @@ class JournalError extends JournalState {
   const JournalError(this.message);
 }
 
-// 새로운 상태: 피드백 제출 완료
-class JournalFeedbackSubmitted extends JournalState {
-  const JournalFeedbackSubmitted();
-}
+// // 새로운 상태: 피드백 제출 완료
+// class JournalFeedbackSubmitted extends JournalState {
+//   final Journal? journal;
+//   const JournalFeedbackSubmitted(this.journal);
+// }
 
 // Riverpod의 @riverpod 어노테이션을 사용하여 저널 서비스를 정의합니다.
 @riverpod
 class JournalService extends _$JournalService {
   static const String journalKey = 'journals';
   static const String idTokenKey = 'id_token';
-
+  // Journal? _tempJournalBackup; // 상태 백업을 위한 변수
   // build 메서드는 초기 상태로 JournalInitial을 반환합니다.
   @override
   AsyncValue<JournalState> build({
@@ -54,10 +55,8 @@ class JournalService extends _$JournalService {
     ref.listen<AsyncValue<ChatsFeedbackState>>(chatsFeedbackNotifierProvider,
         (previous, next) {
       next.whenData((state) {
-        if (state is JournalFeedbackSubmitted) {
-          // 피드백 제출이 완료되면 필요한 추가 작업을 수행할 수 있습니다.
-          Print.green('Feedback submitted successfully');
-        }
+        // 피드백 제출이 완료되면 필요한 추가 작업을 수행할 수 있습니다.
+        Print.green('Feedback submitted successfully');
       });
     });
     final persistanceStorage = ref.read(persistanceStorageProvider);
@@ -90,6 +89,9 @@ class JournalService extends _$JournalService {
           return const AsyncValue.data(JournalLoaded(null));
         }
         Print.white('journal: $journal');
+        if (journal.song != null || journal.music != null) {
+          return AsyncValue.data(JournalLoaded(journal));
+        }
         return AsyncValue.data(JournalLoaded(journal));
       } else {
         Print.white('No journals found');
@@ -118,10 +120,9 @@ class JournalService extends _$JournalService {
       if (journalState is JournalLoaded) {
         final updatedJournal = (journalState.journal ??
                 Journal(
-                  idToken: idToken!,
-                  createdAt: now,
-                  journalType: JournalType.post, // 기본 타입 설정
-                ))
+                    idToken: idToken!,
+                    createdAt: now,
+                    journalType: journalType))
             .copyWith(userInput: input);
         state = AsyncValue.data(
             JournalLoaded(updatedJournal)); // 업데이트된 저널을 상태로 설정합니다.
@@ -139,10 +140,9 @@ class JournalService extends _$JournalService {
       if (journalState is JournalLoaded) {
         final updatedJournal = (journalState.journal ??
                 Journal(
-                  idToken: idToken!,
-                  createdAt: now,
-                  journalType: JournalType.post, // 기본 타입 설정
-                ))
+                    idToken: idToken!,
+                    createdAt: now,
+                    journalType: journalType))
             .copyWith(history: histories);
         state = AsyncValue.data(
             JournalLoaded(updatedJournal)); // 업데이트된 저널을 상태로 설정합니다.
@@ -354,19 +354,28 @@ class JournalService extends _$JournalService {
 
       // 4. 가져온 저널 데이터로 피드백을 제출합니다.
       try {
+        final body = currentJournal.toChatsRequestBody();
+        Print.white(body.toString());
         final response = await repository.postChatsFeedback(
             bearerToken: 'Bearer $idToken',
             type: FeedbackType.post,
             body: currentJournal.toChatsRequestBody());
+
+        final updatedJournal = currentJournal.copyWith(
+            song: response.chatPromptResponse.song, music: response.music);
+
         Print.green(response.toString());
+
+        // 5. updatedJournal을 저장합니다.
+        await _saveJournalToStorage(updatedJournal);
+
+        // 6. 성공적으로 피드백을 제출한 경우 상태를 업데이트합니다.
+        state = AsyncValue.data(JournalLoaded(updatedJournal));
       } catch (e) {
         Print.red('Error in submitFeedback: $e');
         state = AsyncValue.data(JournalError(e.toString()));
         return;
       }
-
-      // 5. 성공적으로 피드백을 제출한 경우
-      state = const AsyncValue.data(JournalFeedbackSubmitted());
     } catch (e) {
       Print.red('Error in submitFeedback: $e');
       state = AsyncValue.data(JournalError(e.toString()));

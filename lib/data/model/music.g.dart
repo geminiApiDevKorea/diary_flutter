@@ -7,11 +7,11 @@ part of 'music.dart';
 // **************************************************************************
 
 Music _$MusicFromJson(Map<String, dynamic> json) => Music(
-      id: json['id'] as String?,
-      url: json['url'] as String?,
-      title: json['title'] as String?,
-      description: json['description'] as String?,
-      thumbnailUrl: json['thumbnailUrl'] as String?,
+      id: json['id'] as String,
+      url: json['url'] as String,
+      title: json['title'] as String,
+      description: json['description'] as String,
+      thumbnailUrl: json['thumbnailUrl'] as String,
     );
 
 Map<String, dynamic> _$MusicToJson(Music instance) => <String, dynamic>{

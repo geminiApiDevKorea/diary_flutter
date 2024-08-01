@@ -48,7 +48,9 @@ class Auth extends _$Auth {
     if (storedIdToken?.isEmpty ?? true) {
       return NeedSigninState();
     } else {
-      return await _postUser(storedIdToken!);
+      //FIXME: 닉네임 젠더
+      return await _postUser(
+          idToken: storedIdToken!, nickname: 'nickname', gender: 'gender');
     }
   }
 
@@ -63,7 +65,10 @@ class Auth extends _$Auth {
       return SignInState.unsignedIn;
     }
     _persistanceStorage.setValue(key, idToken);
-    final authState = await _postUser(idToken);
+
+    //FIXME: 닉네임 젠더
+    final authState = await _postUser(
+        idToken: idToken, nickname: 'nickname', gender: 'gender');
     state = AsyncValue.data(authState);
     if (authState is SignedInState) {
       return authState.isAgreed
@@ -100,11 +105,12 @@ class Auth extends _$Auth {
     }
   }
 
-  Future<AuthState> _postUser(String idToken) async {
+  Future<AuthState> _postUser(
+      {required String idToken, String? nickname, String? gender}) async {
     try {
-      final response = await ref
-          .read(usersRepositoryProvider)
-          .postUsers(bearerToken: 'Bearer $idToken');
+      final response = await ref.read(usersRepositoryProvider).postUsers(
+          bearerToken: 'Bearer $idToken',
+          body: UsersRequestBody(nickname: nickname, gender: gender));
 
       return SignedInState(
         idToken: idToken,

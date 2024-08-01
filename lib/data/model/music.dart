@@ -4,18 +4,18 @@ part 'music.g.dart';
 
 @JsonSerializable()
 class Music {
-  final String? id;
-  final String? url;
-  final String? title;
-  final String? description;
-  final String? thumbnailUrl;
+  final String id;
+  final String url;
+  final String title;
+  final String description;
+  final String thumbnailUrl;
 
   Music({
-    this.id,
-    this.url,
-    this.title,
-    this.description,
-    this.thumbnailUrl,
+    required this.id,
+    required this.url,
+    required this.title,
+    required this.description,
+    required this.thumbnailUrl,
   });
 
   factory Music.fromJson(Map<String, dynamic> json) => _$MusicFromJson(json);
