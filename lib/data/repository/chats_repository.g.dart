@@ -39,42 +39,41 @@ Map<String, dynamic> _$ChatsFeedbackResponseToJson(
 
 ChatPromptResponse _$ChatPromptResponseFromJson(Map<String, dynamic> json) =>
     ChatPromptResponse(
-      comment: json['comment'] as String,
-      song: Song.fromJson(json['song'] as Map<String, dynamic>),
+      comment: json['comment'] as String?,
+      song: json['song'] == null
+          ? null
+          : Song.fromJson(json['song'] as Map<String, dynamic>),
+      canFeedback: json['canFeedback'] as bool?,
+      react: json['react'] as String?,
     );
 
 Map<String, dynamic> _$ChatPromptResponseToJson(ChatPromptResponse instance) =>
     <String, dynamic>{
       'comment': instance.comment,
       'song': instance.song,
-    };
-
-ChatResponse _$ChatResponseFromJson(Map<String, dynamic> json) => ChatResponse(
-      result: ChatsResult.fromJson(json['result'] as Map<String, dynamic>),
-    );
-
-Map<String, dynamic> _$ChatResponseToJson(ChatResponse instance) =>
-    <String, dynamic>{
-      'result': instance.result,
+      'canFeedback': instance.canFeedback,
+      'react': instance.react,
     };
 
 ChatsPromptResponse _$ChatsPromptResponseFromJson(Map<String, dynamic> json) =>
     ChatsPromptResponse(
-      chatResponse:
-          ChatResponse.fromJson(json['chatResponse'] as Map<String, dynamic>),
+      chatPromptResponse: ChatPromptResponse.fromJson(
+          json['chatPromptResponse'] as Map<String, dynamic>),
+      code: (json['code'] as num).toInt(),
     );
 
 Map<String, dynamic> _$ChatsPromptResponseToJson(
         ChatsPromptResponse instance) =>
     <String, dynamic>{
-      'chatResponse': instance.chatResponse,
+      'chatPromptResponse': instance.chatPromptResponse,
+      'code': instance.code,
     };
 
 // **************************************************************************
 // RetrofitGenerator
 // **************************************************************************
 
-// ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers
+// ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers,unused_element
 
 class _ChatsRepository implements ChatsRepository {
   _ChatsRepository(
@@ -115,8 +114,8 @@ class _ChatsRepository implements ChatsRepository {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = ChatsFeedbackResponse.fromJson(_result.data!);
-    return value;
+    final _value = ChatsFeedbackResponse.fromJson(_result.data!);
+    return _value;
   }
 
   @override
@@ -147,8 +146,8 @@ class _ChatsRepository implements ChatsRepository {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = ChatsPromptResponse.fromJson(_result.data!);
-    return value;
+    final _value = ChatsPromptResponse.fromJson(_result.data!);
+    return _value;
   }
 
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {

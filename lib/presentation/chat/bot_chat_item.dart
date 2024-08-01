@@ -47,14 +47,14 @@ class BotChatItem extends ConsumerWidget {
           ref.read(storedChatsProvider.notifier).store(
                 Chat(
                   role: Role.assistant,
-                  message: content.comment,
+                  message: content.react!,
                   createdAt: DateTime.now(),
                 ),
               );
           ref.read(storedChatsProvider.notifier).store(
                 Chat(
                   role: Role.assistant,
-                  message: '${content.song.singer} - ${content.song.title}',
+                  message: '${content.song!.singer} - ${content.song!.title}',
                   createdAt: DateTime.now(),
                 ),
               );

@@ -23,7 +23,7 @@ class LoadingFeedbackState extends EvaluateFeedBackState {
 }
 
 class GeneratedFeedbackState extends EvaluateFeedBackState {
-  final EvaluatedPromptContent content;
+  final ChatPromptResponse content;
   GeneratedFeedbackState(this.content);
 }
 
@@ -57,15 +57,15 @@ class EvaluateFeedback extends _$EvaluateFeedback {
             ),
           );
 
-      final feedbackEvaluateResult = response.content;
+      final feedbackEvaluateResult = response.chatPromptResponse;
       ref.read(storedChatsProvider.notifier).store(Chat(
             role: Role.assistant,
-            message: feedbackEvaluateResult.react,
+            message: feedbackEvaluateResult.react!,
             createdAt: DateTime.now(),
-            chatMetadata: feedbackEvaluateResult.canFeedback
+            chatMetadata: feedbackEvaluateResult.canFeedback!
                 ? AskFeedbackMetadata(
                     null,
-                    feedbackEvaluateResult.react,
+                    feedbackEvaluateResult.react!,
                   )
                 : null,
           ));
