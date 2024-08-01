@@ -23,7 +23,8 @@ class SplashScreen extends HookConsumerWidget {
     final colors = GemTheme.of(ref).colors;
     final authState = ref.watch(authProvider);
     useEffect(() {
-      if (authState.value is NeedSigninState) {
+      if (authState.value is NeedSigninState ||
+          authState.value is ErrorAuthState) {
         _moveNext(ref, context, OnboardingScreen.path);
       } else if (authState.value is SignedInState) {
         _moveNext(ref, context, MainScreen.path);

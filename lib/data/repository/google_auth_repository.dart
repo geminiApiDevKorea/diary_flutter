@@ -16,6 +16,10 @@ class GoogleAuthRepository {
     }
   }
 
+  User? currentUser() {
+    return FirebaseAuth.instance.currentUser;
+  }
+
   Future<User?> signInWithGoogle() async {
     try {
       const List<String> scopes = <String>[

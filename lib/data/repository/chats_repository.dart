@@ -2,12 +2,10 @@ import 'dart:convert';
 import 'package:diary_flutter/common/enums.dart';
 import 'package:diary_flutter/data/model/diary/chats_result.dart';
 import 'package:diary_flutter/data/model/diary/evaluated_prompt_content.dart';
-import 'package:diary_flutter/data/model/diary/generated_feedback_content.dart';
 import 'package:diary_flutter/data/model/history.dart';
 import 'package:diary_flutter/data/model/music.dart';
 import 'package:diary_flutter/data/model/song.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:retrofit/retrofit.dart';
 

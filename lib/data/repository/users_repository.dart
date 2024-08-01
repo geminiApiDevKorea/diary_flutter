@@ -1,3 +1,4 @@
+import 'package:diary_flutter/common/enums.dart';
 import 'package:diary_flutter/data/model/user_response.dart';
 import 'package:dio/dio.dart' hide Headers;
 import 'package:json_annotation/json_annotation.dart';
@@ -14,12 +15,12 @@ class UsersAgreementBody {
 
 @JsonSerializable()
 class UsersRequestBody {
-  String? nickname;
-  String? gender;
+  String nickname;
+  Gender gender;
 
   UsersRequestBody({
-    this.nickname,
-    this.gender,
+    required this.nickname,
+    required this.gender,
   });
 
   factory UsersRequestBody.fromJson(Map<String, dynamic> json) =>
@@ -29,7 +30,7 @@ class UsersRequestBody {
 
   UsersRequestBody copyWith({
     String? nickname,
-    String? gender,
+    Gender? gender,
   }) {
     return UsersRequestBody(
       nickname: nickname ?? this.nickname,

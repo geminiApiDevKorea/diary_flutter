@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:intl/intl.dart';
 
+part 'enums.g.dart';
+
 enum HomeNavigations {
   main,
   chat,
@@ -164,4 +166,12 @@ extension WeekdayExtension on Weekday {
         Weekday.fri => '금',
         Weekday.sat => '토',
       };
+}
+
+@JsonEnum(alwaysCreate: true)
+enum Gender {
+  @JsonValue('FEMALE')
+  female,
+  @JsonValue('MALE')
+  male,
 }
