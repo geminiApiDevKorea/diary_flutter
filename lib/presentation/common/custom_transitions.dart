@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 @JsonEnum()
 enum SlideDirection {
@@ -70,4 +71,59 @@ class CustomTransitions {
       ),
     );
   }
+
+  // static CustomTransitionPage buildSlideWithDarkeningTransitionPage({
+  //   required Widget child,
+  //   required LocalKey key,
+  //   Duration? transitionDuration,
+  //   Curve? curve,
+  // }) {
+  //   return CustomTransitionPage<void>(
+  //     transitionDuration:
+  //         transitionDuration ?? const Duration(milliseconds: 300),
+  //     key: key,
+  //     child: child,
+  //     transitionsBuilder: (context, animation, secondaryAnimation, child) {
+  //       final slideAnimation = Tween<Offset>(
+  //         begin: const Offset(1.0, 0.0),
+  //         end: Offset.zero,
+  //       ).animate(CurvedAnimation(
+  //         parent: animation,
+  //         curve: curve ?? Curves.easeInOut,
+  //       ));
+
+  //       return Stack(
+  //         children: [
+  //           // 기존 페이지에 대한 블러와 틴트 효과
+  //           AnimatedBuilder(
+  //             animation: animation,
+  //             builder: (context, _) {
+  //               return Animate(
+  //                 effects: [
+  //                   BlurEffect(
+  //                     begin: const Offset(0, 0),
+  //                     end: Offset(4 * animation.value, 4 * animation.value),
+  //                     duration: 300.ms,
+  //                   ),
+  //                   TintEffect(
+  //                     begin: 0,
+  //                     end: animation.value,
+  //                     color: Colors.black.withOpacity(0.2),
+  //                     duration: 300.ms,
+  //                   ),
+  //                 ],
+  //                 child: Container(color: Colors.transparent),
+  //               );
+  //             },
+  //           ),
+  //           // 새 페이지 슬라이드 효과
+  //           SlideTransition(
+  //             position: slideAnimation,
+  //             child: child,
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
 }

@@ -17,14 +17,26 @@ class SharedPreferencePersistanceStorage implements PersistanceStorage {
 
   @override
   T? getValue<T>(String key) {
-    switch (sharedPreferences.get(key)) {
-      case null:
-        return null;
-      case (T value):
-        return value;
-      default:
-        throw Exception('$T 타입은 지원하지 않는 타입의 값입니다.');
+    final value = sharedPreferences.get(key);
+    if (value == null) {
+      return null;
     }
+    if (T == String) {
+      return value as T;
+    }
+    if (T == int) {
+      return value as T;
+    }
+    if (T == double) {
+      return value as T;
+    }
+    if (T == bool) {
+      return value as T;
+    }
+    if (T == List<String>) {
+      return sharedPreferences.getStringList(key) as T;
+    }
+    throw Exception('$T 타입은 지원하지 않는 타입의 값입니다.');
   }
 
   @override
