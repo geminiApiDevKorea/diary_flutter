@@ -1,3 +1,4 @@
+import 'package:diary_flutter/common/enums.dart';
 import 'package:diary_flutter/data/provider/google_auth_repository_provider.dart';
 import 'package:diary_flutter/data/provider/persistance_storage_provider.dart';
 import 'package:diary_flutter/data/provider/users_repository_provider.dart';
@@ -38,6 +39,7 @@ class SignedInState extends AuthState {
 @Riverpod(keepAlive: true)
 class Auth extends _$Auth {
   static const String key = "id_token";
+  static const String _defaultNickName = 'anonymous';
 
   PersistanceStorage get _persistanceStorage =>
       ref.read(persistanceStorageProvider);
@@ -47,10 +49,17 @@ class Auth extends _$Auth {
     final storedIdToken = _persistanceStorage.getValue<String>(key);
     if (storedIdToken?.isEmpty ?? true) {
       return NeedSigninState();
-    } else {
-      //FIXME: 닉네임 젠더
+    }
+
+    try {
+      final user = ref.read(googleAuthRepositoryProvider).currentUser();
       return await _postUser(
-          idToken: storedIdToken!, nickname: 'nickname', gender: 'gender');
+        idToken: storedIdToken!,
+        nickname: user?.displayName ?? _defaultNickName,
+        gender: Gender.female,
+      );
+    } on Exception catch (e) {
+      return ErrorAuthState(exception: e);
     }
   }
 
@@ -66,9 +75,10 @@ class Auth extends _$Auth {
     }
     _persistanceStorage.setValue(key, idToken);
 
-    //FIXME: 닉네임 젠더
     final authState = await _postUser(
-        idToken: idToken, nickname: 'nickname', gender: 'gender');
+      idToken: idToken,
+      nickname: user.displayName ?? _defaultNickName,
+    );
     state = AsyncValue.data(authState);
     if (authState is SignedInState) {
       return authState.isAgreed
@@ -105,12 +115,19 @@ class Auth extends _$Auth {
     }
   }
 
-  Future<AuthState> _postUser(
-      {required String idToken, String? nickname, String? gender}) async {
+  Future<AuthState> _postUser({
+    required String idToken,
+    required String nickname,
+    Gender gender = Gender.female,
+  }) async {
     try {
       final response = await ref.read(usersRepositoryProvider).postUsers(
-          bearerToken: 'Bearer $idToken',
-          body: UsersRequestBody(nickname: nickname, gender: gender));
+            bearerToken: 'Bearer $idToken',
+            body: UsersRequestBody(
+              nickname: nickname,
+              gender: gender,
+            ),
+          );
 
       return SignedInState(
         idToken: idToken,

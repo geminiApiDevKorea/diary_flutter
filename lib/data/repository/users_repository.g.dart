@@ -18,21 +18,26 @@ Map<String, dynamic> _$UsersAgreementBodyToJson(UsersAgreementBody instance) =>
 
 UsersRequestBody _$UsersRequestBodyFromJson(Map<String, dynamic> json) =>
     UsersRequestBody(
-      nickname: json['nickname'] as String?,
-      gender: json['gender'] as String?,
+      nickname: json['nickname'] as String,
+      gender: $enumDecode(_$GenderEnumMap, json['gender']),
     );
 
 Map<String, dynamic> _$UsersRequestBodyToJson(UsersRequestBody instance) =>
     <String, dynamic>{
       'nickname': instance.nickname,
-      'gender': instance.gender,
+      'gender': _$GenderEnumMap[instance.gender]!,
     };
+
+const _$GenderEnumMap = {
+  Gender.female: 'FEMALE',
+  Gender.male: 'MALE',
+};
 
 // **************************************************************************
 // RetrofitGenerator
 // **************************************************************************
 
-// ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers,unused_element
+// ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers
 
 class _UsersRepository implements UsersRepository {
   _UsersRepository(
@@ -72,8 +77,8 @@ class _UsersRepository implements UsersRepository {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final _value = UserResponse.fromJson(_result.data!);
-    return _value;
+    final value = UserResponse.fromJson(_result.data!);
+    return value;
   }
 
   @override
@@ -104,8 +109,8 @@ class _UsersRepository implements UsersRepository {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final _value = UserResponse.fromJson(_result.data!);
-    return _value;
+    final value = UserResponse.fromJson(_result.data!);
+    return value;
   }
 
   @override
@@ -132,8 +137,8 @@ class _UsersRepository implements UsersRepository {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final _value = UserResponse.fromJson(_result.data!);
-    return _value;
+    final value = UserResponse.fromJson(_result.data!);
+    return value;
   }
 
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {

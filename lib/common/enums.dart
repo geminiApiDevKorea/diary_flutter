@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:intl/intl.dart';
 
+part 'enums.g.dart';
+
 enum HomeNavigations {
   main,
   chat,
@@ -142,4 +144,34 @@ extension DateTimeFormatting on DateTime {
   String toDDMYYHH() {
     return DateFormat('dd/M/yy HH:mm').format(this);
   }
+}
+
+enum Weekday {
+  sun,
+  mon,
+  tue,
+  wed,
+  thu,
+  fri,
+  sat,
+}
+
+extension WeekdayExtension on Weekday {
+  String get name => switch (this) {
+        Weekday.sun => '일',
+        Weekday.mon => '월',
+        Weekday.tue => '화',
+        Weekday.wed => '수',
+        Weekday.thu => '목',
+        Weekday.fri => '금',
+        Weekday.sat => '토',
+      };
+}
+
+@JsonEnum(alwaysCreate: true)
+enum Gender {
+  @JsonValue('FEMALE')
+  female,
+  @JsonValue('MALE')
+  male,
 }
