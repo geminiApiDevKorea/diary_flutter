@@ -74,7 +74,7 @@ Map<String, dynamic> _$ChatsPromptResponseToJson(
 // RetrofitGenerator
 // **************************************************************************
 
-// ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers,unused_element
+// ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers
 
 class _ChatsRepository implements ChatsRepository {
   _ChatsRepository(
@@ -115,8 +115,8 @@ class _ChatsRepository implements ChatsRepository {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final _value = ChatsFeedbackResponse.fromJson(_result.data!);
-    return _value;
+    final value = ChatsFeedbackResponse.fromJson(_result.data!);
+    return value;
   }
 
   @override
@@ -147,8 +147,8 @@ class _ChatsRepository implements ChatsRepository {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final _value = ChatsPromptResponse.fromJson(_result.data!);
-    return _value;
+    final value = ChatsPromptResponse.fromJson(_result.data!);
+    return value;
   }
 
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {

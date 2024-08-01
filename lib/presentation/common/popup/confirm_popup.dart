@@ -4,7 +4,6 @@ import 'package:diary_flutter/presentation/style/gem_colors.dart';
 import 'package:diary_flutter/presentation/style/gem_text_style.dart';
 import 'package:diary_flutter/presentation/style/gem_theme.dart';
 import 'package:flutter/material.dart';
-// ignore: depend_on_referenced_packages
 import 'package:collection/collection.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
