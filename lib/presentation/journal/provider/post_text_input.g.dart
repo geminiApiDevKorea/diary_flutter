@@ -1,26 +1,26 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'evaluate_feedback.dart';
+part of 'post_text_input.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$evaluateFeedbackHash() => r'4230f0cdd2f35eb83229ea83249a8dab64f5ed4d';
+String _$postTextInputHash() => r'e98ff8383c6d4d4410018f4c3cdc4744bc125849';
 
-/// See also [EvaluateFeedback].
-@ProviderFor(EvaluateFeedback)
-final evaluateFeedbackProvider =
-    NotifierProvider<EvaluateFeedback, EvaluateFeedBackState>.internal(
-  EvaluateFeedback.new,
-  name: r'evaluateFeedbackProvider',
+/// See also [PostTextInput].
+@ProviderFor(PostTextInput)
+final postTextInputProvider =
+    AutoDisposeNotifierProvider<PostTextInput, String?>.internal(
+  PostTextInput.new,
+  name: r'postTextInputProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$evaluateFeedbackHash,
+      : _$postTextInputHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$EvaluateFeedback = Notifier<EvaluateFeedBackState>;
+typedef _$PostTextInput = AutoDisposeNotifier<String?>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

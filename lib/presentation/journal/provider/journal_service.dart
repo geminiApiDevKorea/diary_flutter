@@ -2,7 +2,9 @@ import 'dart:convert';
 import 'package:diary_flutter/common/enums.dart';
 import 'package:diary_flutter/data/model/history.dart';
 import 'package:diary_flutter/data/provider/chats_repository_provider.dart';
+import 'package:diary_flutter/data/repository/chats_repository.dart';
 import 'package:diary_flutter/domain/provider/chats/chats_feedback_notifier.dart';
+import 'package:diary_flutter/domain/provider/chats/chats_prompt_notifier.dart';
 import 'package:palestine_console/palestine_console.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:diary_flutter/data/model/journal.dart';
@@ -59,6 +61,17 @@ class JournalService extends _$JournalService {
         Print.green('Feedback submitted successfully');
       });
     });
+
+    ref.listen<AsyncValue<ChatsPromptState>>(chatsPromptNotifierProvider,
+        (previous, next) {
+      next.whenData((state) {
+        if (state is ChatsPromptData) {
+          //채팅완료
+          _addHistoryToJournal(state.data);
+        }
+      });
+    });
+
     final persistanceStorage = ref.read(persistanceStorageProvider);
     final idToken = persistanceStorage.getValue<String>(idTokenKey);
     if (idToken == null) {
@@ -75,7 +88,7 @@ class JournalService extends _$JournalService {
     try {
       final storage = ref.read(persistanceStorageProvider);
       final journalsStringList = storage.getValue<List<String>>(journalKey);
-      Print.yellow('journalsStringList: $journalsStringList');
+      // Print.yellow('journalsStringList: $journalsStringList');
 
       if (journalsStringList != null) {
         final journals = journalsStringList
@@ -85,13 +98,15 @@ class JournalService extends _$JournalService {
           (journal) =>
               _isSameDay(journal.createdAt, date) && journal.idToken == idToken,
         );
+
         if (journal == null) {
           return const AsyncValue.data(JournalLoaded(null));
         }
-        Print.white('journal: $journal');
+        // Print.white('journal: $journal');
         if (journal.song != null || journal.music != null) {
           return AsyncValue.data(JournalLoaded(journal));
         }
+
         return AsyncValue.data(JournalLoaded(journal));
       } else {
         Print.white('No journals found');
@@ -150,6 +165,27 @@ class JournalService extends _$JournalService {
     });
   }
 
+  Future<void> setJournal({String? userInput, List<History>? histories}) async {
+    final persistanceStorage = ref.read(persistanceStorageProvider);
+    final idToken = persistanceStorage.getValue<String>(idTokenKey);
+    final now = DateTime.now();
+
+    state.whenData((journalState) {
+      if (journalState is JournalLoaded) {
+        final currentJournal = journalState.journal ??
+            Journal(
+                idToken: idToken!, createdAt: now, journalType: journalType);
+
+        final updatedJournal = currentJournal.copyWith(
+          userInput: userInput ?? currentJournal.userInput,
+          history: histories ?? currentJournal.history,
+        );
+
+        state = AsyncValue.data(JournalLoaded(updatedJournal));
+      }
+    });
+  }
+
   // 현재 저널을 저장하는 메서드입니다.
   Future<void> saveJournal() async {
     state.whenData((journalState) async {
@@ -171,7 +207,7 @@ class JournalService extends _$JournalService {
             .copyWith(
           createdAt: now,
         );
-        Print.blue(updatedJournal.toString());
+        // Print.blue(updatedJournal.toString());
         await _saveJournalToStorage(updatedJournal);
       }
     });
@@ -207,7 +243,7 @@ class JournalService extends _$JournalService {
 
       // 저장소에 업데이트된 저널 리스트를 저장합니다.
       storage.setValue<List<String>>(journalKey, updatedJournalsStringList);
-      Print.cyan(journal.toString());
+      // Print.cyan(journal.toString());
       state = AsyncValue.data(JournalLoaded(journal)); // 상태를 업데이트된 저널로 설정합니다.
     } catch (e) {
       Print.red(
@@ -321,7 +357,7 @@ class JournalService extends _$JournalService {
     await saveJournal();
 
     // 2. 상태를 로딩으로 변경합니다.
-    state = const AsyncValue.loading();
+    // state = const AsyncValue.loading();
 
     final repository = ref.read(chatsRepositoryProvider);
     final persistanceStorage = ref.read(persistanceStorageProvider);
@@ -355,14 +391,14 @@ class JournalService extends _$JournalService {
       // 4. 가져온 저널 데이터로 피드백을 제출합니다.
       try {
         final body = currentJournal.toChatsRequestBody();
-        Print.white(body.toString());
+        // Print.white(body.toString());
         final response = await repository.postChatsFeedback(
             bearerToken: 'Bearer $idToken',
             type: FeedbackType.post,
-            body: currentJournal.toChatsRequestBody());
+            body: body);
 
         final updatedJournal = currentJournal.copyWith(
-            song: response.chatPromptResponse.song, music: response.music);
+            song: response.feedbackResponse.song, music: response.music);
 
         Print.green(response.toString());
 
@@ -373,12 +409,108 @@ class JournalService extends _$JournalService {
         state = AsyncValue.data(JournalLoaded(updatedJournal));
       } catch (e) {
         Print.red('Error in submitFeedback: $e');
-        state = AsyncValue.data(JournalError(e.toString()));
+        state = AsyncValue.data(JournalLoaded(currentJournal));
+        // state = AsyncValue.data(JournalError(e.toString()));
         return;
       }
     } catch (e) {
       Print.red('Error in submitFeedback: $e');
       state = AsyncValue.data(JournalError(e.toString()));
     }
+  }
+
+  Journal? getJournalForDate(DateTime date) {
+    try {
+      final storage = ref.read(persistanceStorageProvider);
+      final idToken = storage.getValue<String>(idTokenKey);
+      final journalsStringList = storage.getValue<List<String>>(journalKey);
+
+      if (idToken != null && journalsStringList != null) {
+        final journals = journalsStringList
+            .map((jsonString) => Journal.fromJson(jsonDecode(jsonString)))
+            .toList();
+        return journals.firstWhereOrNull(
+          (journal) =>
+              _isSameDay(journal.createdAt, date) && journal.idToken == idToken,
+        );
+      }
+    } catch (e) {
+      Print.red('Error in getJournalForDate: $e');
+    }
+    return null;
+  }
+
+  Future<void> requestChatPrompt(String userInput) async {
+    final chatsPromptNotifier = ref.read(chatsPromptNotifierProvider.notifier);
+    final persistanceStorage = ref.read(persistanceStorageProvider);
+    final idToken = persistanceStorage.getValue<String>(idTokenKey);
+
+    if (idToken == null) {
+      state = const AsyncValue.data(JournalError('No token found'));
+      return;
+    }
+
+    state.whenData((journalState) async {
+      if (journalState is JournalLoaded) {
+        final currentJournal = journalState.journal;
+        if (currentJournal != null) {
+          // 사용자 메시지를 history에 추가
+          final updatedJournalWithUserMessage =
+              await _addUserMessageToJournal(currentJournal, userInput);
+
+          final body = ChatsRequestBody(
+            userInput: userInput,
+            histories: updatedJournalWithUserMessage.history!,
+          );
+
+          await chatsPromptNotifier.postPrompt(body: body);
+        }
+      }
+    });
+  }
+
+  Future<Journal> _addUserMessageToJournal(
+      Journal journal, String userInput) async {
+    final newHistory = History(
+      role: Role.user,
+      message: userInput,
+    );
+
+    final updatedHistories = [
+      ...?journal.history,
+      newHistory,
+    ];
+
+    final updatedJournal = journal.copyWith(
+      history: updatedHistories,
+    );
+
+    state = AsyncValue.data(JournalLoaded(updatedJournal));
+    await _saveJournalToStorage(updatedJournal);
+    return updatedJournal;
+  }
+
+  Future<void> _addHistoryToJournal(ChatsPromptResponse response) async {
+    state.whenData((journalState) {
+      if (journalState is JournalLoaded) {
+        final currentJournal = journalState.journal;
+        if (currentJournal != null) {
+          final newHistory = History(
+              role: Role.assistant, message: response.chatResponse.react);
+
+          final updatedHistories = [
+            ...?currentJournal.history,
+            newHistory,
+          ];
+
+          final updatedJournal = currentJournal.copyWith(
+            history: updatedHistories,
+          );
+
+          state = AsyncValue.data(JournalLoaded(updatedJournal));
+          _saveJournalToStorage(updatedJournal);
+        }
+      }
+    });
   }
 }

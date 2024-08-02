@@ -23,7 +23,7 @@ class LoadingFeedbackState extends EvaluateFeedBackState {
 }
 
 class GeneratedFeedbackState extends EvaluateFeedBackState {
-  final EvaluatedPromptContent content;
+  final ChatResponse content;
   GeneratedFeedbackState(this.content);
 }
 
@@ -57,7 +57,7 @@ class EvaluateFeedback extends _$EvaluateFeedback {
             ),
           );
 
-      final feedbackEvaluateResult = response.content;
+      final feedbackEvaluateResult = response.chatResponse;
       ref.read(storedChatsProvider.notifier).store(Chat(
             role: Role.assistant,
             message: feedbackEvaluateResult.react,

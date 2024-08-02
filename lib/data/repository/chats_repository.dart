@@ -29,12 +29,13 @@ class ChatsRequestBody {
 
 @JsonSerializable()
 class ChatsFeedbackResponse {
-  ChatPromptResponse chatPromptResponse;
+  @JsonKey(name: 'chatPromptResponse')
+  FeedbackResponse feedbackResponse;
   Music music;
   int code;
 
   ChatsFeedbackResponse({
-    required this.chatPromptResponse,
+    required this.feedbackResponse,
     required this.music,
     required this.code,
   });
@@ -45,12 +46,12 @@ class ChatsFeedbackResponse {
   Map<String, dynamic> toJson() => _$ChatsFeedbackResponseToJson(this);
 
   ChatsFeedbackResponse copyWith({
-    ChatPromptResponse? chatPromptResponse,
+    FeedbackResponse? feedbackResponse,
     Music? music,
     int? code,
   }) {
     return ChatsFeedbackResponse(
-      chatPromptResponse: chatPromptResponse ?? this.chatPromptResponse,
+      feedbackResponse: feedbackResponse ?? this.feedbackResponse,
       music: music ?? this.music,
       code: code ?? this.code,
     );
@@ -58,60 +59,65 @@ class ChatsFeedbackResponse {
 
   @override
   String toString() {
-    return 'ChatsFeedbackResponse(chatPromptResponse: $chatPromptResponse, music: $music, code: $code)';
+    return 'ChatsFeedbackResponse(feedbackResponse: $feedbackResponse, music: $music, code: $code)';
   }
 }
 
 @JsonSerializable()
-class ChatPromptResponse {
-  String comment;
-  Song song;
+class FeedbackResponse {
+  final String comment;
+  final Song song;
 
-  ChatPromptResponse({
-    required this.comment,
-    required this.song,
-  });
+  FeedbackResponse({required this.comment, required this.song});
 
-  factory ChatPromptResponse.fromJson(Map<String, dynamic> json) =>
-      _$ChatPromptResponseFromJson(json);
-
-  Map<String, dynamic> toJson() => _$ChatPromptResponseToJson(this);
-
-  ChatPromptResponse copyWith({
-    String? comment,
-    Song? song,
-  }) {
-    return ChatPromptResponse(
-      comment: comment ?? this.comment,
-      song: song ?? this.song,
-    );
-  }
+  factory FeedbackResponse.fromJson(Map<String, dynamic> json) =>
+      _$FeedbackResponseFromJson(json);
+  Map<String, dynamic> toJson() => _$FeedbackResponseToJson(this);
 
   @override
   String toString() {
-    return 'ChatPromptResponse(comment: $comment, song: $song)';
+    return 'FeedbackResponse(comment: $comment, song: $song)';
   }
 }
 
 @JsonSerializable()
 class ChatResponse {
-  final ChatsResult result;
+  final bool canFeedback;
+  final String react;
 
-  ChatResponse({required this.result});
+  ChatResponse({required this.canFeedback, required this.react});
 
-  Map<String, dynamic> toJson() => _$ChatResponseToJson(this);
   factory ChatResponse.fromJson(Map<String, dynamic> json) =>
       _$ChatResponseFromJson(json);
+  Map<String, dynamic> toJson() => _$ChatResponseToJson(this);
+
+  @override
+  String toString() {
+    return 'ChatResponse(canFeedback: $canFeedback, react: $react)';
+  }
 }
+
+// @JsonSerializable()
+// class ChatResponse {
+//   final ChatsResult result;
+
+//   ChatResponse({required this.result});
+
+//   Map<String, dynamic> toJson() => _$ChatResponseToJson(this);
+//   factory ChatResponse.fromJson(Map<String, dynamic> json) =>
+//       _$ChatResponseFromJson(json);
+// }
 
 @JsonSerializable()
 class ChatsPromptResponse {
+  @JsonKey(name: 'chatPromptResponse')
   final ChatResponse chatResponse;
+  final int code;
 
-  ChatsPromptResponse({required this.chatResponse});
+  ChatsPromptResponse({required this.chatResponse, required this.code});
 
-  EvaluatedPromptContent get content => EvaluatedPromptContent.fromJson(
-      jsonDecode(chatResponse.result.output.content));
+  // EvaluatedPromptContent get content => EvaluatedPromptContent.fromJson(
+  //     jsonDecode(chatPromptResponse.result.output.content));
 
   Map<String, dynamic> toJson() => _$ChatsPromptResponseToJson(this);
   factory ChatsPromptResponse.fromJson(Map<String, dynamic> json) =>

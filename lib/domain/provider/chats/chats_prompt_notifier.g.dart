@@ -1,26 +1,28 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'evaluate_feedback.dart';
+part of 'chats_prompt_notifier.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$evaluateFeedbackHash() => r'4230f0cdd2f35eb83229ea83249a8dab64f5ed4d';
+String _$chatsPromptNotifierHash() =>
+    r'3be3bfb5dc66f3f041e44e7c79c130f7c79db06c';
 
-/// See also [EvaluateFeedback].
-@ProviderFor(EvaluateFeedback)
-final evaluateFeedbackProvider =
-    NotifierProvider<EvaluateFeedback, EvaluateFeedBackState>.internal(
-  EvaluateFeedback.new,
-  name: r'evaluateFeedbackProvider',
+/// See also [ChatsPromptNotifier].
+@ProviderFor(ChatsPromptNotifier)
+final chatsPromptNotifierProvider = AutoDisposeNotifierProvider<
+    ChatsPromptNotifier, AsyncValue<ChatsPromptState>>.internal(
+  ChatsPromptNotifier.new,
+  name: r'chatsPromptNotifierProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$evaluateFeedbackHash,
+      : _$chatsPromptNotifierHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$EvaluateFeedback = Notifier<EvaluateFeedBackState>;
+typedef _$ChatsPromptNotifier
+    = AutoDisposeNotifier<AsyncValue<ChatsPromptState>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
