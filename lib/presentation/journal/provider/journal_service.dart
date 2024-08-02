@@ -398,7 +398,7 @@ class JournalService extends _$JournalService {
             body: body);
 
         final updatedJournal = currentJournal.copyWith(
-            song: response.chatPromptResponse.song, music: response.music);
+            song: response.feedbackResponse.song, music: response.music);
 
         Print.green(response.toString());
 
@@ -496,8 +496,7 @@ class JournalService extends _$JournalService {
         final currentJournal = journalState.journal;
         if (currentJournal != null) {
           final newHistory = History(
-              role: Role.assistant,
-              message: response.chatPromptResponse.react!);
+              role: Role.assistant, message: response.chatResponse.react);
 
           final updatedHistories = [
             ...?currentJournal.history,

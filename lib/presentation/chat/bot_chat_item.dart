@@ -42,19 +42,19 @@ class BotChatItem extends ConsumerWidget {
                           .toList(),
                     ),
                   );
-          final content = response.chatPromptResponse;
+          final content = response.feedbackResponse;
           // 응답 결과를 화면에 표시하기 위해 Chat 아이템 추가
           ref.read(storedChatsProvider.notifier).store(
                 Chat(
                   role: Role.assistant,
-                  message: content.react!,
+                  message: content.comment,
                   createdAt: DateTime.now(),
                 ),
               );
           ref.read(storedChatsProvider.notifier).store(
                 Chat(
                   role: Role.assistant,
-                  message: '${content.song!.singer} - ${content.song!.title}',
+                  message: '${content.song.singer} - ${content.song.title}',
                   createdAt: DateTime.now(),
                 ),
               );

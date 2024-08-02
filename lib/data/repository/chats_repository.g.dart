@@ -23,7 +23,7 @@ Map<String, dynamic> _$ChatsRequestBodyToJson(ChatsRequestBody instance) =>
 ChatsFeedbackResponse _$ChatsFeedbackResponseFromJson(
         Map<String, dynamic> json) =>
     ChatsFeedbackResponse(
-      chatPromptResponse: ChatPromptResponse.fromJson(
+      feedbackResponse: FeedbackResponse.fromJson(
           json['chatPromptResponse'] as Map<String, dynamic>),
       music: Music.fromJson(json['music'] as Map<String, dynamic>),
       code: (json['code'] as num).toInt(),
@@ -32,32 +32,37 @@ ChatsFeedbackResponse _$ChatsFeedbackResponseFromJson(
 Map<String, dynamic> _$ChatsFeedbackResponseToJson(
         ChatsFeedbackResponse instance) =>
     <String, dynamic>{
-      'chatPromptResponse': instance.chatPromptResponse,
+      'chatPromptResponse': instance.feedbackResponse,
       'music': instance.music,
       'code': instance.code,
     };
 
-ChatPromptResponse _$ChatPromptResponseFromJson(Map<String, dynamic> json) =>
-    ChatPromptResponse(
-      comment: json['comment'] as String?,
-      song: json['song'] == null
-          ? null
-          : Song.fromJson(json['song'] as Map<String, dynamic>),
-      canFeedback: json['canFeedback'] as bool?,
-      react: json['react'] as String?,
+FeedbackResponse _$FeedbackResponseFromJson(Map<String, dynamic> json) =>
+    FeedbackResponse(
+      comment: json['comment'] as String,
+      song: Song.fromJson(json['song'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$ChatPromptResponseToJson(ChatPromptResponse instance) =>
+Map<String, dynamic> _$FeedbackResponseToJson(FeedbackResponse instance) =>
     <String, dynamic>{
       'comment': instance.comment,
       'song': instance.song,
+    };
+
+ChatResponse _$ChatResponseFromJson(Map<String, dynamic> json) => ChatResponse(
+      canFeedback: json['canFeedback'] as bool,
+      react: json['react'] as String,
+    );
+
+Map<String, dynamic> _$ChatResponseToJson(ChatResponse instance) =>
+    <String, dynamic>{
       'canFeedback': instance.canFeedback,
       'react': instance.react,
     };
 
 ChatsPromptResponse _$ChatsPromptResponseFromJson(Map<String, dynamic> json) =>
     ChatsPromptResponse(
-      chatPromptResponse: ChatPromptResponse.fromJson(
+      chatResponse: ChatResponse.fromJson(
           json['chatPromptResponse'] as Map<String, dynamic>),
       code: (json['code'] as num).toInt(),
     );
@@ -65,7 +70,7 @@ ChatsPromptResponse _$ChatsPromptResponseFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$ChatsPromptResponseToJson(
         ChatsPromptResponse instance) =>
     <String, dynamic>{
-      'chatPromptResponse': instance.chatPromptResponse,
+      'chatPromptResponse': instance.chatResponse,
       'code': instance.code,
     };
 

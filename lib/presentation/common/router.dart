@@ -18,6 +18,7 @@ final GlobalKey<NavigatorState> mainKey = GlobalKey<NavigatorState>();
 @Riverpod(keepAlive: true)
 GoRouter router(RouterRef ref) {
   return GoRouter(
+    // initialLocation: HomeScreen.path,
     initialLocation: SplashScreen.path,
     // initialLocation: CalendarScreen.path,
     // initialLocation: MainScreen.path,
