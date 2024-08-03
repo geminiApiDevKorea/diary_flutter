@@ -1,10 +1,10 @@
 import 'package:diary_flutter/data/model/history.dart';
 import 'package:flutter/material.dart';
 
-class BotChatItem extends StatelessWidget {
+class AssistantChatItem extends StatelessWidget {
   final String message;
 
-  const BotChatItem({super.key, required this.message});
+  const AssistantChatItem({super.key, required this.message});
 
   @override
   Widget build(BuildContext context) {

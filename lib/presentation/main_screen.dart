@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:ui';
 import 'package:diary_flutter/domain/provider/journal/journal_use_cases.dart';
 import 'package:diary_flutter/presentation/calendar/calendar_screen.dart';
@@ -48,8 +49,8 @@ class MainScreen extends HookConsumerWidget {
     );
 
     useTopOfStack(context, ref, () {
-      final a = ref.read(getJournalsWithMusicAndSongCountProvider);
-      print(a);
+      // final a = ref.read(getJournalsWithMusicAndSongCountProvider);
+      // print(a);
     });
 
     return Animate(
@@ -200,12 +201,12 @@ class MainHeader extends HookConsumerWidget {
     final textStyle = ref.gemTextStyle;
     final colors = ref.gemColors;
 
-    useEffect() {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        final abc = ref.read(getJournalsWithMusicAndSongCountProvider);
-        Print.white(abc.toString());
-      });
-    }
+    // useEffect() {
+    //   WidgetsBinding.instance.addPostFrameCallback((_) {
+    //     final abc = ref.read(getJournalsWithMusicAndSongCountProvider);
+    //     Print.white(abc.toString());
+    //   });
+    // }
 
     return Align(
       alignment: Alignment.topLeft,
@@ -324,6 +325,24 @@ class CustomHorizontalCarousel extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final allMyJournalswithMusicandSong =
+        ref.watch(getJournalsWithMusicAndSongProvider);
+
+    // 저널이 없는 경우 텍스트 위젯 반환
+    if (allMyJournalswithMusicandSong.isEmpty) {
+      return Container(
+        height: 490,
+        padding: const EdgeInsets.only(bottom: 20),
+        color: Colors.amber,
+        child: const Center(
+          child: Text(
+            'No journals with music and song available',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+        ),
+      );
+    }
+
     return Container(
       height: 490,
       padding: const EdgeInsets.only(bottom: 20),
@@ -331,7 +350,7 @@ class CustomHorizontalCarousel extends ConsumerWidget {
       child: CustomCarousel(
         depthOrder: DepthOrder.reverse,
         itemCountBefore: 0,
-        itemCountAfter: 2,
+        itemCountAfter: allMyJournalswithMusicandSong.length > 2 ? 2 : 0,
         alignment: Alignment.bottomCenter,
         scrollDirection: Axis.horizontal,
         tapToSelect: false,
@@ -350,13 +369,15 @@ class CustomHorizontalCarousel extends ConsumerWidget {
           );
         },
         children: List.generate(
-          5,
+          allMyJournalswithMusicandSong.length,
           (index) => _buildCard(
-              context,
-              ref,
-              index,
-              "It's Raining, So... — Hazelnut",
-              'https://picsum.photos/200/200?random=$index'),
+            context,
+            ref,
+            index,
+            allMyJournalswithMusicandSong[index].music?.title ?? '',
+            // 'https://picsum.photos/200/200?random=$index'
+            allMyJournalswithMusicandSong[index].music?.thumbnailUrl ?? '',
+          ),
         ),
       ),
     );

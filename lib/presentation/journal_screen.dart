@@ -20,16 +20,20 @@ class JournalScreen extends HookConsumerWidget with DeleteConfirmDialogMixin {
   Widget build(BuildContext context, WidgetRef ref) {
     final colors = ref.gemColors;
 
-    return Container(
-      color: colors.grayScale90,
-      child: SafeArea(
-        top: true,
-        bottom: false,
-        child: Scaffold(
-          floatingActionButtonLocation: FloatingActionButtonLocation.centerTop,
-          floatingActionButton:
-              JournalFloatingActionButton(journalType: journalType),
-          body: JournalBody(type: type),
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Container(
+        color: colors.grayScale90,
+        child: SafeArea(
+          top: true,
+          bottom: false,
+          child: Scaffold(
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerTop,
+            floatingActionButton:
+                JournalFloatingActionButton(journalType: journalType),
+            body: JournalBody(type: type),
+          ),
         ),
       ),
     );

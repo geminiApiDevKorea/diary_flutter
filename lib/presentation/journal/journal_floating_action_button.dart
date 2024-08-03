@@ -61,15 +61,7 @@ class JournalFloatingActionButton extends HookConsumerWidget
                     ),
                     onPressed: () => journalEventNotifier
                         .onList()
-                        .then((value) => context.pop())
-
-                    // journalEventNotifier
-                    //     .setJournal(
-                    //         userInput: ref.read(postTextInputProvider) ?? '')
-                    //     .then((_) => journalEventNotifier
-                    //         .saveJournal()
-                    //         .then((_) => context.pop())),
-                    ),
+                        .then((value) => context.pop())),
               ),
             ),
             const Spacer(),
@@ -99,19 +91,10 @@ class JournalFloatingActionButton extends HookConsumerWidget
                   "Finish",
                   style: textStyle.button.copyWith(color: colors.primary50),
                 ),
-                onPressed: () => {journalEventNotifier.onFinish()}
-                // journalEventNotifier
-                //         .setJournal(
-                //             userInput: ref.read(postTextInputProvider) ?? '')
-                //         .then((_) {
-                //       return journalEventNotifier.submitJournal();
-                //     }).then((_) {
-                //       // print('Journal submitted successfully!');
-                //     }).catchError((error) {
-                //       // Handle errors if any of the Futures fail
-                //       // print('Failed to submit journal: $error');
-                //     })
-                ),
+                onPressed: () async {
+                  FocusScope.of(context).unfocus();
+                  journalEventNotifier.onFinish();
+                }),
           ],
         ),
       ),

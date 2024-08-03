@@ -6,7 +6,7 @@ part of 'post_text_input.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$postTextInputHash() => r'e98ff8383c6d4d4410018f4c3cdc4744bc125849';
+String _$postTextInputHash() => r'15eaca98b9342ccd878607fb9ef92c37c74fb435';
 
 /// See also [PostTextInput].
 @ProviderFor(PostTextInput)

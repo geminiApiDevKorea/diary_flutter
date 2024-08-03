@@ -175,6 +175,9 @@ class StoredJournal extends _$StoredJournal {
       key,
       journals.map((journal) => jsonEncode(journal.toJson())).toList(),
     );
+
+    /// 영구 저장소에 저장된 데이터가 변경되었음을 알립니다.
+    /// 중요! 이 메서드는 반드시 호출되어야 합니다.
     ref.invalidateSelf();
   }
 

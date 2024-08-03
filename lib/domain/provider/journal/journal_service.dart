@@ -68,6 +68,8 @@ class JournalService extends _$JournalService {
         ref.read(myJournalStoreProvider.notifier).createOrUpdateUserInput(
             _date, ref.read(postTextInputProvider) ?? '', journalType);
       case JournalType.chat:
+        ref.read(myJournalStoreProvider.notifier).createOrUpdateUserInput(
+            _date, ref.read(postTextInputProvider) ?? '', journalType);
     }
   }
 

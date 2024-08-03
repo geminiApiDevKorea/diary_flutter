@@ -22,20 +22,20 @@ class Journal {
   final Music? music;
   final Song? song;
   final List<String>? tags;
-  final List<History>? history;
+  final List<History> history;
   @JsonKey(name: 'type')
   final JournalType journalType;
 
-  const Journal({
+  Journal({
     required this.idToken,
     required this.createdAt,
     this.userInput,
     this.music,
     this.song,
     this.tags,
-    this.history,
+    List<History>? history,
     required this.journalType,
-  });
+  }) : history = history ?? [];
 
   factory Journal.fromJson(Map<String, dynamic> json) =>
       _$JournalFromJson(json);
