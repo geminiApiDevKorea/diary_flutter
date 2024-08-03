@@ -9,7 +9,9 @@ part of 'journal_use_cases.dart';
 String _$getMyLatestJournalHash() =>
     r'e715af8355f1037609b96a70f7a1d8c8fdd32c4b';
 
-/// See also [getMyLatestJournal].
+/// 1. 내 최신 저널 얻기
+///
+/// Copied from [getMyLatestJournal].
 @ProviderFor(getMyLatestJournal)
 final getMyLatestJournalProvider = AutoDisposeProvider<Journal?>.internal(
   getMyLatestJournal,
@@ -24,7 +26,9 @@ final getMyLatestJournalProvider = AutoDisposeProvider<Journal?>.internal(
 typedef GetMyLatestJournalRef = AutoDisposeProviderRef<Journal?>;
 String _$getAllMyJournalsHash() => r'19028bb2924c8857c617f1b01fec7a06c3da8ea7';
 
-/// See also [getAllMyJournals].
+/// 2. 내 저널 전부 얻기
+///
+/// Copied from [getAllMyJournals].
 @ProviderFor(getAllMyJournals)
 final getAllMyJournalsProvider = AutoDisposeProvider<List<Journal>>.internal(
   getAllMyJournals,
@@ -61,16 +65,24 @@ class _SystemHash {
   }
 }
 
-/// See also [getMyJournalByDate].
+/// 3. 특정 날짜의 내 저널 얻기
+///
+/// Copied from [getMyJournalByDate].
 @ProviderFor(getMyJournalByDate)
 const getMyJournalByDateProvider = GetMyJournalByDateFamily();
 
-/// See also [getMyJournalByDate].
+/// 3. 특정 날짜의 내 저널 얻기
+///
+/// Copied from [getMyJournalByDate].
 class GetMyJournalByDateFamily extends Family<Journal?> {
-  /// See also [getMyJournalByDate].
+  /// 3. 특정 날짜의 내 저널 얻기
+  ///
+  /// Copied from [getMyJournalByDate].
   const GetMyJournalByDateFamily();
 
-  /// See also [getMyJournalByDate].
+  /// 3. 특정 날짜의 내 저널 얻기
+  ///
+  /// Copied from [getMyJournalByDate].
   GetMyJournalByDateProvider call(
     DateTime date,
   ) {
@@ -103,9 +115,13 @@ class GetMyJournalByDateFamily extends Family<Journal?> {
   String? get name => r'getMyJournalByDateProvider';
 }
 
-/// See also [getMyJournalByDate].
+/// 3. 특정 날짜의 내 저널 얻기
+///
+/// Copied from [getMyJournalByDate].
 class GetMyJournalByDateProvider extends AutoDisposeProvider<Journal?> {
-  /// See also [getMyJournalByDate].
+  /// 3. 특정 날짜의 내 저널 얻기
+  ///
+  /// Copied from [getMyJournalByDate].
   GetMyJournalByDateProvider(
     DateTime date,
   ) : this._internal(
@@ -189,7 +205,9 @@ class _GetMyJournalByDateProviderElement
 
 String _$getMyJournalCountHash() => r'10b5025918c69b04a4dc7f9491ae2f9481e45929';
 
-/// See also [getMyJournalCount].
+/// 4. 내 저널의 길이 알기
+///
+/// Copied from [getMyJournalCount].
 @ProviderFor(getMyJournalCount)
 final getMyJournalCountProvider = AutoDisposeProvider<int>.internal(
   getMyJournalCount,
@@ -205,16 +223,24 @@ typedef GetMyJournalCountRef = AutoDisposeProviderRef<int>;
 String _$getMyJournalHistoryByDateHash() =>
     r'134f733462a1a0c43fa526643af7cf367b8e7a82';
 
-/// See also [getMyJournalHistoryByDate].
+/// 5. 특정 날짜의 내 저널 내 히스토리 알기
+///
+/// Copied from [getMyJournalHistoryByDate].
 @ProviderFor(getMyJournalHistoryByDate)
 const getMyJournalHistoryByDateProvider = GetMyJournalHistoryByDateFamily();
 
-/// See also [getMyJournalHistoryByDate].
+/// 5. 특정 날짜의 내 저널 내 히스토리 알기
+///
+/// Copied from [getMyJournalHistoryByDate].
 class GetMyJournalHistoryByDateFamily extends Family<List<History>?> {
-  /// See also [getMyJournalHistoryByDate].
+  /// 5. 특정 날짜의 내 저널 내 히스토리 알기
+  ///
+  /// Copied from [getMyJournalHistoryByDate].
   const GetMyJournalHistoryByDateFamily();
 
-  /// See also [getMyJournalHistoryByDate].
+  /// 5. 특정 날짜의 내 저널 내 히스토리 알기
+  ///
+  /// Copied from [getMyJournalHistoryByDate].
   GetMyJournalHistoryByDateProvider call(
     DateTime date,
   ) {
@@ -247,10 +273,14 @@ class GetMyJournalHistoryByDateFamily extends Family<List<History>?> {
   String? get name => r'getMyJournalHistoryByDateProvider';
 }
 
-/// See also [getMyJournalHistoryByDate].
+/// 5. 특정 날짜의 내 저널 내 히스토리 알기
+///
+/// Copied from [getMyJournalHistoryByDate].
 class GetMyJournalHistoryByDateProvider
     extends AutoDisposeProvider<List<History>?> {
-  /// See also [getMyJournalHistoryByDate].
+  /// 5. 특정 날짜의 내 저널 내 히스토리 알기
+  ///
+  /// Copied from [getMyJournalHistoryByDate].
   GetMyJournalHistoryByDateProvider(
     DateTime date,
   ) : this._internal(
@@ -336,7 +366,9 @@ class _GetMyJournalHistoryByDateProviderElement
 String _$getJournalsWithMusicAndSongHash() =>
     r'967f6cbd208fcd576fa2b19d639ad9df49e9347c';
 
-/// See also [getJournalsWithMusicAndSong].
+/// 6. music과 Song이 있는 내 저널 모두 받기
+///
+/// Copied from [getJournalsWithMusicAndSong].
 @ProviderFor(getJournalsWithMusicAndSong)
 final getJournalsWithMusicAndSongProvider =
     AutoDisposeProvider<List<Journal>>.internal(
@@ -353,7 +385,9 @@ typedef GetJournalsWithMusicAndSongRef = AutoDisposeProviderRef<List<Journal>>;
 String _$getJournalsWithMusicAndSongCountHash() =>
     r'3dc459e51d82961092ade64d47b0681327de9c2e';
 
-/// See also [getJournalsWithMusicAndSongCount].
+/// 7. music과 Song이 있는 내 저널 갯수 받기
+///
+/// Copied from [getJournalsWithMusicAndSongCount].
 @ProviderFor(getJournalsWithMusicAndSongCount)
 final getJournalsWithMusicAndSongCountProvider =
     AutoDisposeProvider<int>.internal(

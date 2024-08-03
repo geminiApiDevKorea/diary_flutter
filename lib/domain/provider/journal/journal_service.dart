@@ -47,41 +47,12 @@ class JournalService extends _$JournalService {
   @override
   JournalState build({
     required JournalType journalType,
-    // required DateTime date,
-    // required DateTime date,
-    // required String idToken,
   }) {
-    _setupListeners();
     _date = DateTime.now();
     return const JournalInitial();
   }
 
   void _setupListeners() {
-    ref.listen<AsyncValue<ChatsFeedbackState>>(
-      chatsFeedbackNotifierProvider,
-      (previous, next) {
-        next.whenData((data) async {
-          // 피드백 제출이 완료되면 필요한 추가 작업을 수행할 수 있습니다.
-          Print.green('Feedback submitted successfully');
-          if (data is ChatsFeedbackData) {
-            // Print.green(data.data.toString());
-            final journal =
-                await ref.read(myJournalStoreProvider.notifier).read(_date);
-            if (journal == null) {
-              state = const JournalError('Journal not found');
-              return;
-            }
-            final updatedJournal = journal.copyWith(
-                music: data.data.music, song: data.data.feedbackResponse.song);
-            // Print.white(updatedJournal.toString());
-            ref
-                .read(myJournalStoreProvider.notifier)
-                .createOrUpdate(updatedJournal);
-            state = const JournalInitial();
-          }
-        });
-      },
-    );
     ref.listen<AsyncValue<ChatsPromptState>>(
       chatsPromptNotifierProvider,
       (previous, next) {
@@ -124,10 +95,8 @@ class JournalService extends _$JournalService {
           return;
         }
         state = JournalLoading();
-        final result = await ref
-            .read(chatsFeedbackNotifierProvider.notifier)
-            .postFeedback(
-                type: FeedbackType.post, body: journal.toChatsRequestBody());
+        await ref.read(chatsFeedbackNotifierProvider.notifier).postFeedback(
+            type: FeedbackType.post, body: journal.toChatsRequestBody());
 
         Print.blue('Finishing Post journal');
       case JournalType.chat:

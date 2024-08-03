@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:diary_flutter/domain/provider/journal/journal_use_cases.dart';
 import 'package:diary_flutter/presentation/calendar/calendar_screen.dart';
 import 'package:diary_flutter/presentation/journal_screen.dart';
 import 'package:diary_flutter/presentation/main/use_is_top_of_stack.dart';
@@ -24,6 +25,7 @@ import 'package:flutter_custom_carousel/flutter_custom_carousel.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:palestine_console/palestine_console.dart';
 
 class MainScreen extends HookConsumerWidget {
   static const String path = '/main';
@@ -44,6 +46,11 @@ class MainScreen extends HookConsumerWidget {
       animationController: animationController,
       isDarkening: isDarkening,
     );
+
+    useTopOfStack(context, ref, () {
+      final a = ref.read(getJournalsWithMusicAndSongCountProvider);
+      print(a);
+    });
 
     return Animate(
       effects: [
@@ -192,6 +199,13 @@ class MainHeader extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final textStyle = ref.gemTextStyle;
     final colors = ref.gemColors;
+
+    useEffect() {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final abc = ref.read(getJournalsWithMusicAndSongCountProvider);
+        Print.white(abc.toString());
+      });
+    }
 
     return Align(
       alignment: Alignment.topLeft,
@@ -417,4 +431,17 @@ class CustomHorizontalCarousel extends ConsumerWidget {
       ),
     );
   }
+}
+
+void useTopOfStack(BuildContext context, WidgetRef ref, VoidCallback action) {
+  final isTop = useIsTopOfStack(context);
+
+  useEffect(() {
+    if (isTop) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        action();
+      });
+    }
+    return null;
+  }, [isTop]);
 }

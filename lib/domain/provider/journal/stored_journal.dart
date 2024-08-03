@@ -175,6 +175,7 @@ class StoredJournal extends _$StoredJournal {
       key,
       journals.map((journal) => jsonEncode(journal.toJson())).toList(),
     );
+    ref.invalidateSelf();
   }
 
   /// 영구 저장소에서 모든 저널을 가져옵니다.

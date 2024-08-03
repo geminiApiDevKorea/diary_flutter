@@ -6,7 +6,7 @@ import 'package:collection/collection.dart';
 
 part 'journal_use_cases.g.dart';
 
-// 1. 내 최신 저널 얻기
+/// 1. 내 최신 저널 얻기
 @riverpod
 Journal? getMyLatestJournal(GetMyLatestJournalRef ref) {
   final myJournals = ref.watch(myJournalStoreProvider);
@@ -15,13 +15,13 @@ Journal? getMyLatestJournal(GetMyLatestJournalRef ref) {
   return myJournals.reduce((a, b) => a.createdAt.isAfter(b.createdAt) ? a : b);
 }
 
-// 2. 내 저널 전부 얻기
+/// 2. 내 저널 전부 얻기
 @riverpod
 List<Journal> getAllMyJournals(GetAllMyJournalsRef ref) {
   return ref.watch(myJournalStoreProvider);
 }
 
-// 3. 특정 날짜의 내 저널 얻기
+/// 3. 특정 날짜의 내 저널 얻기
 @riverpod
 Journal? getMyJournalByDate(GetMyJournalByDateRef ref, DateTime date) {
   final myJournals = ref.watch(myJournalStoreProvider);
@@ -30,13 +30,13 @@ Journal? getMyJournalByDate(GetMyJournalByDateRef ref, DateTime date) {
   );
 }
 
-// 4. 내 저널의 길이 알기
+/// 4. 내 저널의 길이 알기
 @riverpod
 int getMyJournalCount(GetMyJournalCountRef ref) {
   return ref.watch(myJournalStoreProvider).length;
 }
 
-// 5. 특정 날짜의 내 저널 내 히스토리 알기
+/// 5. 특정 날짜의 내 저널 내 히스토리 알기
 @riverpod
 List<History>? getMyJournalHistoryByDate(
     GetMyJournalHistoryByDateRef ref, DateTime date) {
@@ -47,7 +47,7 @@ List<History>? getMyJournalHistoryByDate(
   return journal?.history;
 }
 
-// 6. music과 Song이 있는 내 저널 모두 받기
+/// 6. music과 Song이 있는 내 저널 모두 받기
 @riverpod
 List<Journal> getJournalsWithMusicAndSong(GetJournalsWithMusicAndSongRef ref) {
   final myJournals = ref.watch(myJournalStoreProvider);
@@ -56,7 +56,7 @@ List<Journal> getJournalsWithMusicAndSong(GetJournalsWithMusicAndSongRef ref) {
       .toList();
 }
 
-// 7. music과 Song이 있는 내 저널 갯수 받기
+/// 7. music과 Song이 있는 내 저널 갯수 받기
 @riverpod
 int getJournalsWithMusicAndSongCount(GetJournalsWithMusicAndSongCountRef ref) {
   final myJournals = ref.watch(myJournalStoreProvider);
