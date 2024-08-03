@@ -6,7 +6,7 @@ part of 'journal_service.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$journalServiceHash() => r'3f816805753da885303a8366b947cd07199d4eb0';
+String _$journalServiceHash() => r'ffb62b11cb64e902de62ba5c13d2d3ebf6eea99c';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -30,10 +30,10 @@ class _SystemHash {
 }
 
 abstract class _$JournalService
-    extends BuildlessAutoDisposeNotifier<AsyncValue<JournalState>> {
+    extends BuildlessAutoDisposeNotifier<JournalState> {
   late final JournalType journalType;
 
-  AsyncValue<JournalState> build({
+  JournalState build({
     required JournalType journalType,
   });
 }
@@ -43,7 +43,7 @@ abstract class _$JournalService
 const journalServiceProvider = JournalServiceFamily();
 
 /// See also [JournalService].
-class JournalServiceFamily extends Family<AsyncValue<JournalState>> {
+class JournalServiceFamily extends Family<JournalState> {
   /// See also [JournalService].
   const JournalServiceFamily();
 
@@ -81,8 +81,8 @@ class JournalServiceFamily extends Family<AsyncValue<JournalState>> {
 }
 
 /// See also [JournalService].
-class JournalServiceProvider extends AutoDisposeNotifierProviderImpl<
-    JournalService, AsyncValue<JournalState>> {
+class JournalServiceProvider
+    extends AutoDisposeNotifierProviderImpl<JournalService, JournalState> {
   /// See also [JournalService].
   JournalServiceProvider({
     required JournalType journalType,
@@ -113,7 +113,7 @@ class JournalServiceProvider extends AutoDisposeNotifierProviderImpl<
   final JournalType journalType;
 
   @override
-  AsyncValue<JournalState> runNotifierBuild(
+  JournalState runNotifierBuild(
     covariant JournalService notifier,
   ) {
     return notifier.build(
@@ -138,7 +138,7 @@ class JournalServiceProvider extends AutoDisposeNotifierProviderImpl<
   }
 
   @override
-  AutoDisposeNotifierProviderElement<JournalService, AsyncValue<JournalState>>
+  AutoDisposeNotifierProviderElement<JournalService, JournalState>
       createElement() {
     return _JournalServiceProviderElement(this);
   }
@@ -157,14 +157,14 @@ class JournalServiceProvider extends AutoDisposeNotifierProviderImpl<
   }
 }
 
-mixin JournalServiceRef
-    on AutoDisposeNotifierProviderRef<AsyncValue<JournalState>> {
+mixin JournalServiceRef on AutoDisposeNotifierProviderRef<JournalState> {
   /// The parameter `journalType` of this provider.
   JournalType get journalType;
 }
 
-class _JournalServiceProviderElement extends AutoDisposeNotifierProviderElement<
-    JournalService, AsyncValue<JournalState>> with JournalServiceRef {
+class _JournalServiceProviderElement
+    extends AutoDisposeNotifierProviderElement<JournalService, JournalState>
+    with JournalServiceRef {
   _JournalServiceProviderElement(super.provider);
 
   @override

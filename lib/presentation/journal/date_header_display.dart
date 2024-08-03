@@ -5,8 +5,10 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart'; // Make sure to add this dependency in your pubspec.yaml
 
 class DateHeaderDisplay extends ConsumerWidget {
+  final DateTime date;
   const DateHeaderDisplay({
     super.key,
+    required this.date,
   });
 
   @override
@@ -17,12 +19,12 @@ class DateHeaderDisplay extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
-          DateTime.now().toMonthDayOrdinal(),
+          date.toMonthDayOrdinal(),
           style: textStyle.h1.withColor(colors.grayScale0),
         ),
         const SizedBox(height: 12),
         Text(
-          'From   ${DateTime.now().toDDMYYHH()}' '   Post',
+          'From   ${date.toDDMYYHH()}' '   Post',
           style: textStyle.paragraph.withColor(colors.grayScale60),
         ),
         const SizedBox(height: 10),

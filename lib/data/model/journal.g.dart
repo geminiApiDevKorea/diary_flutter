@@ -30,7 +30,7 @@ Map<String, dynamic> _$JournalToJson(Journal instance) => <String, dynamic>{
       'music': instance.music?.toJson(),
       'song': instance.song?.toJson(),
       'tags': instance.tags,
-      'history': instance.history?.map((e) => e.toJson()).toList(),
+      'history': instance.history.map((e) => e.toJson()).toList(),
       'type': _$JournalTypeEnumMap[instance.journalType]!,
     };
 

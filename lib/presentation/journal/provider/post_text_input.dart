@@ -10,4 +10,8 @@ class PostTextInput extends _$PostTextInput {
   Future<void> setText(String? newText) async {
     state = newText;
   }
+
+  Future<void> clear() async {
+    state = null;
+  }
 }

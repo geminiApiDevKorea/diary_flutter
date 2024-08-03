@@ -1,13 +1,18 @@
-import 'package:diary_flutter/common/enums.dart';
 import 'package:diary_flutter/data/model/journal.dart';
-import 'package:diary_flutter/data/provider/persistance_storage_provider.dart';
+import 'package:diary_flutter/domain/provider/chats/chats_feedback_notifier.dart';
+import 'package:diary_flutter/domain/provider/journal/journal_service.dart';
+import 'package:diary_flutter/domain/provider/journal/my_journal_store.dart';
 import 'package:diary_flutter/presentation/journal/date_header_display.dart';
-import 'package:diary_flutter/presentation/journal/dialog/delete_confirmation_dialog_mixin.dart';
+import 'package:diary_flutter/domain/provider/journal/journal_use_cases.dart';
 import 'package:diary_flutter/presentation/journal/journal_music_card.dart';
-import 'package:diary_flutter/presentation/journal/provider/journal_service.dart';
+import 'package:diary_flutter/presentation/journal/journal_text_field.dart';
 import 'package:diary_flutter/presentation/journal/provider/post_text_input.dart';
 import 'package:diary_flutter/presentation/style/index.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:palestine_console/palestine_console.dart';
+
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -16,10 +21,31 @@ class PostJournalBody extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final journalEvent =
-        ref.watch(journalServiceProvider(journalType: JournalType.post));
     final colors = ref.gemColors;
     final textStyle = ref.gemTextStyle;
+    final chatFeedback = ref.watch(chatsFeedbackNotifierProvider);
+    final nowDate = DateTime.now();
+    final getMyJournal = ref.watch(getMyJournalByDateProvider(nowDate));
+    Print.red(getMyJournal.toString());
+    ref.listen<AsyncValue<ChatsFeedbackState>>(
+      chatsFeedbackNotifierProvider,
+      (previous, next) {
+        next.whenData((data) async {
+          if (data is ChatsFeedbackData) {
+            final journal =
+                await ref.read(myJournalStoreProvider.notifier).read(nowDate);
+            if (journal != null) {
+              final updatedJournal = journal.copyWith(
+                  music: data.data.music,
+                  song: data.data.feedbackResponse.song);
+              await ref
+                  .read(myJournalStoreProvider.notifier)
+                  .createOrUpdate(updatedJournal);
+            }
+          }
+        });
+      },
+    );
 
     return SingleChildScrollView(
       physics: const ClampingScrollPhysics(),
@@ -29,101 +55,47 @@ class PostJournalBody extends HookConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const DateHeaderDisplay(),
-            journalEvent.when(
-              data: (state) => _JournalContent(state: state),
+            DateHeaderDisplay(date: nowDate),
+            JournalTextField(date: nowDate),
+            chatFeedback.when(
+              data: (state) {
+                if (state is ChatsFeedbackData) {
+                  return JournalMusicCard(
+                    bottomText: state.data.music.title ?? '',
+                    imgUrl: state.data.music.thumbnailUrl ?? '',
+                    onButtonPressed: () {
+                      print(state.data.music.url ?? '');
+                    },
+                  );
+                } else if (state is ChatsFeedbackError) {
+                  if (state.statusCode == 401) {
+                    return const Text("다시로그인해주세요");
+                  }
+                  if (state.statusCode == 400) {
+                    return const Text("일기내용이없습니다");
+                  }
+                  return Text('Error: ${state.error}',
+                      style: textStyle.h4.copyWith(color: colors.error));
+                } else {
+                  if (getMyJournal?.music == null) {
+                    return const SizedBox();
+                  } else {
+                    return JournalMusicCard(
+                        bottomText: getMyJournal?.music?.title ?? '',
+                        imgUrl: getMyJournal?.music?.thumbnailUrl ?? '',
+                        onButtonPressed: () {
+                          print(getMyJournal?.music?.url ?? '');
+                        });
+                  }
+                }
+              },
               loading: () => const CircularProgressIndicator(),
-              error: (error, stack) => Text('Error: $error'),
+              error: (error, stack) => Text('Error: $error',
+                  style: textStyle.h4.copyWith(color: colors.error)),
             ),
           ],
         ),
       ),
-    );
-  }
-}
-
-class _JournalContent extends HookConsumerWidget {
-  final JournalState state;
-
-  const _JournalContent({required this.state});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final textController = useTextEditingController(
-      text: state is JournalLoaded
-          ? (state as JournalLoaded).journal?.userInput ?? ''
-          : '',
-    );
-    // final colors = ref.gemColors;
-    // final textStyle = ref.gemTextStyle;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _JournalTextField(textController: textController),
-        if (state is JournalLoaded) _buildMusicCard(state as JournalLoaded),
-      ],
-    );
-  }
-
-  Widget _buildMusicCard(JournalLoaded loadedState) {
-    if (loadedState.journal?.music != null) {
-      return JournalMusicCard(
-        bottomText: loadedState.journal!.music!.title,
-        imgUrl: loadedState.journal!.music!.thumbnailUrl,
-        onButtonPressed: () {
-          print(loadedState.journal!.music!.url);
-        },
-      );
-    }
-    return const SizedBox.shrink();
-  }
-}
-
-class _JournalTextField extends HookConsumerWidget {
-  final TextEditingController textController;
-
-  const _JournalTextField({required this.textController});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final colors = ref.gemColors;
-    final textStyle = ref.gemTextStyle;
-    final postTextInputNotifier = ref.read(postTextInputProvider.notifier);
-    final journalService = ref
-        .read(journalServiceProvider(journalType: JournalType.post).notifier);
-
-    final textController =
-        useTextEditingController(text: ref.watch(postTextInputProvider));
-
-    useEffect(() {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        final journal = journalService.getJournalForDate(DateTime.now());
-        if (journal != null && journal.userInput != null) {
-          postTextInputNotifier.setText(journal.userInput!);
-          textController.text = journal.userInput!;
-        }
-      });
-
-      return null;
-    }, []);
-    return TextField(
-      controller: textController,
-      decoration: InputDecoration(
-        hintStyle: textStyle.h2.withColor(colors.placeholder),
-        hintText: 'Just write down any word \nabout your day.',
-        border: InputBorder.none,
-      ),
-      style: textStyle.h2.withColor(colors.grayScale0),
-      maxLines: null,
-      keyboardType: TextInputType.multiline,
-      textInputAction: TextInputAction.done,
-      onSubmitted: (value) {
-        FocusScope.of(context).unfocus();
-      },
-      onChanged: (value) {
-        postTextInputNotifier.setText(value);
-      },
     );
   }
 }

@@ -1,26 +1,26 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'post_text_input.dart';
+part of 'my_journal_store.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$postTextInputHash() => r'15eaca98b9342ccd878607fb9ef92c37c74fb435';
+String _$myJournalStoreHash() => r'93575df3a2315aafbe75033d40ccba70b299581a';
 
-/// See also [PostTextInput].
-@ProviderFor(PostTextInput)
-final postTextInputProvider =
-    AutoDisposeNotifierProvider<PostTextInput, String?>.internal(
-  PostTextInput.new,
-  name: r'postTextInputProvider',
+/// See also [MyJournalStore].
+@ProviderFor(MyJournalStore)
+final myJournalStoreProvider =
+    AutoDisposeNotifierProvider<MyJournalStore, List<Journal>>.internal(
+  MyJournalStore.new,
+  name: r'myJournalStoreProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$postTextInputHash,
+      : _$myJournalStoreHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$PostTextInput = AutoDisposeNotifier<String?>;
+typedef _$MyJournalStore = AutoDisposeNotifier<List<Journal>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

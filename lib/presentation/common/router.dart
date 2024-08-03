@@ -65,7 +65,7 @@ GoRouter router(RouterRef ref) {
           name: JournalScreen.name,
           pageBuilder: (context, state) {
             final type = state.uri.queryParameters['type'] ?? 'chat';
-            const key = ValueKey('journal');
+            final key = ValueKey('journal$type');
 
             return CustomTransitions.buildSlideTransitionPage(
               child: JournalScreen(type: type),
