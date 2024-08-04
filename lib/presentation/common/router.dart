@@ -1,4 +1,6 @@
+import 'package:diary_flutter/common/enums.dart';
 import 'package:diary_flutter/presentation/calendar/calendar_screen.dart';
+import 'package:diary_flutter/presentation/journal/journal_completion_screen.dart';
 import 'package:diary_flutter/presentation/journal_screen.dart';
 import 'package:diary_flutter/presentation/main_screen.dart';
 import 'package:diary_flutter/presentation/common/custom_transitions.dart';
@@ -58,7 +60,7 @@ GoRouter router(RouterRef ref) {
             return CustomTransitions.buildSlideTransitionPage(
                 child: const MainScreen(),
                 key: state.pageKey,
-                from: SlideDirection.bottom);
+                from: SlideDirection.right);
           }),
       GoRoute(
           path: JournalScreen.path,
@@ -71,9 +73,24 @@ GoRouter router(RouterRef ref) {
               child: JournalScreen(type: type),
               key: key,
               from: SlideDirection.right,
-              transitionDuration: const Duration(milliseconds: 300),
+              transitionDuration: TransitionDuration.short.value,
             );
-          }),
+          },
+          routes: [
+            GoRoute(
+              path: JournalCompletionScreen.path,
+              name: JournalCompletionScreen.name,
+              pageBuilder: (context, state) {
+                const key = ValueKey('journalCompletion');
+                return CustomTransitions.buildSlideTransitionPage(
+                  child: const JournalCompletionScreen(),
+                  key: key,
+                  from: SlideDirection.right,
+                  transitionDuration: TransitionDuration.short.value,
+                );
+              },
+            ),
+          ]),
     ],
   );
 }

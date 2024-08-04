@@ -1,22 +1,13 @@
-import 'dart:math';
 import 'dart:ui';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:diary_flutter/common/enums.dart';
+import 'package:diary_flutter/domain/provider/auth/get_my_name.dart';
 import 'package:diary_flutter/domain/provider/journal/journal_use_cases.dart';
+import 'package:diary_flutter/domain/provider/journal/my_journal_store.dart';
 import 'package:diary_flutter/presentation/calendar/calendar_screen.dart';
+import 'package:diary_flutter/presentation/journal/journal_music_card.dart';
 import 'package:diary_flutter/presentation/journal_screen.dart';
-import 'package:diary_flutter/presentation/main/use_is_top_of_stack.dart';
-import 'package:diary_flutter/presentation/style/index.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
-import 'package:flutter_custom_carousel/flutter_custom_carousel.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:go_router/go_router.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-
-import 'dart:ui';
-import 'package:diary_flutter/presentation/calendar/calendar_screen.dart';
-import 'package:diary_flutter/presentation/journal_screen.dart';
+import 'package:diary_flutter/presentation/main/provider/main_screen_scroll_position.dart';
 import 'package:diary_flutter/presentation/main/use_is_top_of_stack.dart';
 import 'package:diary_flutter/presentation/style/index.dart';
 import 'package:flutter/cupertino.dart';
@@ -31,7 +22,7 @@ import 'package:palestine_console/palestine_console.dart';
 class MainScreen extends HookConsumerWidget {
   static const String path = '/main';
   static const String name = 'main';
-  static const double carouselHeight = 490.0;
+  static const double carouselHeight = 490.0 + kToolbarHeight;
 
   const MainScreen({super.key});
 
@@ -40,18 +31,38 @@ class MainScreen extends HookConsumerWidget {
     final colors = ref.gemColors;
     final animationController =
         useAnimationController(duration: const Duration(milliseconds: 300));
-    final isDarkening = useState(false);
+    // final isDarkening = useState(false);
+    final darkeningAnimationContorller = useAnimationController(
+        duration: const Duration(milliseconds: 300), initialValue: 0.0);
 
     useStackAnimation(
       isTopOfStack: useIsTopOfStack(context),
       animationController: animationController,
-      isDarkening: isDarkening,
+      // isDarkening: isDarkening,
     );
+    final scrollPosition = ref.watch(mainScrollPositionProvider);
 
-    useTopOfStack(context, ref, () {
-      // final a = ref.read(getJournalsWithMusicAndSongCountProvider);
-      // print(a);
-    });
+    // final opacityController = useAnimationController(
+    //   duration: const Duration(milliseconds: 300),
+    //   initialValue: 1.0,
+    // );
+    // useEffect(() {
+    //   final opacity = ((scrollPosition / (carouselHeight - kToolbarHeight))
+    //       .clamp(0.0, 1.0));
+
+    //   opacityController.animateTo(1 - opacity,
+    //       duration: const Duration(milliseconds: 100));
+    //   return null;
+    // }, [scrollPosition]);
+
+    // useEffect(() {
+    //   if (scrollPosition > 86) {
+    //     isVisible.value = false;
+    //   } else {
+    //     isVisible.value = true;
+    //   }
+    //   return null;
+    // }, [scrollPosition]);
 
     return Animate(
       effects: [
@@ -60,10 +71,17 @@ class MainScreen extends HookConsumerWidget {
           begin: 0,
           end: 1,
           color: Colors.black.withOpacity(0.2),
-          duration: 300.ms,
+          duration: TransitionDuration.short.value,
+        ),
+        MoveEffect(
+          curve: Curves.easeInOut,
+          begin: const Offset(0, 0),
+          end: const Offset(-40, 0),
+          duration: TransitionDuration.short.value,
         ),
       ],
-      target: isDarkening.value ? 1 : 0,
+      controller: darkeningAnimationContorller,
+      target: 0,
       child: Container(
         color: colors.primary100,
         child: SafeArea(
@@ -75,9 +93,9 @@ class MainScreen extends HookConsumerWidget {
             floatingActionButton: MainFloatingActionButton(
                 animationController: animationController),
             body: MainBody(
-              carouselHeight: carouselHeight,
-              isDarkening: isDarkening,
+              // isDarkening: isDarkening,
               animationController: animationController,
+              darkeningAnimationContorller: darkeningAnimationContorller,
             ),
           ),
         ),
@@ -106,37 +124,62 @@ class MainFloatingActionButton extends HookConsumerWidget {
           children: [
             Hero(
               tag: 'floating',
-              child: SizedBox(
-                width: 140,
-                height: 36,
-                child: ElevatedButton.icon(
-                  onPressed: () => context.go(CalendarScreen.path),
-                  style: ElevatedButton.styleFrom(
-                    overlayColor: Colors.transparent,
-                    foregroundColor: colors.grayScale80,
-                    elevation: 0,
-                    shadowColor: Colors.transparent,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(32),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(32),
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 50, sigmaY: 50),
+                  child: SizedBox(
+                    width: 140,
+                    height: 36,
+                    child: ElevatedButton.icon(
+                      onPressed: () => context.go(CalendarScreen.path),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: colors.grayScale80.withOpacity(0.8),
+                        foregroundColor: colors.grayScale80,
+                        elevation: 0,
+                        shadowColor: Colors.transparent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(32),
+                        ),
+                      ),
+                      label: AnimatedBuilder(
+                        animation: animationController,
+                        builder: (context, child) => FadeTransition(
+                          opacity: animationController,
+                          child: child,
+                        ),
+                        child: Text(
+                          'Calendar',
+                          style: textStyle.button
+                              .copyWith(color: colors.grayScale0),
+                        ),
+                      ),
+                      icon: Icon(CupertinoIcons.back,
+                          size: 18, color: colors.grayScale50),
                     ),
                   ),
-                  label: AnimatedBuilder(
-                    animation: animationController,
-                    builder: (context, child) => FadeTransition(
-                      opacity: animationController,
-                      child: child,
-                    ),
-                    child: Text(
-                      'Calendar',
-                      style:
-                          textStyle.button.copyWith(color: colors.grayScale0),
-                    ),
-                  ),
-                  icon: Icon(CupertinoIcons.back,
-                      size: 18, color: colors.grayScale50),
                 ),
               ),
             ),
+            const Spacer(),
+            TextButton(
+                onPressed: () {
+                  Print.red("일기 전부삭제");
+                  ref.read(myJournalStoreProvider.notifier).deleteAllJournals();
+                },
+                child: Text(
+                  "일기삭제",
+                  style: textStyle.button.withColor(colors.error),
+                )),
+            TextButton(
+                onPressed: () {
+                  Print.cyan("더미 일기 생성");
+                  ref
+                      .read(myJournalStoreProvider.notifier)
+                      .createDummyJournal();
+                },
+                child: Text("일기생성",
+                    style: textStyle.button.withColor(colors.caption)))
           ],
         ),
       ),
@@ -145,26 +188,36 @@ class MainFloatingActionButton extends HookConsumerWidget {
 }
 
 class MainBody extends HookConsumerWidget {
-  final double carouselHeight;
-  final ValueNotifier<bool> isDarkening;
+  static const double carouselHeight = 490.0 + kToolbarHeight;
+  // final double carouselHeight;
+  // final ValueNotifier<bool> isDarkening;
   final AnimationController animationController;
+  final AnimationController darkeningAnimationContorller;
 
   const MainBody({
     super.key,
-    required this.carouselHeight,
-    required this.isDarkening,
+    // required this.carouselHeight,
+    // required this.isDarkening,
     required this.animationController,
+    required this.darkeningAnimationContorller,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final scrollController = useMainScrollController(ref);
+    final scrollPosition = ref.watch(mainScrollPositionProvider);
+
+    Print.white(scrollPosition.toString());
+
     return CustomScrollView(
+      controller: scrollController,
       physics: const ClampingScrollPhysics(),
       slivers: [
         SliverToBoxAdapter(
           child: MainHeader(
-            isDarkening: isDarkening,
+            // isDarkening: isDarkening,
             animationController: animationController,
+            darkeningAnimationContorller: darkeningAnimationContorller,
           ),
         ),
         SliverPersistentHeader(
@@ -172,7 +225,9 @@ class MainBody extends HookConsumerWidget {
           delegate: _SliverAppBarDelegate(
             minHeight: carouselHeight,
             maxHeight: carouselHeight,
-            child: const CustomHorizontalCarousel(),
+            child: const CustomHorizontalCarousel(
+              carouselHeight: carouselHeight,
+            ),
           ),
         ),
         SliverToBoxAdapter(
@@ -187,13 +242,15 @@ class MainBody extends HookConsumerWidget {
 }
 
 class MainHeader extends HookConsumerWidget {
-  final ValueNotifier<bool> isDarkening;
+  // final ValueNotifier<bool> isDarkening;
   final AnimationController animationController;
+  final AnimationController darkeningAnimationContorller;
 
   const MainHeader({
     super.key,
-    required this.isDarkening,
+    // required this.isDarkening,
     required this.animationController,
+    required this.darkeningAnimationContorller,
   });
 
   @override
@@ -201,12 +258,7 @@ class MainHeader extends HookConsumerWidget {
     final textStyle = ref.gemTextStyle;
     final colors = ref.gemColors;
 
-    // useEffect() {
-    //   WidgetsBinding.instance.addPostFrameCallback((_) {
-    //     final abc = ref.read(getJournalsWithMusicAndSongCountProvider);
-    //     Print.white(abc.toString());
-    //   });
-    // }
+    final myName = ref.read(getMyNameProvider);
 
     return Align(
       alignment: Alignment.topLeft,
@@ -217,7 +269,7 @@ class MainHeader extends HookConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Good Evening, Cody",
+            Text("Good Evening, $myName",
                 style: textStyle.paragraph.withColor(colors.grayScale60)),
             Text("How was\n your day?", style: textStyle.h1),
             const SizedBox(height: 50),
@@ -245,11 +297,14 @@ class MainHeader extends HookConsumerWidget {
       child: InkWell(
         borderRadius: BorderRadius.circular(32),
         onTap: () async {
-          isDarkening.value = true;
+          // isDarkening.value = true;
+
+          darkeningAnimationContorller.forward();
           animationController.value = 0.0;
           await context
               .pushNamed(JournalScreen.name, queryParameters: {'type': type});
-          isDarkening.value = false;
+          // isDarkening.value = false;
+          darkeningAnimationContorller.reverse();
         },
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6.0),
@@ -274,13 +329,13 @@ class MainHeader extends HookConsumerWidget {
 void useStackAnimation({
   required bool isTopOfStack,
   required AnimationController animationController,
-  required ValueNotifier<bool> isDarkening,
+  // required ValueNotifier<bool> isDarkening,
 }) {
   useEffect(() {
     if (isTopOfStack) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Future.delayed(const Duration(milliseconds: 300), () {
-          isDarkening.value = false;
+          // isDarkening.value = false;
           animationController.forward(from: 0.0);
         });
       });
@@ -306,9 +361,19 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   @override
   double get maxExtent => maxHeight;
 
+  bool _wasAtTop = false;
+
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
+    //FIXME: 59??
+    if (shrinkOffset >= 59 && !_wasAtTop) {
+      _wasAtTop = true;
+      print('SliverPersistentHeader reached the top of the screen');
+    } else if (shrinkOffset < 59 && _wasAtTop) {
+      _wasAtTop = false;
+      print('SliverPersistentHeader is no longer at the top of the screen');
+    }
     return SizedBox.expand(child: child);
   }
 
@@ -321,17 +386,19 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
 }
 
 class CustomHorizontalCarousel extends ConsumerWidget {
-  const CustomHorizontalCarousel({super.key});
+  final double carouselHeight;
+  const CustomHorizontalCarousel({super.key, required this.carouselHeight});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final allMyJournalswithMusicandSong =
-        ref.watch(getJournalsWithMusicAndSongProvider);
-
+    // final allMyJournalswithMusicandSong =
+    //     ref.watch(getJournalsWithMusicAndSongProvider);
+    final allMyJournals = ref.watch(getAllMyJournalsProvider);
     // 저널이 없는 경우 텍스트 위젯 반환
-    if (allMyJournalswithMusicandSong.isEmpty) {
+    final scrollPosition = ref.watch(mainScrollPositionProvider);
+    if (allMyJournals.isEmpty) {
       return Container(
-        height: 490,
+        height: carouselHeight,
         padding: const EdgeInsets.only(bottom: 20),
         color: Colors.amber,
         child: const Center(
@@ -344,13 +411,14 @@ class CustomHorizontalCarousel extends ConsumerWidget {
     }
 
     return Container(
-      height: 490,
+      height: carouselHeight,
       padding: const EdgeInsets.only(bottom: 20),
       color: Colors.amber,
       child: CustomCarousel(
         depthOrder: DepthOrder.reverse,
         itemCountBefore: 0,
-        itemCountAfter: allMyJournalswithMusicandSong.length > 2 ? 2 : 0,
+        itemCountAfter:
+            allMyJournals.length > 2 ? 2 : (allMyJournals.length == 2 ? 1 : 0),
         alignment: Alignment.bottomCenter,
         scrollDirection: Axis.horizontal,
         tapToSelect: false,
@@ -369,22 +437,31 @@ class CustomHorizontalCarousel extends ConsumerWidget {
           );
         },
         children: List.generate(
-          allMyJournalswithMusicandSong.length,
-          (index) => _buildCard(
-            context,
-            ref,
-            index,
-            allMyJournalswithMusicandSong[index].music?.title ?? '',
-            // 'https://picsum.photos/200/200?random=$index'
-            allMyJournalswithMusicandSong[index].music?.thumbnailUrl ?? '',
-          ),
+          allMyJournals.length,
+          (index) => _buildCard(context, ref,
+              index: index,
+              musicTitle: allMyJournals[index].song?.title ?? '',
+              singer: allMyJournals[index].song?.singer ?? '',
+              imgUrl: allMyJournals[index].music?.thumbnailUrl,
+              journalTitle: allMyJournals[index].title,
+              isRevealed: scrollPosition >= 350 //FIXME: 숫자멋대로
+              // index,
+              // allMyJournals[index].music?.title ?? 'Draft',
+              // // 'https://picsum.photos/200/200?random=$index'
+              // allMyJournals[index].music?.thumbnailUrl,
+              ),
         ),
       ),
     );
   }
 
-  Widget _buildCard(BuildContext context, WidgetRef ref, int index,
-      String title, String? imgUrl) {
+  Widget _buildCard(BuildContext context, WidgetRef ref,
+      {required int index,
+      required String musicTitle,
+      required String singer,
+      required String? imgUrl,
+      required String? journalTitle,
+      required bool isRevealed}) {
     final colors = ref.gemColors;
     final textStyle = ref.gemTextStyle;
     return AspectRatio(
@@ -400,31 +477,74 @@ class CustomHorizontalCarousel extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                title,
+                '$musicTitle $singer',
                 style: textStyle.caption.withColor(colors.grayScale40),
               ),
               const SizedBox(height: 10),
-              ClipRRect(
-                borderRadius: BorderRadius.circular(300),
-                child: imgUrl != null
-                    ? FutureBuilder<void>(
-                        future: precacheImage(NetworkImage(imgUrl), context),
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                                  ConnectionState.done &&
-                              !snapshot.hasError) {
-                            return Image.network(
-                              imgUrl,
-                              width: 250,
-                              height: 250,
-                              fit: BoxFit.cover,
-                            );
-                          } else {
-                            return _buildBlurredCircle(context, ref);
-                          }
-                        },
-                      )
-                    : _buildBlurredCircle(context, ref),
+              Stack(
+                alignment: Alignment.center,
+                children: [
+                  // 이미지
+                  imgUrl != null
+                      ? ClipRRect(
+                          borderRadius: BorderRadius.circular(300),
+                          child: CachedNetworkImage(
+                            imageUrl: imgUrl,
+                            width: 250,
+                            height: 250,
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) =>
+                                const BlurredCircleWidget(),
+                            errorWidget: (context, url, error) =>
+                                const BlurredCircleWidget(),
+                          ),
+                        )
+                      : const BlurredCircleWidget(),
+
+                  // AnimatedSwitcher를 사용하여 컨테이너와 버튼 사이의 전환
+                  AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 300),
+                    child: isRevealed
+                        ? ElevatedButton(
+                            key: const ValueKey('play_button'),
+                            onPressed: () {
+                              // 버튼 동작 추가
+                            },
+                            style: ElevatedButton.styleFrom(
+                              shape: const CircleBorder(),
+                              padding: const EdgeInsets.all(20),
+                            ),
+                            child: const Icon(Icons.play_arrow),
+                          )
+                        : SizedBox(
+                            key: const ValueKey('journal_container'),
+                            width: 250,
+                            height: 250,
+                            child: Align(
+                              alignment: Alignment.bottomCenter,
+                              child: Container(
+                                width: 250,
+                                height: 125,
+                                decoration: BoxDecoration(
+                                  color: colors.grayScale100,
+                                  borderRadius: const BorderRadius.only(
+                                    bottomLeft: Radius.circular(125),
+                                    bottomRight: Radius.circular(125),
+                                  ),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    journalTitle ?? "Draft",
+                                    style: textStyle.h1
+                                        .withColor(colors.grayScale0),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -465,4 +585,21 @@ void useTopOfStack(BuildContext context, WidgetRef ref, VoidCallback action) {
     }
     return null;
   }, [isTop]);
+}
+
+ScrollController useMainScrollController(WidgetRef ref) {
+  final controller = useScrollController();
+
+  useEffect(() {
+    void listener() {
+      ref
+          .read(mainScrollPositionProvider.notifier)
+          .updateScrollPosition(controller.offset);
+    }
+
+    controller.addListener(listener);
+    return () => controller.removeListener(listener);
+  }, [controller]);
+
+  return controller;
 }
