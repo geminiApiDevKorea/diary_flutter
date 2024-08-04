@@ -18,6 +18,9 @@ sealed class GemColors {
   /// ![](https://placehold.co/15x15/0E7A3F/0E7A3F.png) `#0E7A3F`
   final Color success = const Color(0xFF0E7A3F);
 
+  // final Color buttonBackgorund = const Color();
+  final Color subButtonBackground = const Color(0xFFF6F5EC);
+
   // 그레이스케일
   final Color grayScale100;
   final Color grayScale90;
