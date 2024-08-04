@@ -1,6 +1,8 @@
 import 'package:diary_flutter/common/enums.dart';
 import 'package:diary_flutter/domain/provider/chats/chats_feedback_notifier.dart';
+import 'package:diary_flutter/domain/provider/journal/journal_use_cases.dart';
 import 'package:diary_flutter/domain/provider/journal/my_journal_store.dart';
+import 'package:diary_flutter/presentation/journal/provider/feedback_active.dart';
 import 'package:diary_flutter/presentation/journal/provider/post_text_input.dart';
 import 'package:palestine_console/palestine_console.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -46,9 +48,13 @@ class JournalService extends _$JournalService {
   Future<void> onList() async {
     switch (journalType) {
       case JournalType.post:
+        final hasFeedback = ref.read(hasFeedbackProvider(focusedDate));
+        if (hasFeedback) return;
         ref.read(myJournalStoreProvider.notifier).createOrUpdateUserInput(
             focusedDate, ref.read(postTextInputProvider) ?? '', journalType);
       case JournalType.chat:
+        final hasFeedback = ref.read(hasFeedbackProvider(focusedDate));
+        if (hasFeedback) return;
         ref.read(myJournalStoreProvider.notifier).createOrUpdateUserInput(
             focusedDate, ref.read(postTextInputProvider) ?? '', journalType);
     }
@@ -65,25 +71,55 @@ class JournalService extends _$JournalService {
     }
   }
 
-  // onFinish 메서드 구현
-  Future<void> onFinish() async {
+  // onSave 메서드 구현
+  Future<void> onSave(
+      {required String newTitle, required JournalType journalType}) async {
     switch (journalType) {
       case JournalType.post:
-        ref.read(myJournalStoreProvider.notifier).createOrUpdateUserInput(
+        await ref.read(myJournalStoreProvider.notifier).createOrUpdateUserInput(
             focusedDate, ref.read(postTextInputProvider) ?? '', journalType);
+        await ref
+            .read(myJournalStoreProvider.notifier)
+            .createOrUpdateTitle(focusedDate, newTitle, journalType);
         final journal =
             await ref.read(myJournalStoreProvider.notifier).read(focusedDate);
+        Print.yellow('Journal: $journal');
         if (journal == null) {
           state = const JournalError('Journal not found');
           return;
         }
         state = JournalLoading();
+        final isFeedbackActive = ref.read(feedbackActiveProvider);
+        if (!isFeedbackActive) {
+          state = const JournalInitial();
+          return;
+        }
         await ref.read(chatsFeedbackNotifierProvider.notifier).postFeedback(
             type: FeedbackType.post, body: journal.toChatsRequestBody());
 
         Print.blue('Finishing Post journal');
       case JournalType.chat:
-        Print.blue('Finishing Chat journal');
+        await ref
+            .read(myJournalStoreProvider.notifier)
+            .createOrUpdateUserInput(focusedDate, 'yes, please', journalType);
+        await ref
+            .read(myJournalStoreProvider.notifier)
+            .createOrUpdateTitle(focusedDate, newTitle, journalType);
+        final journal =
+            await ref.read(myJournalStoreProvider.notifier).read(focusedDate);
+        Print.yellow('Journal: $journal');
+        if (journal == null) {
+          state = const JournalError('Journal not found');
+          return;
+        }
+        state = JournalLoading();
+        final isFeedbackActive = ref.read(feedbackActiveProvider);
+        if (!isFeedbackActive) {
+          state = const JournalInitial();
+          return;
+        }
+        await ref.read(chatsFeedbackNotifierProvider.notifier).postFeedback(
+            type: FeedbackType.post, body: journal.toChatsRequestBody());
     }
   }
 }

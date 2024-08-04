@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:diary_flutter/common/enums.dart';
 import 'package:diary_flutter/presentation/style/index.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';
@@ -11,13 +12,17 @@ import 'package:flutter_animate/flutter_animate.dart';
 
 class JournalMusicCard extends ConsumerWidget {
   final String? imgUrl;
-  final String? bottomText;
+  // final String? bottomText;
+  final String? singer;
+  final String? song;
   final VoidCallback? onButtonPressed;
 
   const JournalMusicCard({
     super.key,
     this.imgUrl,
-    this.bottomText,
+    // this.bottomText,
+    this.singer,
+    this.song,
     this.onButtonPressed,
   });
 
@@ -25,43 +30,47 @@ class JournalMusicCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final colors = ref.gemColors;
     final textStyle = ref.gemTextStyle;
+
+    final formattedSongTitle = song?.formattedSongTitle ?? '';
+    final formattedSinger = singer?.formattedSinger ?? '';
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         AspectRatio(
           aspectRatio: 1,
           child: ClipRRect(
-              borderRadius: BorderRadius.circular(300),
-              child: imgUrl != null
-                  ? CachedNetworkImage(
-                      imageUrl: imgUrl!,
-                      width: 250,
-                      height: 250,
-                      fit: BoxFit.cover,
-                      placeholder: (context, url) =>
-                          const BlurredCircleWidget(),
-                      errorWidget: (context, url, error) =>
-                          const BlurredCircleWidget(),
-                    )
-                  : const BlurredCircleWidget()),
+            borderRadius: BorderRadius.circular(300),
+            child: imgUrl != null
+                ? CachedNetworkImage(
+                    imageUrl: imgUrl!,
+                    width: 300,
+                    height: 300,
+                    fit: BoxFit.cover,
+                    placeholder: (context, url) => const BlankCircleWidget(),
+                    errorWidget: (context, url, error) =>
+                        const BlankCircleWidget(),
+                  )
+                : const BlankCircleWidget(),
+          ),
         ),
         const SizedBox(height: 20),
-        if (bottomText != null)
+        if (singer != null)
           Text(
-            bottomText ?? '',
-            style: textStyle.caption.withColor(colors.grayScale40),
+            '$formattedSongTitle - $formattedSinger',
+            softWrap: true,
+            style: textStyle.h1.withColor(colors.grayScale40),
             textAlign: TextAlign.center,
+            maxLines: 2,
             overflow: TextOverflow.ellipsis,
           )
+        // Text(
+        //   singer ?? '',
+        //   style: textStyle.h1.withColor(colors.grayScale40),
+        //   textAlign: TextAlign.center,
+        //   overflow: TextOverflow.ellipsis,
+        // );
         else
-          Text(
-            'No music data',
-            style: textStyle.caption.withColor(colors.grayScale40),
-            textAlign: TextAlign.center,
-            overflow: TextOverflow.ellipsis,
-          )
-              .animate(onPlay: (controller) => controller.repeat(reverse: true))
-              .shimmer(duration: 1.seconds, color: colors.grayScale40),
+          const SizedBox.shrink(),
         const SizedBox(height: 20),
         if (onButtonPressed != null)
           SizedBox(
@@ -90,6 +99,23 @@ class JournalMusicCard extends ConsumerWidget {
                 curve: Curves.easeOut,
               ),
       ],
+    );
+  }
+}
+
+class BlankCircleWidget extends ConsumerWidget {
+  const BlankCircleWidget({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colors = ref.gemColors;
+    return Container(
+      width: 300,
+      height: 300,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: colors.grayScale60,
+      ),
     );
   }
 }
