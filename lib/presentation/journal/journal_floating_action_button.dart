@@ -1,5 +1,6 @@
 import 'package:diary_flutter/data/model/journal.dart';
 import 'package:diary_flutter/data/provider/persistance_storage_provider.dart';
+import 'package:diary_flutter/presentation/common/hero_list_back_button.dart';
 import 'package:diary_flutter/presentation/journal/dialog/delete_confirmation_dialog_mixin.dart';
 import 'package:diary_flutter/domain/provider/journal/journal_service.dart';
 import 'package:diary_flutter/domain/provider/journal/my_journal_store.dart';
@@ -37,31 +38,11 @@ class JournalFloatingActionButton extends HookConsumerWidget
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Hero(
-              tag: 'floating',
-              child: SizedBox(
-                width: 100,
-                height: 36,
-                child: ElevatedButton.icon(
-                    label: Text(
-                      'List',
-                      style:
-                          textStyle.button.copyWith(color: colors.grayScale0),
-                    ),
-                    icon: Icon(CupertinoIcons.back,
-                        size: 18, color: colors.grayScale50),
-                    style: ElevatedButton.styleFrom(
-                      overlayColor: Colors.transparent,
-                      foregroundColor: colors.grayScale80,
-                      elevation: 0,
-                      shadowColor: Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(32),
-                      ),
-                    ),
-                    onPressed: () => journalEventNotifier
-                        .onList()
-                        .then((value) => context.pop())),
+            HeroListBackButton(
+              onBack: () => journalEventNotifier.onList().then(
+                (value) {
+                  context.pop();
+                },
               ),
             ),
             const Spacer(),

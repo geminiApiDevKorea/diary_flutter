@@ -15,12 +15,11 @@ class Calendar extends ConsumerWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: 20.0,
-        vertical: 13.0,
       ),
       child: Column(
         children: [
           CalendarHeader(
-            dateTime: calendarChangeNotifier.dateTime,
+            dateTime: calendarChangeNotifier.initialDateTime,
           ),
           const SizedBox(height: 24),
           const CalendarWeekend(),

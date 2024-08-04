@@ -110,7 +110,7 @@ class MainFloatingActionButton extends HookConsumerWidget {
                 width: 140,
                 height: 36,
                 child: ElevatedButton.icon(
-                  onPressed: () => context.go(CalendarScreen.path),
+                  onPressed: () => context.pushNamed(CalendarScreen.name),
                   style: ElevatedButton.styleFrom(
                     overlayColor: Colors.transparent,
                     foregroundColor: colors.grayScale80,
