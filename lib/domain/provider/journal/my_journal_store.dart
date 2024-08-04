@@ -77,4 +77,11 @@ class MyJournalStore extends _$MyJournalStore {
         .read(storedJournalProvider(_idToken).notifier)
         .deleteAllJournals(_idToken);
   }
+
+  Future<void> createOrUpdateTitle(
+      DateTime date, String newTitle, JournalType journalType) async {
+    await ref
+        .read(storedJournalProvider(_idToken).notifier)
+        .createOrUpdateTitle(_idToken, date, newTitle, journalType);
+  }
 }
