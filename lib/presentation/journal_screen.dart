@@ -1,20 +1,22 @@
 import 'package:diary_flutter/data/model/journal.dart';
-import 'package:diary_flutter/presentation/journal/dialog/delete_confirmation_dialog_mixin.dart';
 import 'package:diary_flutter/presentation/journal/journal_chat_body.dart';
-import 'package:diary_flutter/presentation/journal/journal_floating_action_button.dart';
+import 'package:diary_flutter/presentation/journal/journal_body_appbar.dart';
 import 'package:diary_flutter/presentation/journal/journal_post_body.dart';
 import 'package:diary_flutter/presentation/style/index.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class JournalScreen extends HookConsumerWidget with DeleteConfirmDialogMixin {
+class JournalScreen extends HookConsumerWidget {
   const JournalScreen({super.key, required this.type});
   final String type;
   static const String path = '/journal';
   static const String name = 'journal';
 
-  JournalType get journalType =>
-      type == 'post' ? JournalType.post : JournalType.chat;
+  JournalType get journalType => switch (type) {
+        'post' => JournalType.post,
+        'chat' => JournalType.chat,
+        _ => throw ArgumentError('Invalid journal type: $type'),
+      };
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
