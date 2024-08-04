@@ -7,6 +7,7 @@ part of 'journal.dart';
 // **************************************************************************
 
 Journal _$JournalFromJson(Map<String, dynamic> json) => Journal(
+      title: json['title'] as String?,
       idToken: json['idToken'] as String,
       createdAt: DateTime.parse(json['createdAt'] as String),
       userInput: json['userInput'] as String?,
@@ -24,6 +25,7 @@ Journal _$JournalFromJson(Map<String, dynamic> json) => Journal(
     );
 
 Map<String, dynamic> _$JournalToJson(Journal instance) => <String, dynamic>{
+      'title': instance.title,
       'idToken': instance.idToken,
       'createdAt': instance.createdAt.toIso8601String(),
       'userInput': instance.userInput,
