@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:math';
 import 'package:diary_flutter/data/model/history.dart';
 import 'package:diary_flutter/data/model/journal.dart';
+import 'package:diary_flutter/data/model/music.dart';
 import 'package:diary_flutter/data/model/song.dart';
 import 'package:diary_flutter/data/provider/persistance_storage_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -116,7 +118,7 @@ class StoredJournal extends _$StoredJournal {
     final index = allJournals.indexWhere(
         (j) => j.idToken == idToken && _isSameDay(j.createdAt, date));
     if (index != -1) {
-      final updatedHistory = [...?allJournals[index].history, history];
+      final updatedHistory = [...allJournals[index].history, history];
       allJournals[index] = allJournals[index].copyWith(history: updatedHistory);
       _saveToStorage(allJournals);
     }
@@ -134,10 +136,9 @@ class StoredJournal extends _$StoredJournal {
     final journalIndex = allJournals.indexWhere(
         (j) => j.idToken == idToken && _isSameDay(j.createdAt, date));
     if (journalIndex != -1 &&
-        allJournals[journalIndex].history != null &&
-        index < allJournals[journalIndex].history!.length) {
+        index < allJournals[journalIndex].history.length) {
       final updatedHistory =
-          List<History>.from(allJournals[journalIndex].history!);
+          List<History>.from(allJournals[journalIndex].history);
       updatedHistory[index] = newHistory;
       allJournals[journalIndex] =
           allJournals[journalIndex].copyWith(history: updatedHistory);
@@ -155,15 +156,65 @@ class StoredJournal extends _$StoredJournal {
     final journalIndex = allJournals.indexWhere(
         (j) => j.idToken == idToken && _isSameDay(j.createdAt, date));
     if (journalIndex != -1 &&
-        allJournals[journalIndex].history != null &&
-        index < allJournals[journalIndex].history!.length) {
+        index < allJournals[journalIndex].history.length) {
       final updatedHistory =
-          List<History>.from(allJournals[journalIndex].history!);
+          List<History>.from(allJournals[journalIndex].history);
       updatedHistory.removeAt(index);
       allJournals[journalIndex] =
           allJournals[journalIndex].copyWith(history: updatedHistory);
       _saveToStorage(allJournals);
     }
+  }
+
+  Future<Journal?> createDummyJournal(String idToken) async {
+    final random = Random();
+    DateTime currentDate = DateTime.now();
+
+    // 이미 존재하지 않는 가장 최근 날짜 찾기
+    while (await read(idToken, currentDate) != null) {
+      currentDate = currentDate.subtract(const Duration(days: 1));
+    }
+
+    bool hasTitle = random.nextBool();
+    bool hasMusicAndSong = random.nextBool();
+    int index = random.nextInt(201);
+
+    Journal newJournal = Journal(
+      title: hasTitle
+          ? "Sample Journal Entry for ${currentDate.toString().split(' ')[0]}"
+          : null,
+      idToken: idToken,
+      createdAt: currentDate,
+      userInput:
+          "This is a sample journal entry for ${currentDate.toString().split(' ')[0]}.",
+      music: hasMusicAndSong
+          ? Music(
+              id: "music_$index",
+              url: "https://example.com/music/$index",
+              title: "Sample Music $index",
+              description: "This is a sample music description",
+              thumbnailUrl: "https://picsum.photos/200/200?random=$index",
+            )
+          : null,
+      song: hasMusicAndSong
+          ? Song(
+              "Sample Song $index",
+              "Sample Singer $index",
+              "This is a sample reason for choosing this song",
+            )
+          : null,
+      journalType: JournalType.post,
+    );
+
+    await createOrUpdate(newJournal);
+    return newJournal;
+  }
+
+  Future<void> deleteAllJournals(String idToken) async {
+    final allJournals = _getAllJournals();
+    allJournals.removeWhere((journal) => journal.idToken == idToken);
+    await _saveToStorage(allJournals);
+    ref.invalidateSelf();
   }
 
   /// 주어진 저널 리스트를 영구 저장소에 저장합니다.
