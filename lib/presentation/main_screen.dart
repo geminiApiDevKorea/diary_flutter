@@ -528,7 +528,7 @@ class CustomHorizontalCarousel extends ConsumerWidget {
     final colors = ref.gemColors;
     final textStyle = ref.gemTextStyle;
     // final musicTitle = journal.song?.title ?? '';
-    final singer = journal.song?.singer ?? '';
+    // final singer = journal.song?.singer ?? '';
     final imgUrl = journal.music?.thumbnailUrl;
     final journalTitle = journal.title;
     final createdAt = journal.createdAt;
