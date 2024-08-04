@@ -1,6 +1,3 @@
-import 'package:diary_flutter/data/model/journal.dart';
-import 'package:diary_flutter/presentation/journal/icon_text_button.dart';
-import 'package:diary_flutter/presentation/journal/journal_body_appbar.dart';
 import 'package:diary_flutter/presentation/style/index.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';

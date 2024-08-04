@@ -1,17 +1,17 @@
 import 'package:diary_flutter/data/model/journal.dart';
+import 'package:diary_flutter/domain/provider/common/focused_date.dart';
 import 'package:diary_flutter/presentation/journal/provider/journal_service.dart';
 import 'package:diary_flutter/presentation/journal/confirm_dialog.dart';
 import 'package:diary_flutter/presentation/journal/icon_text_button.dart';
 import 'package:diary_flutter/presentation/journal/journal_completion_screen.dart';
 import 'package:diary_flutter/presentation/style/index.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class JournalFloatingActionButton extends HookConsumerWidget
+class JournalBodyAppBar extends HookConsumerWidget
     with JournalBodyAppbarHandlerMixin {
-  const JournalFloatingActionButton({super.key, required this.journalType});
+  const JournalBodyAppBar({super.key, required this.journalType});
 
   final JournalType journalType;
 
@@ -62,8 +62,10 @@ class JournalFloatingActionButton extends HookConsumerWidget
 mixin JournalBodyAppbarHandlerMixin {
   Future<void> handleListButton(
       WidgetRef ref, JournalType journalType, BuildContext context) async {
-    final journalEventNotifier =
-        ref.read(journalServiceProvider(journalType: journalType).notifier);
+    final journalEventNotifier = ref.read(journalServiceProvider(
+            journalType: journalType,
+            focusedDate: ref.watch(focusedDateProvider))
+        .notifier);
     await journalEventNotifier.onList();
     if (context.mounted) context.pop();
   }
@@ -85,8 +87,10 @@ mixin JournalBodyAppbarHandlerMixin {
     if (!context.mounted) return;
 
     final colors = ref.gemColors;
-    final journalEventNotifier =
-        ref.read(journalServiceProvider(journalType: journalType).notifier);
+    final journalEventNotifier = ref.read(journalServiceProvider(
+            journalType: journalType,
+            focusedDate: ref.watch(focusedDateProvider))
+        .notifier);
 
     final result = await showConfirmDialog(
       context: context,

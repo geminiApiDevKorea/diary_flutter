@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:diary_flutter/common/enums.dart';
 import 'package:diary_flutter/domain/provider/auth/get_my_name.dart';
+import 'package:diary_flutter/domain/provider/common/focused_date.dart';
 import 'package:diary_flutter/domain/provider/journal/journal_use_cases.dart';
 import 'package:diary_flutter/domain/provider/journal/my_journal_store.dart';
 import 'package:diary_flutter/presentation/calendar/calendar_screen.dart';
@@ -40,7 +41,7 @@ class MainScreen extends HookConsumerWidget {
       animationController: animationController,
       // isDarkening: isDarkening,
     );
-    final scrollPosition = ref.watch(mainScrollPositionProvider);
+    // final scrollPosition = ref.watch(mainScrollPositionProvider);
 
     // final opacityController = useAnimationController(
     //   duration: const Duration(milliseconds: 300),
@@ -276,8 +277,40 @@ class MainHeader extends HookConsumerWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                _buildButton(context, 'Chat to record', 'chat', ref),
-                _buildButton(context, 'Add a new record', 'post', ref),
+                MainHeaderButton(
+                  text: 'Chat to record',
+                  onTap: () async {
+                    darkeningAnimationContorller.forward();
+                    animationController.value = 0.0;
+                    await ref.read(focusedDateProvider.notifier).resetToToday();
+                    if (context.mounted) {
+                      await context
+                          .pushNamed(JournalScreen.name, queryParameters: {
+                        'type': 'chat',
+                      });
+                    }
+
+                    darkeningAnimationContorller.reverse();
+                  },
+                ),
+                MainHeaderButton(
+                  text: 'Add a new record',
+                  onTap: () async {
+                    darkeningAnimationContorller.forward();
+                    animationController.value = 0.0;
+                    await ref.read(focusedDateProvider.notifier).resetToToday();
+                    if (context.mounted) {
+                      await context
+                          .pushNamed(JournalScreen.name, queryParameters: {
+                        'type': 'post',
+                      });
+                    }
+
+                    darkeningAnimationContorller.reverse();
+                  },
+                ),
+                // _buildButton(context, 'Chat to record', 'chat', ref),
+                // _buildButton(context, 'Add a new record', 'post', ref),
               ],
             )
           ],
@@ -286,44 +319,44 @@ class MainHeader extends HookConsumerWidget {
     );
   }
 
-  Widget _buildButton(
-      BuildContext context, String text, String type, WidgetRef ref) {
-    final textStyle = ref.gemTextStyle;
-    final colors = ref.gemColors;
+  // Widget _buildButton(
+  //     BuildContext context, String text, String type, WidgetRef ref) {
+  //   final textStyle = ref.gemTextStyle;
+  //   final colors = ref.gemColors;
 
-    return Material(
-      color: colors.grayScale80,
-      borderRadius: BorderRadius.circular(32),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(32),
-        onTap: () async {
-          // isDarkening.value = true;
+  //   return Material(
+  //     color: colors.grayScale80,
+  //     borderRadius: BorderRadius.circular(32),
+  //     child: InkWell(
+  //       borderRadius: BorderRadius.circular(32),
+  //       onTap: () async {
+  //         // isDarkening.value = true;
 
-          darkeningAnimationContorller.forward();
-          animationController.value = 0.0;
-          await context
-              .pushNamed(JournalScreen.name, queryParameters: {'type': type});
-          // isDarkening.value = false;
-          darkeningAnimationContorller.reverse();
-        },
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6.0),
-          child: SizedBox(
-            height: 31,
-            width: 130,
-            child: Align(
-              alignment: Alignment.center,
-              child: Text(
-                text,
-                textAlign: TextAlign.center,
-                style: textStyle.paragraph.copyWith(color: colors.grayScale0),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
+  //         darkeningAnimationContorller.forward();
+  //         animationController.value = 0.0;
+  //         await context
+  //             .pushNamed(JournalScreen.name, queryParameters: {'type': type});
+  //         // isDarkening.value = false;
+  //         darkeningAnimationContorller.reverse();
+  //       },
+  //       child: Padding(
+  //         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6.0),
+  //         child: SizedBox(
+  //           height: 31,
+  //           width: 130,
+  //           child: Align(
+  //             alignment: Alignment.center,
+  //             child: Text(
+  //               text,
+  //               textAlign: TextAlign.center,
+  //               style: textStyle.paragraph.copyWith(color: colors.grayScale0),
+  //             ),
+  //           ),
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 }
 
 void useStackAnimation({
@@ -369,10 +402,11 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
     //FIXME: 59??
     if (shrinkOffset >= 59 && !_wasAtTop) {
       _wasAtTop = true;
+      // ignore: avoid_print
       print('SliverPersistentHeader reached the top of the screen');
     } else if (shrinkOffset < 59 && _wasAtTop) {
       _wasAtTop = false;
-      print('SliverPersistentHeader is no longer at the top of the screen');
+      // print('SliverPersistentHeader is no longer at the top of the screen');
     }
     return SizedBox.expand(child: child);
   }
@@ -553,25 +587,25 @@ class CustomHorizontalCarousel extends ConsumerWidget {
     );
   }
 
-  Widget _buildBlurredCircle(BuildContext context, WidgetRef ref) {
-    final colors = ref.gemColors;
-    return Container(
-      width: 250,
-      height: 250,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: colors.grayScale60,
-      ),
-      child: ClipOval(
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-          child: Container(
-            color: Colors.transparent,
-          ),
-        ),
-      ),
-    );
-  }
+  // Widget _buildBlurredCircle(BuildContext context, WidgetRef ref) {
+  //   final colors = ref.gemColors;
+  //   return Container(
+  //     width: 250,
+  //     height: 250,
+  //     decoration: BoxDecoration(
+  //       shape: BoxShape.circle,
+  //       color: colors.grayScale60,
+  //     ),
+  //     child: ClipOval(
+  //       child: BackdropFilter(
+  //         filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+  //         child: Container(
+  //           color: Colors.transparent,
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 }
 
 void useTopOfStack(BuildContext context, WidgetRef ref, VoidCallback action) {
@@ -602,4 +636,46 @@ ScrollController useMainScrollController(WidgetRef ref) {
   }, [controller]);
 
   return controller;
+}
+
+class MainHeaderButton extends ConsumerWidget {
+  final String text;
+
+  final VoidCallback onTap;
+
+  const MainHeaderButton({
+    super.key,
+    required this.text,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final textStyle = ref.gemTextStyle;
+    final colors = ref.gemColors;
+
+    return Material(
+      color: colors.grayScale80,
+      borderRadius: BorderRadius.circular(32),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(32),
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6.0),
+          child: SizedBox(
+            height: 31,
+            width: 130,
+            child: Align(
+              alignment: Alignment.center,
+              child: Text(
+                text,
+                textAlign: TextAlign.center,
+                style: textStyle.paragraph.copyWith(color: colors.grayScale0),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }

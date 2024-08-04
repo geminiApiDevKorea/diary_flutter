@@ -6,7 +6,7 @@ part of 'journal_service.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$journalServiceHash() => r'a700522473118c8cc0871150bebf9fc703ea9077';
+String _$journalServiceHash() => r'1796d83232ba19b503095f73b35821156c55656c';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -32,9 +32,11 @@ class _SystemHash {
 abstract class _$JournalService
     extends BuildlessAutoDisposeNotifier<JournalState> {
   late final JournalType journalType;
+  late final DateTime focusedDate;
 
   JournalState build({
     required JournalType journalType,
+    required DateTime focusedDate,
   });
 }
 
@@ -50,9 +52,11 @@ class JournalServiceFamily extends Family<JournalState> {
   /// See also [JournalService].
   JournalServiceProvider call({
     required JournalType journalType,
+    required DateTime focusedDate,
   }) {
     return JournalServiceProvider(
       journalType: journalType,
+      focusedDate: focusedDate,
     );
   }
 
@@ -62,6 +66,7 @@ class JournalServiceFamily extends Family<JournalState> {
   ) {
     return call(
       journalType: provider.journalType,
+      focusedDate: provider.focusedDate,
     );
   }
 
@@ -86,8 +91,11 @@ class JournalServiceProvider
   /// See also [JournalService].
   JournalServiceProvider({
     required JournalType journalType,
+    required DateTime focusedDate,
   }) : this._internal(
-          () => JournalService()..journalType = journalType,
+          () => JournalService()
+            ..journalType = journalType
+            ..focusedDate = focusedDate,
           from: journalServiceProvider,
           name: r'journalServiceProvider',
           debugGetCreateSourceHash:
@@ -98,6 +106,7 @@ class JournalServiceProvider
           allTransitiveDependencies:
               JournalServiceFamily._allTransitiveDependencies,
           journalType: journalType,
+          focusedDate: focusedDate,
         );
 
   JournalServiceProvider._internal(
@@ -108,9 +117,11 @@ class JournalServiceProvider
     required super.debugGetCreateSourceHash,
     required super.from,
     required this.journalType,
+    required this.focusedDate,
   }) : super.internal();
 
   final JournalType journalType;
+  final DateTime focusedDate;
 
   @override
   JournalState runNotifierBuild(
@@ -118,6 +129,7 @@ class JournalServiceProvider
   ) {
     return notifier.build(
       journalType: journalType,
+      focusedDate: focusedDate,
     );
   }
 
@@ -126,13 +138,16 @@ class JournalServiceProvider
     return ProviderOverride(
       origin: this,
       override: JournalServiceProvider._internal(
-        () => create()..journalType = journalType,
+        () => create()
+          ..journalType = journalType
+          ..focusedDate = focusedDate,
         from: from,
         name: null,
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
         journalType: journalType,
+        focusedDate: focusedDate,
       ),
     );
   }
@@ -145,13 +160,16 @@ class JournalServiceProvider
 
   @override
   bool operator ==(Object other) {
-    return other is JournalServiceProvider && other.journalType == journalType;
+    return other is JournalServiceProvider &&
+        other.journalType == journalType &&
+        other.focusedDate == focusedDate;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
     hash = _SystemHash.combine(hash, journalType.hashCode);
+    hash = _SystemHash.combine(hash, focusedDate.hashCode);
 
     return _SystemHash.finish(hash);
   }
@@ -160,6 +178,9 @@ class JournalServiceProvider
 mixin JournalServiceRef on AutoDisposeNotifierProviderRef<JournalState> {
   /// The parameter `journalType` of this provider.
   JournalType get journalType;
+
+  /// The parameter `focusedDate` of this provider.
+  DateTime get focusedDate;
 }
 
 class _JournalServiceProviderElement
@@ -169,6 +190,8 @@ class _JournalServiceProviderElement
 
   @override
   JournalType get journalType => (origin as JournalServiceProvider).journalType;
+  @override
+  DateTime get focusedDate => (origin as JournalServiceProvider).focusedDate;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

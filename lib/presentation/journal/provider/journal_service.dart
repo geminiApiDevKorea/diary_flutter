@@ -34,12 +34,11 @@ class JournalService extends _$JournalService {
   // Journal? _tempJournalBackup; // 상태 백업을 위한 변수
   // build 메서드는 초기 상태로 JournalInitial을 반환합니다.
 
-  late DateTime _date;
   @override
   JournalState build({
     required JournalType journalType,
+    required DateTime focusedDate,
   }) {
-    _date = DateTime.now();
     return const JournalInitial();
   }
 
@@ -48,10 +47,10 @@ class JournalService extends _$JournalService {
     switch (journalType) {
       case JournalType.post:
         ref.read(myJournalStoreProvider.notifier).createOrUpdateUserInput(
-            _date, ref.read(postTextInputProvider) ?? '', journalType);
+            focusedDate, ref.read(postTextInputProvider) ?? '', journalType);
       case JournalType.chat:
         ref.read(myJournalStoreProvider.notifier).createOrUpdateUserInput(
-            _date, ref.read(postTextInputProvider) ?? '', journalType);
+            focusedDate, ref.read(postTextInputProvider) ?? '', journalType);
     }
   }
 
@@ -59,10 +58,10 @@ class JournalService extends _$JournalService {
   Future<void> onDelete() async {
     switch (journalType) {
       case JournalType.post:
-        ref.read(myJournalStoreProvider.notifier).delete(_date);
+        ref.read(myJournalStoreProvider.notifier).delete(focusedDate);
 
       case JournalType.chat:
-        ref.read(myJournalStoreProvider.notifier).delete(_date);
+        ref.read(myJournalStoreProvider.notifier).delete(focusedDate);
     }
   }
 
@@ -71,9 +70,9 @@ class JournalService extends _$JournalService {
     switch (journalType) {
       case JournalType.post:
         ref.read(myJournalStoreProvider.notifier).createOrUpdateUserInput(
-            _date, ref.read(postTextInputProvider) ?? '', journalType);
+            focusedDate, ref.read(postTextInputProvider) ?? '', journalType);
         final journal =
-            await ref.read(myJournalStoreProvider.notifier).read(_date);
+            await ref.read(myJournalStoreProvider.notifier).read(focusedDate);
         if (journal == null) {
           state = const JournalError('Journal not found');
           return;

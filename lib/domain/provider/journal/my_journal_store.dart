@@ -1,7 +1,6 @@
 import 'package:diary_flutter/data/model/history.dart';
 import 'package:diary_flutter/data/model/journal.dart';
 import 'package:diary_flutter/data/model/song.dart';
-import 'package:diary_flutter/data/provider/persistance_storage_provider.dart';
 import 'package:diary_flutter/domain/provider/auth/get_my_id_token.dart';
 import 'package:diary_flutter/domain/provider/journal/stored_journal.dart';
 import 'package:palestine_console/palestine_console.dart';

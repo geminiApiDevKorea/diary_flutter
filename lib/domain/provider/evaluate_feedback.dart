@@ -1,7 +1,6 @@
 import 'package:diary_flutter/common/enums.dart';
 import 'package:diary_flutter/data/model/chat.dart';
 import 'package:diary_flutter/data/model/chat_metadata.dart';
-import 'package:diary_flutter/data/model/diary/evaluated_prompt_content.dart';
 import 'package:diary_flutter/data/model/history.dart';
 import 'package:diary_flutter/data/provider/chats_repository_provider.dart';
 import 'package:diary_flutter/data/repository/chats_repository.dart';

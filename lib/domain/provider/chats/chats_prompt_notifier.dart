@@ -1,4 +1,3 @@
-import 'package:diary_flutter/common/enums.dart';
 import 'package:diary_flutter/data/provider/chats_repository_provider.dart';
 import 'package:diary_flutter/data/provider/persistance_storage_provider.dart';
 import 'package:diary_flutter/data/repository/chats_repository.dart';

@@ -2,7 +2,6 @@ import 'package:diary_flutter/common/enums.dart';
 import 'package:diary_flutter/presentation/style/index.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:intl/intl.dart'; // Make sure to add this dependency in your pubspec.yaml
 
 class DateHeaderDisplay extends ConsumerWidget {
   final DateTime date;

@@ -9,6 +9,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 class JournalScreen extends HookConsumerWidget {
   const JournalScreen({super.key, required this.type});
   final String type;
+
   static const String path = '/journal';
   static const String name = 'journal';
 
@@ -32,9 +33,10 @@ class JournalScreen extends HookConsumerWidget {
           child: Scaffold(
             floatingActionButtonLocation:
                 FloatingActionButtonLocation.centerTop,
-            floatingActionButton:
-                JournalFloatingActionButton(journalType: journalType),
-            body: JournalBody(type: type),
+            floatingActionButton: JournalBodyAppBar(journalType: journalType),
+            body: JournalBody(
+              type: type,
+            ),
           ),
         ),
       ),
@@ -45,7 +47,10 @@ class JournalScreen extends HookConsumerWidget {
 class JournalBody extends StatelessWidget {
   final String type;
 
-  const JournalBody({super.key, required this.type});
+  const JournalBody({
+    super.key,
+    required this.type,
+  });
 
   @override
   Widget build(BuildContext context) {

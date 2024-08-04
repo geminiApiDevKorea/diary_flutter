@@ -20,9 +20,9 @@ void useListeners(BuildContext context, WidgetRef ref,
 }
 
 class ChatFeedbackListener implements ListenerCallback {
-  final DateTime nowDate;
+  final DateTime injectedDate;
 
-  ChatFeedbackListener(this.nowDate);
+  ChatFeedbackListener(this.injectedDate);
 
   @override
   void call(WidgetRef ref) {
@@ -44,7 +44,7 @@ class ChatFeedbackListener implements ListenerCallback {
   Future<void> _updateJournalWithFeedbackData(
       WidgetRef ref, ChatsFeedbackData data) async {
     final journal =
-        await ref.read(myJournalStoreProvider.notifier).read(nowDate);
+        await ref.read(myJournalStoreProvider.notifier).read(injectedDate);
     if (journal != null) {
       final updatedJournal = _createUpdatedJournal(journal, data);
       await ref

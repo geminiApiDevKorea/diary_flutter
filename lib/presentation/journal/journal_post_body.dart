@@ -1,5 +1,6 @@
 import 'package:diary_flutter/data/model/journal.dart';
 import 'package:diary_flutter/domain/provider/chats/chats_feedback_notifier.dart';
+import 'package:diary_flutter/domain/provider/common/focused_date.dart';
 import 'package:diary_flutter/presentation/journal/date_header_display.dart';
 import 'package:diary_flutter/domain/provider/journal/journal_use_cases.dart';
 import 'package:diary_flutter/presentation/journal/journal_music_card.dart';
@@ -18,16 +19,17 @@ class PostJournalBody extends HookConsumerWidget with PostJournalHandlerMixin {
     final colors = ref.gemColors;
     final textStyle = ref.gemTextStyle;
     final chatFeedback = ref.watch(chatsFeedbackNotifierProvider);
-    final nowDate = DateTime.now();
-    final getMyJournal = ref.watch(getMyJournalByDateProvider(nowDate));
+    // final nowDate = DateTime.now();
+    final focusedDate = ref.watch(focusedDateProvider);
+    final getMyJournal = ref.watch(getMyJournalByDateProvider(focusedDate));
 
     useListeners(
       context,
       ref,
       [
-        ChatFeedbackListener(nowDate),
+        ChatFeedbackListener(focusedDate),
       ],
-      [nowDate],
+      [focusedDate],
     );
 
     return SingleChildScrollView(
@@ -38,8 +40,8 @@ class PostJournalBody extends HookConsumerWidget with PostJournalHandlerMixin {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            DateHeaderDisplay(date: nowDate),
-            JournalTextField(date: nowDate),
+            DateHeaderDisplay(date: focusedDate),
+            JournalTextField(date: focusedDate),
             chatFeedback.when(
               data: (state) =>
                   buildChatFeedbackWidget(state, ref, getMyJournal),
@@ -62,11 +64,11 @@ mixin PostJournalHandlerMixin {
 
     if (state is ChatsFeedbackData) {
       return JournalMusicCard(
-        bottomText: state.data.music.title ?? '',
-        imgUrl: state.data.music.thumbnailUrl ?? '',
+        bottomText: state.data.music.title,
+        imgUrl: state.data.music.thumbnailUrl,
         onButtonPressed: () {
           //TODO: 음악재생 로직 추가!!
-          print(state.data.music.url ?? '');
+          // print(state.data.music.url);
         },
       );
     } else if (state is ChatsFeedbackError) {
@@ -96,7 +98,7 @@ mixin PostJournalHandlerMixin {
             bottomText: myJournal?.music?.title ?? '',
             imgUrl: myJournal?.music?.thumbnailUrl ?? '',
             onButtonPressed: () {
-              print(myJournal?.music?.url ?? '');
+              // print(myJournal?.music?.url ?? '');
             });
       }
     }
