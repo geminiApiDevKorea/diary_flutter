@@ -9,6 +9,11 @@ class History {
   final String message;
   Map<String, dynamic> toJson() => _$HistoryToJson(this);
 
+  @override
+  String toString() {
+    return 'History(role: $role, message: $message)';
+  }
+
   factory History.fromJson(Map<String, dynamic> json) =>
       _$HistoryFromJson(json);
   History({required this.role, required this.message});
