@@ -175,3 +175,25 @@ enum Gender {
   @JsonValue('MALE')
   male,
 }
+
+enum TransitionDuration {
+  @JsonValue(Duration(milliseconds: 300))
+  short,
+  @JsonValue(Duration(milliseconds: 600))
+  medium,
+  @JsonValue(Duration(milliseconds: 3000))
+  long,
+}
+
+extension TransitionDurationExtension on TransitionDuration {
+  Duration get value {
+    switch (this) {
+      case TransitionDuration.short:
+        return const Duration(milliseconds: 300);
+      case TransitionDuration.medium:
+        return const Duration(milliseconds: 600);
+      case TransitionDuration.long:
+        return const Duration(milliseconds: 3000);
+    }
+  }
+}

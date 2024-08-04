@@ -1,19 +1,27 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:diary_flutter/presentation/style/index.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+
 class JournalMusicCard extends ConsumerWidget {
   final String? imgUrl;
-  final String bottomText;
-  final VoidCallback onButtonPressed;
+  final String? bottomText;
+  final VoidCallback? onButtonPressed;
 
   const JournalMusicCard({
     super.key,
     this.imgUrl,
-    required this.bottomText,
-    required this.onButtonPressed,
+    this.bottomText,
+    this.onButtonPressed,
   });
 
   @override
@@ -26,54 +34,64 @@ class JournalMusicCard extends ConsumerWidget {
         AspectRatio(
           aspectRatio: 1,
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(300),
-            child: imgUrl != null
-                ? FutureBuilder<void>(
-                    future: precacheImage(NetworkImage(imgUrl!), context),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.done &&
-                          !snapshot.hasError) {
-                        return Image.network(
-                          imgUrl!,
-                          width: 250,
-                          height: 250,
-                          fit: BoxFit.cover,
-                        );
-                      } else {
-                        return const BlurredCircleWidget();
-                      }
-                    },
-                  )
-                : const BlurredCircleWidget(),
-          ),
+              borderRadius: BorderRadius.circular(300),
+              child: imgUrl != null
+                  ? CachedNetworkImage(
+                      imageUrl: imgUrl!,
+                      width: 250,
+                      height: 250,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) =>
+                          const BlurredCircleWidget(),
+                      errorWidget: (context, url, error) =>
+                          const BlurredCircleWidget(),
+                    )
+                  : const BlurredCircleWidget()),
         ),
         const SizedBox(height: 20),
-        Text(
-          bottomText,
-          style: textStyle.caption.withColor(colors.grayScale40),
-          textAlign: TextAlign.center,
-          overflow: TextOverflow.ellipsis,
-        ),
+        if (bottomText != null)
+          Text(
+            bottomText ?? '',
+            style: textStyle.caption.withColor(colors.grayScale40),
+            textAlign: TextAlign.center,
+            overflow: TextOverflow.ellipsis,
+          )
+        else
+          Text(
+            'No music data',
+            style: textStyle.caption.withColor(colors.grayScale40),
+            textAlign: TextAlign.center,
+            overflow: TextOverflow.ellipsis,
+          )
+              .animate(onPlay: (controller) => controller.repeat(reverse: true))
+              .shimmer(duration: 1.seconds, color: colors.grayScale40),
         const SizedBox(height: 20),
-        SizedBox(
-          width: 270,
-          height: 44,
-          child: ElevatedButton(
-            onPressed: onButtonPressed,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: colors.primary50, // 버튼 배경색을 primary50으로 설정
-              foregroundColor: colors.grayScale100, // 텍스트와 아이콘 색상을 white로 설
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
+        if (onButtonPressed != null)
+          SizedBox(
+            width: 270,
+            height: 44,
+            child: ElevatedButton(
+              onPressed: onButtonPressed,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: colors.primary50,
+                foregroundColor: colors.grayScale100,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               ),
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              child: Text(
+                'Play in Youtube',
+                style: textStyle.button.withColor(colors.grayScale100),
+              ),
             ),
-            child: Text(
-              'Play in Youtube',
-              style: textStyle.button.withColor(colors.grayScale100),
-            ),
-          ),
-        ),
+          ).animate().fade(duration: 300.ms, curve: Curves.easeOut).slideY(
+                begin: 1,
+                end: 0,
+                duration: 300.ms,
+                curve: Curves.easeOut,
+              ),
       ],
     );
   }

@@ -2,7 +2,7 @@ import 'package:diary_flutter/common/enums.dart';
 import 'package:diary_flutter/data/model/journal.dart';
 import 'package:diary_flutter/presentation/journal/assistant_chat_item.dart';
 
-import 'package:diary_flutter/domain/provider/journal/journal_service.dart';
+import 'package:diary_flutter/presentation/journal/provider/journal_service.dart';
 import 'package:diary_flutter/presentation/journal/user_chat_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';

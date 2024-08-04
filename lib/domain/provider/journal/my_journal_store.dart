@@ -2,6 +2,7 @@ import 'package:diary_flutter/data/model/history.dart';
 import 'package:diary_flutter/data/model/journal.dart';
 import 'package:diary_flutter/data/model/song.dart';
 import 'package:diary_flutter/data/provider/persistance_storage_provider.dart';
+import 'package:diary_flutter/domain/provider/auth/get_my_id_token.dart';
 import 'package:diary_flutter/domain/provider/journal/stored_journal.dart';
 import 'package:palestine_console/palestine_console.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -10,8 +11,8 @@ part 'my_journal_store.g.dart';
 
 @riverpod
 class MyJournalStore extends _$MyJournalStore {
-  String get _idToken =>
-      ref.read(persistanceStorageProvider).getValue<String>("id_token") ?? "";
+  String get _idToken => ref.read(getMyIdTokenProvider);
+
   @override
   List<Journal> build() {
     Print.white('MyJournalStore build');
@@ -64,5 +65,17 @@ class MyJournalStore extends _$MyJournalStore {
     ref
         .read(storedJournalProvider(_idToken).notifier)
         .deleteHistory(_idToken, date, index);
+  }
+
+  Future<Journal?> createDummyJournal() async {
+    return ref
+        .read(storedJournalProvider(_idToken).notifier)
+        .createDummyJournal(_idToken);
+  }
+
+  Future<void> deleteAllJournals() async {
+    await ref
+        .read(storedJournalProvider(_idToken).notifier)
+        .deleteAllJournals(_idToken);
   }
 }
