@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:diary_flutter/common/enums.dart';
+import 'package:diary_flutter/data/model/journal.dart';
 import 'package:diary_flutter/domain/provider/auth/get_my_name.dart';
 import 'package:diary_flutter/domain/provider/common/focused_date.dart';
 import 'package:diary_flutter/domain/provider/journal/journal_use_cases.dart';
@@ -36,11 +37,11 @@ class MainScreen extends HookConsumerWidget {
     final darkeningAnimationContorller = useAnimationController(
         duration: const Duration(milliseconds: 300), initialValue: 0.0);
 
-    useStackAnimation(
-      isTopOfStack: useIsTopOfStack(context),
-      animationController: animationController,
-      // isDarkening: isDarkening,
-    );
+    useTopofStackAction(
+        isTopOfStack: useIsTopOfStack(context),
+        animationController: animationController,
+        action: () => ref.read(focusedDateProvider.notifier).resetToToday());
+
     // final scrollPosition = ref.watch(mainScrollPositionProvider);
 
     // final opacityController = useAnimationController(
@@ -207,7 +208,7 @@ class MainBody extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final scrollController = useMainScrollController(ref);
     final scrollPosition = ref.watch(mainScrollPositionProvider);
-
+    final colors = ref.gemColors;
     Print.white(scrollPosition.toString());
 
     return CustomScrollView(
@@ -234,7 +235,7 @@ class MainBody extends HookConsumerWidget {
         SliverToBoxAdapter(
           child: Container(
             height: MediaQuery.of(context).size.height - carouselHeight,
-            color: Colors.red,
+            color: colors.primary100,
           ),
         ),
       ],
@@ -243,13 +244,11 @@ class MainBody extends HookConsumerWidget {
 }
 
 class MainHeader extends HookConsumerWidget {
-  // final ValueNotifier<bool> isDarkening;
   final AnimationController animationController;
   final AnimationController darkeningAnimationContorller;
 
   const MainHeader({
     super.key,
-    // required this.isDarkening,
     required this.animationController,
     required this.darkeningAnimationContorller,
   });
@@ -260,6 +259,8 @@ class MainHeader extends HookConsumerWidget {
     final colors = ref.gemColors;
 
     final myName = ref.read(getMyNameProvider);
+    final myJournalonToday =
+        ref.watch(getMyJournalByDateProvider(ref.watch(focusedDateProvider)));
 
     return Align(
       alignment: Alignment.topLeft,
@@ -274,95 +275,119 @@ class MainHeader extends HookConsumerWidget {
                 style: textStyle.paragraph.withColor(colors.grayScale60)),
             Text("How was\n your day?", style: textStyle.h1),
             const SizedBox(height: 50),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                MainHeaderButton(
-                  text: 'Chat to record',
-                  onTap: () async {
-                    darkeningAnimationContorller.forward();
-                    animationController.value = 0.0;
-                    await ref.read(focusedDateProvider.notifier).resetToToday();
-                    if (context.mounted) {
-                      await context
-                          .pushNamed(JournalScreen.name, queryParameters: {
-                        'type': 'chat',
-                      });
-                    }
-
-                    darkeningAnimationContorller.reverse();
-                  },
-                ),
-                MainHeaderButton(
-                  text: 'Add a new record',
-                  onTap: () async {
-                    darkeningAnimationContorller.forward();
-                    animationController.value = 0.0;
-                    await ref.read(focusedDateProvider.notifier).resetToToday();
-                    if (context.mounted) {
-                      await context
-                          .pushNamed(JournalScreen.name, queryParameters: {
-                        'type': 'post',
-                      });
-                    }
-
-                    darkeningAnimationContorller.reverse();
-                  },
-                ),
-                // _buildButton(context, 'Chat to record', 'chat', ref),
-                // _buildButton(context, 'Add a new record', 'post', ref),
-              ],
-            )
+            AnimatedSwitcher(
+              duration: const Duration(milliseconds: 300),
+              transitionBuilder: (Widget child, Animation<double> animation) {
+                return FadeTransition(
+                  opacity: animation,
+                  child: child,
+                );
+              },
+              child: myJournalonToday == null
+                  ? _buildCreateJournalButtons(context, ref)
+                  : _buildViewTodayButton(context, ref, myJournalonToday),
+            ),
           ],
         ),
       ),
     );
   }
 
-  // Widget _buildButton(
-  //     BuildContext context, String text, String type, WidgetRef ref) {
-  //   final textStyle = ref.gemTextStyle;
-  //   final colors = ref.gemColors;
+  Widget _buildCreateJournalButtons(BuildContext context, WidgetRef ref) {
+    return Row(
+      key: const ValueKey('create_buttons'),
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        MainHeaderButton(
+          text: 'Chat to record',
+          onTap: () => _navigateToJournal(context, ref, JournalType.chat),
+        ),
+        MainHeaderButton(
+          text: 'Add a new record',
+          onTap: () => _navigateToJournal(context, ref, JournalType.post),
+        ),
+      ],
+    );
+  }
 
-  //   return Material(
-  //     color: colors.grayScale80,
-  //     borderRadius: BorderRadius.circular(32),
-  //     child: InkWell(
-  //       borderRadius: BorderRadius.circular(32),
-  //       onTap: () async {
-  //         // isDarkening.value = true;
+  Widget _buildViewTodayButton(
+      BuildContext context, WidgetRef ref, Journal myJournalonToday) {
+    return Row(
+      key: const ValueKey('view_today_button'),
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        MainHeaderButton(
+          width: 320,
+          text: 'View Today',
+          onTap: () =>
+              _navigateToJournal(context, ref, myJournalonToday.journalType),
+        ),
+      ],
+    );
+  }
 
-  //         darkeningAnimationContorller.forward();
-  //         animationController.value = 0.0;
-  //         await context
-  //             .pushNamed(JournalScreen.name, queryParameters: {'type': type});
-  //         // isDarkening.value = false;
-  //         darkeningAnimationContorller.reverse();
-  //       },
-  //       child: Padding(
-  //         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6.0),
-  //         child: SizedBox(
-  //           height: 31,
-  //           width: 130,
-  //           child: Align(
-  //             alignment: Alignment.center,
-  //             child: Text(
-  //               text,
-  //               textAlign: TextAlign.center,
-  //               style: textStyle.paragraph.copyWith(color: colors.grayScale0),
-  //             ),
-  //           ),
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
+  void _navigateToJournal(
+      BuildContext context, WidgetRef ref, JournalType journalType) async {
+    darkeningAnimationContorller.forward();
+    animationController.value = 0.0;
+
+    if (journalType == JournalType.chat || journalType == JournalType.post) {
+      await ref.read(focusedDateProvider.notifier).resetToToday();
+    }
+
+    if (context.mounted) {
+      await context.pushNamed(JournalScreen.name, queryParameters: {
+        'type': journalType.value,
+      });
+    }
+
+    darkeningAnimationContorller.reverse();
+  }
 }
+// Widget _buildButton(
+//     BuildContext context, String text, String type, WidgetRef ref) {
+//   final textStyle = ref.gemTextStyle;
+//   final colors = ref.gemColors;
 
-void useStackAnimation({
+//   return Material(
+//     color: colors.grayScale80,
+//     borderRadius: BorderRadius.circular(32),
+//     child: InkWell(
+//       borderRadius: BorderRadius.circular(32),
+//       onTap: () async {
+//         // isDarkening.value = true;
+
+//         darkeningAnimationContorller.forward();
+//         animationController.value = 0.0;
+//         await context
+//             .pushNamed(JournalScreen.name, queryParameters: {'type': type});
+//         // isDarkening.value = false;
+//         darkeningAnimationContorller.reverse();
+//       },
+//       child: Padding(
+//         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6.0),
+//         child: SizedBox(
+//           height: 31,
+//           width: 130,
+//           child: Align(
+//             alignment: Alignment.center,
+//             child: Text(
+//               text,
+//               textAlign: TextAlign.center,
+//               style: textStyle.paragraph.copyWith(color: colors.grayScale0),
+//             ),
+//           ),
+//         ),
+//       ),
+//     ),
+//   );
+// }
+// }
+
+void useTopofStackAction({
   required bool isTopOfStack,
   required AnimationController animationController,
-  // required ValueNotifier<bool> isDarkening,
+  VoidCallback? action,
 }) {
   useEffect(() {
     if (isTopOfStack) {
@@ -370,6 +395,7 @@ void useStackAnimation({
         Future.delayed(const Duration(milliseconds: 300), () {
           // isDarkening.value = false;
           animationController.forward(from: 0.0);
+          action?.call();
         });
       });
     }
@@ -399,7 +425,6 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
-    //FIXME: 59??
     if (shrinkOffset >= 59 && !_wasAtTop) {
       _wasAtTop = true;
       // ignore: avoid_print
@@ -425,21 +450,23 @@ class CustomHorizontalCarousel extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final textStyle = ref.gemTextStyle;
+    final colors = ref.gemColors;
     // final allMyJournalswithMusicandSong =
     //     ref.watch(getJournalsWithMusicAndSongProvider);
     final allMyJournals = ref.watch(getAllMyJournalsProvider);
+    final sortedMyJournals = allMyJournals.sortByDateDescending();
+
     // 저널이 없는 경우 텍스트 위젯 반환
     final scrollPosition = ref.watch(mainScrollPositionProvider);
-    if (allMyJournals.isEmpty) {
+    if (sortedMyJournals.isEmpty) {
       return Container(
         height: carouselHeight,
         padding: const EdgeInsets.only(bottom: 20),
-        color: Colors.amber,
-        child: const Center(
-          child: Text(
-            'No journals with music and song available',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
+        color: colors.primary100,
+        child: Center(
+          child: Text('The box is empty',
+              style: textStyle.h4.withColor(colors.caption)),
         ),
       );
     }
@@ -447,7 +474,7 @@ class CustomHorizontalCarousel extends ConsumerWidget {
     return Container(
       height: carouselHeight,
       padding: const EdgeInsets.only(bottom: 20),
-      color: Colors.amber,
+      color: colors.primary100,
       child: CustomCarousel(
         depthOrder: DepthOrder.reverse,
         itemCountBefore: 0,
@@ -471,14 +498,15 @@ class CustomHorizontalCarousel extends ConsumerWidget {
           );
         },
         children: List.generate(
-          allMyJournals.length,
+          sortedMyJournals.length,
           (index) => _buildCard(context, ref,
               index: index,
-              musicTitle: allMyJournals[index].song?.title ?? '',
-              singer: allMyJournals[index].song?.singer ?? '',
-              imgUrl: allMyJournals[index].music?.thumbnailUrl,
-              journalTitle: allMyJournals[index].title,
-              isRevealed: scrollPosition >= 350 //FIXME: 숫자멋대로
+              // musicTitle: allMyJournals[index].song?.title ?? '',
+              // singer: allMyJournals[index].song?.singer ?? '',
+              // imgUrl: allMyJournals[index].music?.thumbnailUrl,
+              // journalTitle: allMyJournals[index].title,
+              journal: sortedMyJournals[index],
+              isRevealed: scrollPosition >= 350
               // index,
               // allMyJournals[index].music?.title ?? 'Draft',
               // // 'https://picsum.photos/200/200?random=$index'
@@ -491,13 +519,25 @@ class CustomHorizontalCarousel extends ConsumerWidget {
 
   Widget _buildCard(BuildContext context, WidgetRef ref,
       {required int index,
-      required String musicTitle,
-      required String singer,
-      required String? imgUrl,
-      required String? journalTitle,
+      required Journal journal,
+      // required String musicTitle,
+      // required String singer,
+      // required String? imgUrl,
+      // required String? journalTitle,
       required bool isRevealed}) {
     final colors = ref.gemColors;
     final textStyle = ref.gemTextStyle;
+    // final musicTitle = journal.song?.title ?? '';
+    final singer = journal.song?.singer ?? '';
+    final imgUrl = journal.music?.thumbnailUrl;
+    final journalTitle = journal.title;
+    final createdAt = journal.createdAt;
+    // Print.white("createdAt: $createdAt");
+    final journalType = journal.journalType;
+    final hasFeedback = ref.watch(hasFeedbackProvider(createdAt));
+    final formattedSongTitle = journal.song?.title.formattedSongTitle ?? '';
+    final formattedSinger = journal.song?.singer.formattedSinger ?? '';
+
     return AspectRatio(
       aspectRatio: 1,
       child: Align(
@@ -511,10 +551,10 @@ class CustomHorizontalCarousel extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                '$musicTitle $singer',
+                '♫ $formattedSongTitle - $formattedSinger',
                 style: textStyle.caption.withColor(colors.grayScale40),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 20),
               Stack(
                 alignment: Alignment.center,
                 children: [
@@ -524,41 +564,79 @@ class CustomHorizontalCarousel extends ConsumerWidget {
                           borderRadius: BorderRadius.circular(300),
                           child: CachedNetworkImage(
                             imageUrl: imgUrl,
-                            width: 250,
-                            height: 250,
+                            width: 300,
+                            height: 300,
                             fit: BoxFit.cover,
                             placeholder: (context, url) =>
-                                const BlurredCircleWidget(),
+                                const BlankCircleWidget(),
                             errorWidget: (context, url, error) =>
-                                const BlurredCircleWidget(),
+                                const BlankCircleWidget(),
                           ),
                         )
-                      : const BlurredCircleWidget(),
+                      : const BlankCircleWidget(),
 
                   // AnimatedSwitcher를 사용하여 컨테이너와 버튼 사이의 전환
                   AnimatedSwitcher(
                     duration: const Duration(milliseconds: 300),
                     child: isRevealed
-                        ? ElevatedButton(
-                            key: const ValueKey('play_button'),
-                            onPressed: () {
-                              // 버튼 동작 추가
-                            },
-                            style: ElevatedButton.styleFrom(
-                              shape: const CircleBorder(),
-                              padding: const EdgeInsets.all(20),
-                            ),
-                            child: const Icon(Icons.play_arrow),
-                          )
+                        ? (hasFeedback
+                            ? ElevatedButton(
+                                key: const ValueKey('play_button'),
+                                onPressed: () async {
+                                  await ref
+                                      .read(focusedDateProvider.notifier)
+                                      .updateDate(createdAt);
+                                  if (context.mounted) {
+                                    await context.pushNamed(JournalScreen.name,
+                                        queryParameters: {
+                                          'type': journalType.value,
+                                        });
+                                  }
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  shape: const CircleBorder(),
+                                  padding: const EdgeInsets.all(20),
+                                ),
+                                child: const Icon(Icons.play_arrow),
+                              )
+                            : SizedBox(
+                                width: 150,
+                                height: 50,
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: colors.subButtonBackground,
+
+                                    // padding: const EdgeInsets.all(20),
+                                  ),
+                                  key: const ValueKey('edit_button'),
+                                  onPressed: () async {
+                                    await ref
+                                        .read(focusedDateProvider.notifier)
+                                        .updateDate(createdAt);
+                                    if (context.mounted) {
+                                      await context.pushNamed(
+                                          JournalScreen.name,
+                                          queryParameters: {
+                                            'type': journalType.value,
+                                          });
+                                    }
+                                  },
+                                  child: Text(
+                                    'Edit',
+                                    style: textStyle.button
+                                        .copyWith(color: colors.grayScale40),
+                                  ),
+                                ),
+                              ))
                         : SizedBox(
                             key: const ValueKey('journal_container'),
-                            width: 250,
-                            height: 250,
+                            width: 300,
+                            height: 300,
                             child: Align(
                               alignment: Alignment.bottomCenter,
                               child: Container(
-                                width: 250,
-                                height: 125,
+                                width: 300,
+                                height: 150,
                                 decoration: BoxDecoration(
                                   color: colors.grayScale100,
                                   borderRadius: const BorderRadius.only(
@@ -566,12 +644,15 @@ class CustomHorizontalCarousel extends ConsumerWidget {
                                     bottomRight: Radius.circular(125),
                                   ),
                                 ),
-                                child: Center(
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
                                   child: Text(
-                                    journalTitle ?? "Draft",
+                                    journalTitle ??
+                                        "Draft of \n${createdAt.toMonthDayOrdinal()}",
                                     style: textStyle.h1
-                                        .withColor(colors.grayScale0),
-                                    textAlign: TextAlign.center,
+                                        .withColor(colors.grayScale0)
+                                        .withFontSize(28),
+                                    textAlign: TextAlign.left,
                                   ),
                                 ),
                               ),
@@ -640,11 +721,12 @@ ScrollController useMainScrollController(WidgetRef ref) {
 
 class MainHeaderButton extends ConsumerWidget {
   final String text;
-
+  final double? width;
   final VoidCallback onTap;
 
   const MainHeaderButton({
     super.key,
+    this.width,
     required this.text,
     required this.onTap,
   });
@@ -664,7 +746,7 @@ class MainHeaderButton extends ConsumerWidget {
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6.0),
           child: SizedBox(
             height: 31,
-            width: 130,
+            width: width ?? 130,
             child: Align(
               alignment: Alignment.center,
               child: Text(
