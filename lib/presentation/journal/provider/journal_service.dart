@@ -1,19 +1,10 @@
-import 'dart:convert';
 import 'package:diary_flutter/common/enums.dart';
-import 'package:diary_flutter/data/model/history.dart';
-import 'package:diary_flutter/data/provider/chats_repository_provider.dart';
-import 'package:diary_flutter/data/repository/chats_repository.dart';
-import 'package:diary_flutter/domain/provider/auth/get_my_id_token.dart';
 import 'package:diary_flutter/domain/provider/chats/chats_feedback_notifier.dart';
-import 'package:diary_flutter/domain/provider/chats/chats_prompt_notifier.dart';
 import 'package:diary_flutter/domain/provider/journal/my_journal_store.dart';
 import 'package:diary_flutter/presentation/journal/provider/post_text_input.dart';
-import 'package:flutter/gestures.dart';
 import 'package:palestine_console/palestine_console.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:diary_flutter/data/model/journal.dart';
-import 'package:diary_flutter/data/provider/persistance_storage_provider.dart';
-import 'package:collection/collection.dart';
 
 part 'journal_service.g.dart';
 
@@ -50,15 +41,6 @@ class JournalService extends _$JournalService {
   }) {
     _date = DateTime.now();
     return const JournalInitial();
-  }
-
-  void _setupListeners() {
-    ref.listen<AsyncValue<ChatsPromptState>>(
-      chatsPromptNotifierProvider,
-      (previous, next) {
-        next.whenData((data) {});
-      },
-    );
   }
 
   // onList 메서드 구현

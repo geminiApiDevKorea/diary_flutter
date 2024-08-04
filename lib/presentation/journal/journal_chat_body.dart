@@ -8,7 +8,7 @@ import 'package:diary_flutter/domain/provider/journal/journal_use_cases.dart';
 import 'package:diary_flutter/domain/provider/journal/my_journal_store.dart';
 import 'package:diary_flutter/presentation/journal/assistant_chat_item.dart';
 import 'package:diary_flutter/presentation/journal/date_header_display.dart';
-import 'package:diary_flutter/domain/provider/journal/journal_service.dart';
+import 'package:diary_flutter/presentation/journal/provider/journal_service.dart';
 import 'package:diary_flutter/presentation/journal/journal_text_field.dart';
 import 'package:diary_flutter/presentation/journal/provider/post_text_input.dart';
 import 'package:diary_flutter/presentation/journal/user_chat_item.dart';
@@ -93,6 +93,7 @@ class ChatJournalBody extends ConsumerWidget {
                       return const Text("다시로그인해주세요");
                     }
                     if (state.statusCode == 500) {
+                      Print.red(state.error);
                       return const Text("에러가 발생했습니다");
                     }
                     return Text('Error: ${state.error}',

@@ -1,26 +1,27 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'my_journal_store.dart';
+part of 'main_screen_scroll_position.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$myJournalStoreHash() => r'b08724b64fedb65ee18fdc8a449bafdb244f353e';
+String _$mainScrollPositionHash() =>
+    r'c2a9f9ce2570dfbaf9e9aff23fccffcaf3f3ec7b';
 
-/// See also [MyJournalStore].
-@ProviderFor(MyJournalStore)
-final myJournalStoreProvider =
-    AutoDisposeNotifierProvider<MyJournalStore, List<Journal>>.internal(
-  MyJournalStore.new,
-  name: r'myJournalStoreProvider',
+/// See also [MainScrollPosition].
+@ProviderFor(MainScrollPosition)
+final mainScrollPositionProvider =
+    AutoDisposeNotifierProvider<MainScrollPosition, double>.internal(
+  MainScrollPosition.new,
+  name: r'mainScrollPositionProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$myJournalStoreHash,
+      : _$mainScrollPositionHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$MyJournalStore = AutoDisposeNotifier<List<Journal>>;
+typedef _$MainScrollPosition = AutoDisposeNotifier<double>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
