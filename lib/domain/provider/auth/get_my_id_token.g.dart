@@ -6,11 +6,11 @@ part of 'get_my_id_token.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$getMyIdTokenHash() => r'90d657d83939f6ee997e11d49c318703a3f79926';
+String _$getMyIdTokenHash() => r'3d6c29ee3775b2751f8397374fc50d66ab0d103d';
 
 /// See also [getMyIdToken].
 @ProviderFor(getMyIdToken)
-final getMyIdTokenProvider = AutoDisposeProvider<String?>.internal(
+final getMyIdTokenProvider = AutoDisposeProvider<String>.internal(
   getMyIdToken,
   name: r'getMyIdTokenProvider',
   debugGetCreateSourceHash:
@@ -19,6 +19,6 @@ final getMyIdTokenProvider = AutoDisposeProvider<String?>.internal(
   allTransitiveDependencies: null,
 );
 
-typedef GetMyIdTokenRef = AutoDisposeProviderRef<String?>;
+typedef GetMyIdTokenRef = AutoDisposeProviderRef<String>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
