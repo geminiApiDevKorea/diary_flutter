@@ -1,3 +1,4 @@
+import 'package:diary_flutter/data/model/journal.dart';
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:intl/intl.dart';
@@ -195,5 +196,38 @@ extension TransitionDurationExtension on TransitionDuration {
       case TransitionDuration.long:
         return const Duration(milliseconds: 3000);
     }
+  }
+}
+
+extension StringExtension on String {
+  String capitalize() {
+    if (isEmpty) {
+      return this;
+    }
+    return this[0].toUpperCase() + substring(1);
+  }
+
+  String get formattedSongTitle {
+    if (length <= 15) {
+      return this;
+    }
+    return '${substring(0, 15)}...';
+  }
+
+  String get formattedSinger {
+    final firstWord = split(' ').first;
+    return firstWord;
+  }
+}
+
+extension JournalListExtension on List<Journal> {
+  List<Journal> sortByDateDescending() {
+    if (isEmpty) return this; // 빈 리스트인 경우 그대로 반환
+    return [...this]..sort((a, b) => b.createdAt.compareTo(a.createdAt));
+  }
+
+  void sortByDateDescendingInPlace() {
+    if (isEmpty) return; // 빈 리스트인 경우 아무 작업도 하지 않음
+    sort((a, b) => b.createdAt.compareTo(a.createdAt));
   }
 }
