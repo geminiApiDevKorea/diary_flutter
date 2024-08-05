@@ -4,8 +4,8 @@ import 'package:diary_flutter/presentation/my_info/my_info_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class CalendarScreenHeader extends StatelessWidget {
-  const CalendarScreenHeader({super.key});
+class CalendarDiaryNavigationBar extends StatelessWidget {
+  const CalendarDiaryNavigationBar({super.key});
 
   @override
   Widget build(BuildContext context) {

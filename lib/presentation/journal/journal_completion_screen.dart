@@ -1,4 +1,4 @@
-import 'package:diary_flutter/common/enums.dart';
+import 'package:diary_flutter/common/extension/date_time_extension.dart';
 import 'package:diary_flutter/data/model/journal.dart';
 import 'package:diary_flutter/domain/provider/common/focused_date.dart';
 import 'package:diary_flutter/presentation/journal/confirm_dialog.dart';
@@ -21,6 +21,56 @@ class JournalCompletionScreen extends HookConsumerWidget {
         'chat' => JournalType.chat,
         _ => throw ArgumentError('Invalid journal type: $type'),
       };
+
+  _hideKeyboardIfNeed(BuildContext context) async {
+    final isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom > 0;
+    FocusScope.of(context).unfocus();
+    if (isKeyboardVisible) {
+      await Future.delayed(const Duration(milliseconds: 300));
+    }
+    if (!context.mounted) return;
+  }
+
+  _back(BuildContext context) {
+    _hideKeyboardIfNeed(context).then((_) => context.pop());
+  }
+
+  _save(
+    BuildContext context,
+    WidgetRef ref,
+    TextEditingController textController,
+    DateTime focusedDate,
+  ) {
+    _hideKeyboardIfNeed(context).then((_) async {
+      final colors = ref.gemColors;
+      final journalEventNotifier = ref.read(journalServiceProvider(
+              journalType: journalType,
+              focusedDate: ref.watch(focusedDateProvider))
+          .notifier);
+
+      final result = await showConfirmDialog(
+        context: context,
+        colors: colors,
+        title: 'Journal Completed!',
+        leftButtonTitle: 'No',
+        rightButtonTitle: 'Yes',
+        description: 'You cannot write more or modify the content for today.',
+        onConfirm: () async {
+          final newTitle = textController.text.isEmpty
+              ? focusedDate.toMonthDayOrdinal()
+              : textController.text;
+          await journalEventNotifier.onSave(
+              newTitle: newTitle, journalType: journalType);
+        },
+      );
+
+      if (result == DeleteConfirmationResult.confirm && context.mounted) {
+        FocusScope.of(context).unfocus();
+        context.pop();
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final colors = ref.gemColors;
@@ -49,86 +99,28 @@ class JournalCompletionScreen extends HookConsumerWidget {
                     Hero(
                       tag: 'floating',
                       child: IconButton(
-                          splashColor: Colors.transparent,
-                          icon: Icon(
-                            Icons.arrow_back_ios,
-                            color: colors.grayScale70,
-                          ),
-                          onPressed: () async {
-                            // 현재 키보드 가시성 확인
-                            final isKeyboardVisible =
-                                MediaQuery.of(context).viewInsets.bottom > 0;
-
-                            // 키보드 숨기기
-                            FocusScope.of(context).unfocus();
-
-                            // 키보드가 보이는 상태였다면 잠시 대기
-                            if (isKeyboardVisible) {
-                              await Future.delayed(
-                                  const Duration(milliseconds: 300));
-                            }
-
-                            // 컨텍스트가 여전히 유효한지 확인
-                            if (!context.mounted) return;
-
-                            context.pop();
-                          }),
+                        splashColor: Colors.transparent,
+                        icon: Icon(
+                          Icons.arrow_back_ios,
+                          color: colors.grayScale70,
+                        ),
+                        onPressed: () async => await _back(context),
+                      ),
                     ),
                     const Spacer(),
                     TextButton(
-                        child: Text(
-                          "Save",
-                          style: textStyle.button
-                              .copyWith(color: colors.primary50),
-                        ),
-                        onPressed: () async {
-                          // 현재 키보드 가시성 확인
-                          final isKeyboardVisible =
-                              MediaQuery.of(context).viewInsets.bottom > 0;
-
-                          // 키보드 숨기기
-                          FocusScope.of(context).unfocus();
-
-                          // 키보드가 보이는 상태였다면 잠시 대기
-                          if (isKeyboardVisible) {
-                            await Future.delayed(
-                                const Duration(milliseconds: 300));
-                          }
-
-                          // 컨텍스트가 여전히 유효한지 확인
-                          if (!context.mounted) return;
-
-                          final colors = ref.gemColors;
-                          final journalEventNotifier = ref.read(
-                              journalServiceProvider(
-                                      journalType: journalType,
-                                      focusedDate:
-                                          ref.watch(focusedDateProvider))
-                                  .notifier);
-
-                          final result = await showConfirmDialog(
-                            context: context,
-                            colors: colors,
-                            title: 'Journal Completed!',
-                            leftButtonTitle: 'No',
-                            rightButtonTitle: 'Yes',
-                            description:
-                                'You cannot write more or modify the content for today.',
-                            onConfirm: () async {
-                              final newTitle = textController.text.isEmpty
-                                  ? focusedDate.toMonthDayOrdinal()
-                                  : textController.text;
-                              await journalEventNotifier.onSave(
-                                  newTitle: newTitle, journalType: journalType);
-                            },
-                          );
-
-                          if (result == DeleteConfirmationResult.confirm &&
-                              context.mounted) {
-                            FocusScope.of(context).unfocus();
-                            context.pop();
-                          }
-                        }),
+                      child: Text(
+                        "Save",
+                        style:
+                            textStyle.button.copyWith(color: colors.primary50),
+                      ),
+                      onPressed: () => _save(
+                        context,
+                        ref,
+                        textController,
+                        focusedDate,
+                      ),
+                    ),
                   ],
                 ),
               ),

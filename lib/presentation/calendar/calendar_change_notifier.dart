@@ -1,13 +1,12 @@
 import 'package:diary_flutter/common/enums.dart';
+import 'package:diary_flutter/common/extension/date_time_extension.dart';
 import 'package:flutter/material.dart';
 
 class CalendarChangeNotifier extends ChangeNotifier {
   DateTime selectedDateTime;
 
   int _startWeekday() {
-    final year = selectedDateTime.year;
-    final month = selectedDateTime.month;
-    DateTime firstDayOfMonth = DateTime(year, month, 1);
+    DateTime firstDayOfMonth = selectedDateTime.firstDayOfMonth;
     // weekday가 1은 월요일이라 7인 일요일을 0으로 만들기 위해 7로 나눈 나머지를 반환
     return firstDayOfMonth.weekday % 7;
   }
@@ -18,7 +17,7 @@ class CalendarChangeNotifier extends ChangeNotifier {
     return lastDayOfMonth.day;
   }
 
-  int weekdaysInMonth() {
+  int get weekdaysInMonth {
     int startWeekday = _startWeekday();
     int lastDay = _lastDay();
     int totalCells = startWeekday + lastDay;

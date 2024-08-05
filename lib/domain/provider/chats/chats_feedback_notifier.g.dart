@@ -7,7 +7,7 @@ part of 'chats_feedback_notifier.dart';
 // **************************************************************************
 
 String _$chatsFeedbackNotifierHash() =>
-    r'0c8ae945a643c7a275609d602adf69f02256b49d';
+    r'da5ae1e7d33d691fb801a99d136c82d48c6ed2b2';
 
 /// See also [ChatsFeedbackNotifier].
 @ProviderFor(ChatsFeedbackNotifier)

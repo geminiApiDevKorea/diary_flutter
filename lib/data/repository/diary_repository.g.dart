@@ -7,15 +7,28 @@ part of 'diary_repository.dart';
 // **************************************************************************
 
 MusicDiary _$MusicDiaryFromJson(Map<String, dynamic> json) => MusicDiary(
-      date: json['date'] as String,
+      dateTime: const DateTimeConverter().fromJson(json['dateTime'] as String),
       title: json['title'] as String,
+      contents: (json['contents'] as List<dynamic>)
+          .map((e) => History.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      type: $enumDecode(_$JournalTypeEnumMap, json['type']),
+      music: Music.fromJson(json['music'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$MusicDiaryToJson(MusicDiary instance) =>
     <String, dynamic>{
-      'date': instance.date,
+      'dateTime': const DateTimeConverter().toJson(instance.dateTime),
       'title': instance.title,
+      'contents': instance.contents,
+      'type': _$JournalTypeEnumMap[instance.type]!,
+      'music': instance.music,
     };
+
+const _$JournalTypeEnumMap = {
+  JournalType.post: 'post',
+  JournalType.chat: 'chat',
+};
 
 DiaryRespons _$DiaryResponsFromJson(Map<String, dynamic> json) => DiaryRespons(
       diary: (json['diary'] as List<dynamic>)
@@ -26,6 +39,52 @@ DiaryRespons _$DiaryResponsFromJson(Map<String, dynamic> json) => DiaryRespons(
 Map<String, dynamic> _$DiaryResponsToJson(DiaryRespons instance) =>
     <String, dynamic>{
       'diary': instance.diary,
+    };
+
+DiaryPostResponse _$DiaryPostResponseFromJson(Map<String, dynamic> json) =>
+    DiaryPostResponse(
+      title: json['title'] as String,
+      music: json['music'] as String,
+      code: json['code'] as String,
+    );
+
+Map<String, dynamic> _$DiaryPostResponseToJson(DiaryPostResponse instance) =>
+    <String, dynamic>{
+      'title': instance.title,
+      'music': instance.music,
+      'code': instance.code,
+    };
+
+DailyDiary _$DailyDiaryFromJson(Map<String, dynamic> json) => DailyDiary(
+      type: $enumDecode(_$JournalTypeEnumMap, json['type']),
+      dateTime: json['dateTime'] as String,
+      title: json['title'] as String,
+      contents: (json['contents'] as List<dynamic>)
+          .map((e) => History.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      music: Music.fromJson(json['music'] as Map<String, dynamic>),
+      tag: (json['tag'] as List<dynamic>?)?.map((e) => e as String).toList(),
+    );
+
+Map<String, dynamic> _$DailyDiaryToJson(DailyDiary instance) =>
+    <String, dynamic>{
+      'dateTime': instance.dateTime,
+      'title': instance.title,
+      'contents': instance.contents,
+      'type': _$JournalTypeEnumMap[instance.type]!,
+      'music': instance.music,
+      'tag': instance.tag,
+    };
+
+DiaryPostBody _$DiaryPostBodyFromJson(Map<String, dynamic> json) =>
+    DiaryPostBody(
+      dailyDiary:
+          DailyDiary.fromJson(json['dailyDiary'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$DiaryPostBodyToJson(DiaryPostBody instance) =>
+    <String, dynamic>{
+      'dailyDiary': instance.dailyDiary,
     };
 
 // **************************************************************************
@@ -79,6 +138,38 @@ class _DiaryRepository implements DiaryRepository {
               baseUrl,
             ))));
     final value = DiaryRespons.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<DiaryPostResponse> postDiary({
+    required String bearerToken,
+    required DiaryPostBody body,
+  }) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'Authorization': bearerToken};
+    _headers.removeWhere((k, v) => v == null);
+    final _data = <String, dynamic>{};
+    _data.addAll(body.toJson());
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<DiaryPostResponse>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/diary',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = DiaryPostResponse.fromJson(_result.data!);
     return value;
   }
 
