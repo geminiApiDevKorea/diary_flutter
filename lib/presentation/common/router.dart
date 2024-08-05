@@ -5,6 +5,7 @@ import 'package:diary_flutter/presentation/journal_screen.dart';
 import 'package:diary_flutter/presentation/main_screen.dart';
 import 'package:diary_flutter/presentation/common/custom_transitions.dart';
 import 'package:diary_flutter/presentation/home_screen.dart';
+import 'package:diary_flutter/presentation/my_info/my_info_screen.dart';
 import 'package:diary_flutter/presentation/onbording/onbording_screen.dart';
 import 'package:diary_flutter/presentation/terms_screen.dart';
 import 'package:diary_flutter/presentation/splash_screen.dart';
@@ -15,6 +16,15 @@ import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'router.g.dart';
+
+enum QueryParameterKeys {
+  previous,
+}
+
+enum PreviousScreens {
+  calendar,
+  main,
+}
 
 final GlobalKey<NavigatorState> mainKey = GlobalKey<NavigatorState>();
 @Riverpod(keepAlive: true)
@@ -32,7 +42,24 @@ GoRouter router(RouterRef ref) {
       ),
       GoRoute(
         path: CalendarScreen.path,
+        name: CalendarScreen.name,
         builder: (context, state) => const CalendarScreen(),
+      ),
+      GoRoute(
+        path: MyInfoScreen.path,
+        name: MyInfoScreen.name,
+        builder: (context, state) {
+          final previousQueryString =
+              state.uri.queryParameters[QueryParameterKeys.previous.toString()];
+          if (previousQueryString == null) {
+            throw Exception('previous screen is not exist');
+          }
+          final previousScreen = PreviousScreens.values
+              .firstWhere((e) => e.toString() == previousQueryString);
+          return MyInfoScreen(
+            previousScreen: previousScreen,
+          );
+        },
       ),
       GoRoute(
         path: OnboardingScreen.path,

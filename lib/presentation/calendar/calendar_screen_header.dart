@@ -43,7 +43,8 @@ class CalendarScreenHeader extends StatelessWidget {
           ),
           InkWell(
             onTap: () => context.pushNamed(MyInfoScreen.name, queryParameters: {
-              QueryParameterKeys.previous.toString(): PreviousScreens.calendar,
+              QueryParameterKeys.previous.toString():
+                  PreviousScreens.calendar.toString(),
             }),
             child: GenAssets.images.iconMyInfo.image(scale: 2),
           ),

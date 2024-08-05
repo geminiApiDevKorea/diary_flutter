@@ -1,3 +1,4 @@
+import 'package:diary_flutter/data/repository/diary_repository.dart';
 import 'package:diary_flutter/gen/gen_assets.dart';
 import 'package:diary_flutter/presentation/calendar/calendar_journal_music_chip.dart';
 import 'package:diary_flutter/presentation/style/gem_text_style.dart';
@@ -6,7 +7,11 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class CalendarJournalCard extends ConsumerWidget {
-  const CalendarJournalCard({super.key});
+  final MusicDiary diary;
+  const CalendarJournalCard({
+    super.key,
+    required this.diary,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

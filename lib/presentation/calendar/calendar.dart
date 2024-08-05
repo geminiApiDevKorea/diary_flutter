@@ -19,7 +19,7 @@ class Calendar extends ConsumerWidget {
       child: Column(
         children: [
           CalendarHeader(
-            dateTime: calendarChangeNotifier.initialDateTime,
+            dateTime: calendarChangeNotifier.selectedDateTime,
           ),
           const SizedBox(height: 24),
           const CalendarWeekend(),

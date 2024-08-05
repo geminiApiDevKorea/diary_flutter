@@ -1,5 +1,6 @@
 import 'package:diary_flutter/data/model/history.dart';
 import 'package:diary_flutter/data/model/journal.dart';
+import 'package:diary_flutter/data/provider/diary_repository_provider.dart';
 import 'package:diary_flutter/domain/provider/journal/my_journal_store.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:collection/collection.dart';
