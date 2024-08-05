@@ -1,12 +1,6 @@
-import 'package:diary_flutter/common/enums.dart';
-import 'package:diary_flutter/data/model/journal.dart';
-import 'package:diary_flutter/presentation/journal/assistant_chat_item.dart';
-
-import 'package:diary_flutter/presentation/journal/provider/journal_service.dart';
-import 'package:diary_flutter/presentation/journal/user_chat_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
+
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class JournalChatList extends HookConsumerWidget {
@@ -14,7 +8,7 @@ class JournalChatList extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final scrollController = useScrollController();
+    // final scrollController = useScrollController();
     // final journalState =
     //     ref.watch(journalServiceProvider(journalType: JournalType.chat));
 

@@ -1,13 +1,15 @@
 import 'package:diary_flutter/common/enums.dart';
+import 'package:diary_flutter/data/model/journal.dart';
 import 'package:diary_flutter/presentation/style/index.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:intl/intl.dart'; // Make sure to add this dependency in your pubspec.yaml
 
 class DateHeaderDisplay extends ConsumerWidget {
   final DateTime date;
+  final JournalType journalType;
   const DateHeaderDisplay({
     super.key,
+    required this.journalType,
     required this.date,
   });
 
@@ -24,7 +26,7 @@ class DateHeaderDisplay extends ConsumerWidget {
         ),
         const SizedBox(height: 12),
         Text(
-          'From   ${date.toDDMYYHH()}' '   Post',
+          'From   ${date.toDDMYYHH()}    ${journalType.value.capitalize()}',
           style: textStyle.paragraph.withColor(colors.grayScale60),
         ),
         const SizedBox(height: 10),

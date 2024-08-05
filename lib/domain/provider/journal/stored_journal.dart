@@ -82,6 +82,7 @@ class StoredJournal extends _$StoredJournal {
     } else {
       // 해당 날짜의 저널이 없으면 새로 생성
       allJournals.add(Journal(
+        title: null,
         idToken: idToken,
         createdAt: date,
         userInput: newUserInput ?? '',
@@ -215,6 +216,33 @@ class StoredJournal extends _$StoredJournal {
     allJournals.removeWhere((journal) => journal.idToken == idToken);
     await _saveToStorage(allJournals);
     ref.invalidateSelf();
+  }
+
+  /// 특정 날짜와 ID 토큰에 해당하는 저널의 타이틀을 생성하거나 업데이트합니다.
+  ///
+  /// [idToken] - 저널의 ID 토큰
+  /// [date] - 저널의 생성 날짜
+  /// [newTitle] - 업데이트할 새로운 타이틀
+  Future<void> createOrUpdateTitle(String idToken, DateTime date,
+      String newTitle, JournalType journalType) async {
+    final allJournals = _getAllJournals();
+    final index = allJournals.indexWhere(
+        (j) => j.idToken == idToken && _isSameDay(j.createdAt, date));
+
+    if (index != -1) {
+      // 기존 저널이 존재하면 title 업데이트
+      allJournals[index] = allJournals[index].copyWith(title: newTitle);
+    } else {
+      // 해당 날짜의 저널이 없으면 새로 생성
+      allJournals.add(Journal(
+        idToken: idToken,
+        createdAt: date,
+        title: newTitle,
+        journalType: journalType, // 기본 타입으로 설정
+      ));
+    }
+
+    _saveToStorage(allJournals);
   }
 
   /// 주어진 저널 리스트를 영구 저장소에 저장합니다.

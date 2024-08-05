@@ -1,17 +1,18 @@
 import 'package:diary_flutter/data/model/journal.dart';
+import 'package:diary_flutter/domain/provider/common/focused_date.dart';
+import 'package:diary_flutter/domain/provider/journal/journal_use_cases.dart';
 import 'package:diary_flutter/presentation/journal/provider/journal_service.dart';
 import 'package:diary_flutter/presentation/journal/confirm_dialog.dart';
 import 'package:diary_flutter/presentation/journal/icon_text_button.dart';
 import 'package:diary_flutter/presentation/journal/journal_completion_screen.dart';
 import 'package:diary_flutter/presentation/style/index.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class JournalFloatingActionButton extends HookConsumerWidget
+class JournalBodyAppBar extends HookConsumerWidget
     with JournalBodyAppbarHandlerMixin {
-  const JournalFloatingActionButton({super.key, required this.journalType});
+  const JournalBodyAppBar({super.key, required this.journalType});
 
   final JournalType journalType;
 
@@ -19,6 +20,8 @@ class JournalFloatingActionButton extends HookConsumerWidget
   Widget build(BuildContext context, WidgetRef ref) {
     final textStyle = ref.gemTextStyle;
     final colors = ref.gemColors;
+    final focusedDate = ref.read(focusedDateProvider);
+    final hasFeedback = ref.watch(hasFeedbackProvider(focusedDate));
 
     return SizedBox(
       height: 52,
@@ -39,19 +42,65 @@ class JournalFloatingActionButton extends HookConsumerWidget
               ),
             ),
             const Spacer(),
-            TextButton(
-              child: Text(
-                "Delete",
-                style: textStyle.button.copyWith(color: colors.error),
-              ),
-              onPressed: () => handleDeleteButton(context, ref, journalType),
-            ),
-            TextButton(
-                child: Text(
-                  "Finish",
-                  style: textStyle.button.copyWith(color: colors.primary50),
-                ),
-                onPressed: () => handleFinishButton(context, ref, journalType)),
+            // TextButton(
+            //   child: Text(
+            //     "Delete",
+            //     style: textStyle.button.copyWith(color: colors.error),
+            //   ),
+            //   onPressed: () => handleDeleteButton(context, ref, journalType),
+            // ),
+            // TextButton(
+            //     child: Text(
+            //       "Finish",
+            //       style: textStyle.button.copyWith(color: colors.primary50),
+            //     ),
+            //     onPressed: () => handleFinishButton(context, ref, journalType)),
+            AnimatedSwitcher(
+                duration: const Duration(milliseconds: 300),
+                transitionBuilder: (Widget child, Animation<double> animation) {
+                  return FadeTransition(
+                    opacity: animation,
+                    child: SizeTransition(
+                      sizeFactor: animation,
+                      axis: Axis.horizontal,
+                      axisAlignment: -1,
+                      child: child,
+                    ),
+                  );
+                },
+                child: hasFeedback
+                    ? TextButton(
+                        key: const ValueKey('delete'),
+                        child: Text(
+                          "Delete",
+                          style: textStyle.button.copyWith(color: colors.error),
+                        ),
+                        onPressed: () =>
+                            handleDeleteButton(context, ref, journalType),
+                      )
+                    : Row(
+                        key: const ValueKey('delete_and_finish'),
+                        children: [
+                          TextButton(
+                            child: Text(
+                              "Delete",
+                              style: textStyle.button
+                                  .copyWith(color: colors.error),
+                            ),
+                            onPressed: () =>
+                                handleDeleteButton(context, ref, journalType),
+                          ),
+                          TextButton(
+                            child: Text(
+                              "Finish",
+                              style: textStyle.button
+                                  .copyWith(color: colors.primary50),
+                            ),
+                            onPressed: () =>
+                                handleFinishButton(context, ref, journalType),
+                          ),
+                        ],
+                      ))
           ],
         ),
       ),
@@ -62,8 +111,10 @@ class JournalFloatingActionButton extends HookConsumerWidget
 mixin JournalBodyAppbarHandlerMixin {
   Future<void> handleListButton(
       WidgetRef ref, JournalType journalType, BuildContext context) async {
-    final journalEventNotifier =
-        ref.read(journalServiceProvider(journalType: journalType).notifier);
+    final journalEventNotifier = ref.read(journalServiceProvider(
+            journalType: journalType,
+            focusedDate: ref.watch(focusedDateProvider))
+        .notifier);
     await journalEventNotifier.onList();
     if (context.mounted) context.pop();
   }
@@ -85,14 +136,19 @@ mixin JournalBodyAppbarHandlerMixin {
     if (!context.mounted) return;
 
     final colors = ref.gemColors;
-    final journalEventNotifier =
-        ref.read(journalServiceProvider(journalType: journalType).notifier);
+    final journalEventNotifier = ref.read(journalServiceProvider(
+            journalType: journalType,
+            focusedDate: ref.watch(focusedDateProvider))
+        .notifier);
 
     final result = await showConfirmDialog(
       context: context,
       colors: colors,
       title: 'Delete Journal',
       description: 'Once you delete this journal, it cannot be recovered.',
+      onClose: () async {
+        FocusScope.of(context).unfocus();
+      },
       onConfirm: () async {
         await journalEventNotifier.onDelete();
       },
@@ -106,10 +162,29 @@ mixin JournalBodyAppbarHandlerMixin {
 
   Future<void> handleFinishButton(
       BuildContext context, WidgetRef ref, JournalType journalType) async {
+    // 현재 키보드 가시성 확인
+    final isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom > 0;
+
+    // 키보드 숨기기
     FocusScope.of(context).unfocus();
-    // final journalEventNotifier =
-    //     ref.read(journalServiceProvider(journalType: journalType).notifier);
-    // await journalEventNotifier.onFinish();
-    context.pushNamed(JournalCompletionScreen.name);
+
+    // 키보드가 보이는 상태였다면 잠시 대기
+    if (isKeyboardVisible) {
+      await Future.delayed(const Duration(milliseconds: 300));
+    }
+
+    // 컨텍스트가 여전히 유효한지 확인
+    if (!context.mounted) return;
+
+    final journalEventNotifier = ref.read(journalServiceProvider(
+            journalType: journalType,
+            focusedDate: ref.read(focusedDateProvider))
+        .notifier);
+    await journalEventNotifier.onList(); //비어잇으면 빈거라도저장
+    if (context.mounted) {
+      await context.pushNamed(JournalCompletionScreen.name, queryParameters: {
+        'type': journalType.value,
+      });
+    }
   }
 }

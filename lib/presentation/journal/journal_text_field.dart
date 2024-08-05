@@ -1,15 +1,15 @@
-import 'dart:ui';
-
+import 'package:diary_flutter/data/model/journal.dart';
+import 'package:diary_flutter/domain/provider/common/focused_date.dart';
 import 'package:diary_flutter/domain/provider/journal/journal_use_cases.dart';
 import 'package:diary_flutter/presentation/journal/provider/post_text_input.dart';
 import 'package:diary_flutter/presentation/style/index.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:palestine_console/palestine_console.dart';
 
 class JournalTextField extends HookConsumerWidget {
+  final JournalType journalType;
   final DateTime date;
   final VoidCallback? onSubmitted;
   final bool submitClear; // 추가된 변수
@@ -17,6 +17,7 @@ class JournalTextField extends HookConsumerWidget {
   const JournalTextField({
     super.key,
     required this.date,
+    required this.journalType,
     this.onSubmitted,
     this.submitClear = false, // 기본값은 false
   });
@@ -25,33 +26,43 @@ class JournalTextField extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final colors = ref.gemColors;
     final textStyle = ref.gemTextStyle;
+    // ignore: unused_local_variable
     final text = ref.watch(postTextInputProvider);
     final textController = usePostTextInputController(ref, date);
+    final focusedDate = ref.read(focusedDateProvider);
+    final hasFeedback = ref.watch(hasFeedbackProvider(focusedDate));
 
-    return TextField(
-      controller: textController,
-      decoration: InputDecoration(
-        hintStyle: textStyle.h2.withColor(colors.placeholder),
-        hintText: 'Just write down any word \nabout your day.',
-        border: InputBorder.none,
+    return Visibility(
+      visible: (!hasFeedback || journalType == JournalType.post),
+      child: TextField(
+        controller: textController,
+        decoration: InputDecoration(
+          hintStyle: textStyle.h2.withColor(colors.placeholder),
+          hintText: !hasFeedback
+              ? 'Just write down any word \nabout your day.'
+              : null,
+          border: InputBorder.none,
+        ),
+        style: textStyle.h2.withColor(colors.grayScale0),
+        maxLines: null,
+        keyboardType: TextInputType.multiline,
+        textInputAction: TextInputAction.done,
+        enabled: !hasFeedback, // 피드백이 있으면 입력 불가능
+        onSubmitted: (value) async {
+          FocusScope.of(context).unfocus();
+          if (hasFeedback) return; // 피드백이 있으면 제출 로직 실행하지 않음
+          onSubmitted?.call();
+
+          /// 순서중요
+          if (submitClear) {
+            textController.clear();
+            // ref.read(postTextInputProvider.notifier).clear();
+          }
+        },
+        onChanged: (value) {
+          Print.white(ref.read(postTextInputProvider) ?? '');
+        },
       ),
-      style: textStyle.h2.withColor(colors.grayScale0),
-      maxLines: null,
-      keyboardType: TextInputType.multiline,
-      textInputAction: TextInputAction.done,
-      onSubmitted: (value) async {
-        FocusScope.of(context).unfocus();
-        onSubmitted?.call();
-
-        /// 순서중요
-        if (submitClear) {
-          textController.clear();
-          // ref.read(postTextInputProvider.notifier).clear();
-        }
-      },
-      onChanged: (value) {
-        Print.white(ref.read(postTextInputProvider) ?? '');
-      },
     );
   }
 }

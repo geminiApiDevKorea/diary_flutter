@@ -1,26 +1,26 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'my_journal_store.dart';
+part of 'feedback_active.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$myJournalStoreHash() => r'731aa6471fd2ee70ea21b0f85ecb5e14e3457422';
+String _$feedbackActiveHash() => r'74b7c1c008f4b5633d4330503da2d1b8f4ed3d1b';
 
-/// See also [MyJournalStore].
-@ProviderFor(MyJournalStore)
-final myJournalStoreProvider =
-    AutoDisposeNotifierProvider<MyJournalStore, List<Journal>>.internal(
-  MyJournalStore.new,
-  name: r'myJournalStoreProvider',
+/// See also [FeedbackActive].
+@ProviderFor(FeedbackActive)
+final feedbackActiveProvider =
+    AutoDisposeNotifierProvider<FeedbackActive, bool>.internal(
+  FeedbackActive.new,
+  name: r'feedbackActiveProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$myJournalStoreHash,
+      : _$feedbackActiveHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$MyJournalStore = AutoDisposeNotifier<List<Journal>>;
+typedef _$FeedbackActive = AutoDisposeNotifier<bool>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

@@ -94,10 +94,13 @@ GoRouter router(RouterRef ref) {
           name: JournalScreen.name,
           pageBuilder: (context, state) {
             final type = state.uri.queryParameters['type'] ?? 'chat';
+
             final key = ValueKey('journal$type');
 
             return CustomTransitions.buildSlideTransitionPage(
-              child: JournalScreen(type: type),
+              child: JournalScreen(
+                type: type,
+              ),
               key: key,
               from: SlideDirection.right,
               transitionDuration: TransitionDuration.short.value,
@@ -108,9 +111,10 @@ GoRouter router(RouterRef ref) {
               path: JournalCompletionScreen.path,
               name: JournalCompletionScreen.name,
               pageBuilder: (context, state) {
-                const key = ValueKey('journalCompletion');
+                final type = state.uri.queryParameters['type'] ?? 'chat';
+                final key = ValueKey('journalCompletion$type');
                 return CustomTransitions.buildSlideTransitionPage(
-                  child: const JournalCompletionScreen(),
+                  child: JournalCompletionScreen(type: type),
                   key: key,
                   from: SlideDirection.right,
                   transitionDuration: TransitionDuration.short.value,

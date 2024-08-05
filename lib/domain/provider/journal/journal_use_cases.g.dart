@@ -401,5 +401,144 @@ final getJournalsWithMusicAndSongCountProvider =
 );
 
 typedef GetJournalsWithMusicAndSongCountRef = AutoDisposeProviderRef<int>;
+String _$hasFeedbackHash() => r'5243aafaed6dc8db2e6efdc297968c2df904dc15';
+
+/// 8. 특정 날짜의 저널에 피드백이 있는지 확인 (title이 있거나 song이 있는 경우)
+///
+/// Copied from [hasFeedback].
+@ProviderFor(hasFeedback)
+const hasFeedbackProvider = HasFeedbackFamily();
+
+/// 8. 특정 날짜의 저널에 피드백이 있는지 확인 (title이 있거나 song이 있는 경우)
+///
+/// Copied from [hasFeedback].
+class HasFeedbackFamily extends Family<bool> {
+  /// 8. 특정 날짜의 저널에 피드백이 있는지 확인 (title이 있거나 song이 있는 경우)
+  ///
+  /// Copied from [hasFeedback].
+  const HasFeedbackFamily();
+
+  /// 8. 특정 날짜의 저널에 피드백이 있는지 확인 (title이 있거나 song이 있는 경우)
+  ///
+  /// Copied from [hasFeedback].
+  HasFeedbackProvider call(
+    DateTime date,
+  ) {
+    return HasFeedbackProvider(
+      date,
+    );
+  }
+
+  @override
+  HasFeedbackProvider getProviderOverride(
+    covariant HasFeedbackProvider provider,
+  ) {
+    return call(
+      provider.date,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'hasFeedbackProvider';
+}
+
+/// 8. 특정 날짜의 저널에 피드백이 있는지 확인 (title이 있거나 song이 있는 경우)
+///
+/// Copied from [hasFeedback].
+class HasFeedbackProvider extends AutoDisposeProvider<bool> {
+  /// 8. 특정 날짜의 저널에 피드백이 있는지 확인 (title이 있거나 song이 있는 경우)
+  ///
+  /// Copied from [hasFeedback].
+  HasFeedbackProvider(
+    DateTime date,
+  ) : this._internal(
+          (ref) => hasFeedback(
+            ref as HasFeedbackRef,
+            date,
+          ),
+          from: hasFeedbackProvider,
+          name: r'hasFeedbackProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$hasFeedbackHash,
+          dependencies: HasFeedbackFamily._dependencies,
+          allTransitiveDependencies:
+              HasFeedbackFamily._allTransitiveDependencies,
+          date: date,
+        );
+
+  HasFeedbackProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.date,
+  }) : super.internal();
+
+  final DateTime date;
+
+  @override
+  Override overrideWith(
+    bool Function(HasFeedbackRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: HasFeedbackProvider._internal(
+        (ref) => create(ref as HasFeedbackRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        date: date,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeProviderElement<bool> createElement() {
+    return _HasFeedbackProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is HasFeedbackProvider && other.date == date;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, date.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin HasFeedbackRef on AutoDisposeProviderRef<bool> {
+  /// The parameter `date` of this provider.
+  DateTime get date;
+}
+
+class _HasFeedbackProviderElement extends AutoDisposeProviderElement<bool>
+    with HasFeedbackRef {
+  _HasFeedbackProviderElement(super.provider);
+
+  @override
+  DateTime get date => (origin as HasFeedbackProvider).date;
+}
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

@@ -1,24 +1,24 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'router.dart';
+part of 'focused_date.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$routerHash() => r'a77fec4fa93e59bb6c5a8b1fed9384bab0b15b95';
+String _$focusedDateHash() => r'22a4015ffbc3b03a23d6a6784acf750b06c358a3';
 
-/// See also [router].
-@ProviderFor(router)
-final routerProvider = Provider<GoRouter>.internal(
-  router,
-  name: r'routerProvider',
+/// See also [FocusedDate].
+@ProviderFor(FocusedDate)
+final focusedDateProvider = NotifierProvider<FocusedDate, DateTime>.internal(
+  FocusedDate.new,
+  name: r'focusedDateProvider',
   debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$routerHash,
+      const bool.fromEnvironment('dart.vm.product') ? null : _$focusedDateHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef RouterRef = ProviderRef<GoRouter>;
+typedef _$FocusedDate = Notifier<DateTime>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

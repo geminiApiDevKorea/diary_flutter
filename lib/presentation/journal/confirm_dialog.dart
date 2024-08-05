@@ -13,6 +13,8 @@ Future<DeleteConfirmationResult?> showConfirmDialog({
   required GemColors colors,
   required String title,
   required String description,
+  String? leftButtonTitle,
+  String? rightButtonTitle,
   VoidCallback? onClose,
   VoidCallback? onConfirm,
 }) {
@@ -25,19 +27,19 @@ Future<DeleteConfirmationResult?> showConfirmDialog({
         description: description,
         popupButtonParams: [
           PopupButtonParam(
-            title: 'Close',
+            title: leftButtonTitle ?? 'Close',
             isPrimary: false,
             onTap: (popupContext) async {
-              Navigator.pop(popupContext, DeleteConfirmationResult.cancel);
               onClose?.call();
+              Navigator.pop(popupContext, DeleteConfirmationResult.cancel);
             },
           ),
           PopupButtonParam(
-            title: 'Confirm',
+            title: rightButtonTitle ?? 'Confirm',
             isPrimary: true,
             onTap: (popupContext) async {
-              Navigator.pop(popupContext, DeleteConfirmationResult.confirm);
               onConfirm?.call();
+              Navigator.pop(popupContext, DeleteConfirmationResult.confirm);
             },
           ),
         ],
