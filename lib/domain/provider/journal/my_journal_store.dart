@@ -3,7 +3,6 @@ import 'package:diary_flutter/data/model/journal.dart';
 import 'package:diary_flutter/data/model/song.dart';
 import 'package:diary_flutter/domain/provider/auth/get_my_id_token.dart';
 import 'package:diary_flutter/domain/provider/journal/stored_journal.dart';
-import 'package:palestine_console/palestine_console.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'my_journal_store.g.dart';
@@ -14,7 +13,7 @@ class MyJournalStore extends _$MyJournalStore {
 
   @override
   List<Journal> build() {
-    Print.white('MyJournalStore build');
+    // Print.white('MyJournalStore build');
     return ref.watch(storedJournalProvider(_idToken));
   }
 

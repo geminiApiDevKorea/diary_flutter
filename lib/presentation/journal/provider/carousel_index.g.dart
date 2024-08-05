@@ -1,26 +1,26 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'my_journal_store.dart';
+part of 'carousel_index.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$myJournalStoreHash() => r'7cf7202b9d7df152cd3994a64f5896ec9d8a6ce2';
+String _$carouselIndexHash() => r'c575080fd727531e72a3cba27ab673aa2fafb537';
 
-/// See also [MyJournalStore].
-@ProviderFor(MyJournalStore)
-final myJournalStoreProvider =
-    AutoDisposeNotifierProvider<MyJournalStore, List<Journal>>.internal(
-  MyJournalStore.new,
-  name: r'myJournalStoreProvider',
+/// See also [CarouselIndex].
+@ProviderFor(CarouselIndex)
+final carouselIndexProvider =
+    AutoDisposeNotifierProvider<CarouselIndex, int>.internal(
+  CarouselIndex.new,
+  name: r'carouselIndexProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$myJournalStoreHash,
+      : _$carouselIndexHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$MyJournalStore = AutoDisposeNotifier<List<Journal>>;
+typedef _$CarouselIndex = AutoDisposeNotifier<int>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

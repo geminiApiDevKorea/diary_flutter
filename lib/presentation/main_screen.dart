@@ -8,6 +8,7 @@ import 'package:diary_flutter/domain/provider/journal/journal_use_cases.dart';
 import 'package:diary_flutter/domain/provider/journal/my_journal_store.dart';
 import 'package:diary_flutter/presentation/calendar/calendar_screen.dart';
 import 'package:diary_flutter/presentation/journal/journal_music_card.dart';
+import 'package:diary_flutter/presentation/journal/provider/carousel_index.dart';
 import 'package:diary_flutter/presentation/journal_screen.dart';
 import 'package:diary_flutter/presentation/main/provider/main_screen_scroll_position.dart';
 import 'package:diary_flutter/presentation/main/use_is_top_of_stack.dart';
@@ -42,7 +43,8 @@ class MainScreen extends HookConsumerWidget {
         animationController: animationController,
         action: () => ref.read(focusedDateProvider.notifier).resetToToday());
 
-    // final scrollPosition = ref.watch(mainScrollPositionProvider);
+    // ignore: unused_local_variable
+    final scrollPosition = ref.watch(mainScrollPositionProvider);
 
     // final opacityController = useAnimationController(
     //   duration: const Duration(milliseconds: 300),
@@ -136,8 +138,7 @@ class MainFloatingActionButton extends HookConsumerWidget {
                     child: ElevatedButton.icon(
                       onPressed: () => context.go(CalendarScreen.path),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: colors.grayScale80.withOpacity(0.8),
-                        foregroundColor: colors.grayScale80,
+                        backgroundColor: colors.subButtonBackground,
                         elevation: 0,
                         shadowColor: Colors.transparent,
                         shape: RoundedRectangleBorder(
@@ -207,9 +208,10 @@ class MainBody extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final scrollController = useMainScrollController(ref);
-    final scrollPosition = ref.watch(mainScrollPositionProvider);
+    // final scrollPosition = ref.watch(mainScrollPositionProvider);
     final colors = ref.gemColors;
-    Print.white(scrollPosition.toString());
+    final textStyle = ref.gemTextStyle;
+    // Print.white(scrollPosition.toString());
 
     return CustomScrollView(
       controller: scrollController,
@@ -234,9 +236,38 @@ class MainBody extends HookConsumerWidget {
         ),
         SliverToBoxAdapter(
           child: Container(
-            height: MediaQuery.of(context).size.height - carouselHeight,
-            color: colors.primary100,
-          ),
+              height: MediaQuery.of(context).size.height - carouselHeight,
+              color: colors.primary100,
+              child: Consumer(
+                builder: (context, ref, child) {
+                  final carouselIndex = ref.watch(carouselIndexProvider);
+                  final allMyJournals = ref.watch(getAllMyJournalsProvider);
+                  final sortedMyJournals = allMyJournals.sortByDateDescending();
+                  if (sortedMyJournals.isEmpty) {
+                    return Container();
+                  }
+
+                  final createdAt = sortedMyJournals[carouselIndex].createdAt;
+                  final bottomTitle = sortedMyJournals[carouselIndex].title ??
+                      "Draft of \n${createdAt.toMonthDayOrdinal()}";
+                  final scrollpostion = ref.watch(mainScrollPositionProvider);
+                  return Container(
+                    padding: const EdgeInsets.only(left: 56),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Visibility(
+                        visible: scrollpostion > 350,
+                        child: Text(
+                          bottomTitle,
+                          style: textStyle.h1
+                              .withColor(colors.grayScale0)
+                              .withFontSize(28),
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              )),
         ),
       ],
     );
@@ -260,6 +291,8 @@ class MainHeader extends HookConsumerWidget {
 
     final myName = ref.read(getMyNameProvider);
     final myJournalonToday =
+        ref.watch(getMyJournalByDateProvider(ref.watch(focusedDateProvider)));
+    final hasFeedback =
         ref.watch(getMyJournalByDateProvider(ref.watch(focusedDateProvider)));
 
     return Align(
@@ -386,7 +419,7 @@ class MainHeader extends HookConsumerWidget {
 
 void useTopofStackAction({
   required bool isTopOfStack,
-  required AnimationController animationController,
+  AnimationController? animationController,
   VoidCallback? action,
 }) {
   useEffect(() {
@@ -394,7 +427,10 @@ void useTopofStackAction({
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Future.delayed(const Duration(milliseconds: 300), () {
           // isDarkening.value = false;
-          animationController.forward(from: 0.0);
+          if (animationController != null) {
+            animationController.forward(from: 0.0);
+          }
+
           action?.call();
         });
       });
@@ -476,6 +512,15 @@ class CustomHorizontalCarousel extends ConsumerWidget {
       padding: const EdgeInsets.only(bottom: 20),
       color: colors.primary100,
       child: CustomCarousel(
+        onSelectedItemChanged: (index) {
+          // carouselIndex가 리스트 범위를 벗어나지 않도록 보장
+          final safeIndex = index.clamp(0, sortedMyJournals.length - 1);
+
+// 필요한 경우 carouselIndexProvider를 업데이트
+          if (safeIndex != index) {
+            ref.read(carouselIndexProvider.notifier).setIndex(safeIndex);
+          }
+        },
         depthOrder: DepthOrder.reverse,
         itemCountBefore: 0,
         itemCountAfter:
@@ -484,8 +529,6 @@ class CustomHorizontalCarousel extends ConsumerWidget {
         scrollDirection: Axis.horizontal,
         tapToSelect: false,
         effectsBuilder: (index, ratio, child) {
-          // print('index: $index, ratio: $ratio');
-
           return Transform(
             transform: Matrix4.identity()
               ..translate(0.0, -ratio * 127, 0)
@@ -737,7 +780,7 @@ class MainHeaderButton extends ConsumerWidget {
     final colors = ref.gemColors;
 
     return Material(
-      color: colors.grayScale80,
+      color: colors.subButtonBackground,
       borderRadius: BorderRadius.circular(32),
       child: InkWell(
         borderRadius: BorderRadius.circular(32),
