@@ -1,13 +1,13 @@
-import 'package:diary_flutter/presentation/calendar/calendar.dart';
 import 'package:diary_flutter/presentation/calendar/calendar_change_notifier.dart';
 import 'package:diary_flutter/presentation/calendar/calendar_inherited_notifier.dart';
-import 'package:diary_flutter/presentation/calendar/calendar_journal_card.dart';
+import 'package:diary_flutter/presentation/calendar/calendar_diary.dart';
 import 'package:diary_flutter/presentation/style/gem_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class CalendarScreen extends ConsumerWidget {
-  static const String path = '/calendar';
+  static const String path = '/$name';
+  static const String name = 'calendar';
   const CalendarScreen({super.key});
 
   @override
@@ -17,27 +17,11 @@ class CalendarScreen extends ConsumerWidget {
       backgroundColor: colors.background,
       body: SafeArea(
         bottom: false,
-        child: CustomScrollView(
-          slivers: [
-            SliverList.separated(
-              itemCount: 100000 + 1,
-              itemBuilder: (context, index) {
-                if (index == 0) {
-                  return CalendarInheritedNotifier(
-                    notifier: CalendarChangeNotifier(
-                      dateTime: DateTime.now(),
-                    ),
-                    child: const Calendar(),
-                  );
-                } else {
-                  return const CalendarJournalCard();
-                }
-              },
-              separatorBuilder: (context, index) {
-                return const SizedBox(height: 20);
-              },
-            ),
-          ],
+        child: CalendarInheritedNotifier(
+          notifier: CalendarChangeNotifier(
+            selectedDateTime: DateTime.now(),
+          ),
+          child: const CalendarDiary(),
         ),
       ),
     );

@@ -1,5 +1,6 @@
 import 'package:diary_flutter/common/enums.dart';
 import 'package:diary_flutter/domain/provider/chats/chats_feedback_notifier.dart';
+import 'package:diary_flutter/domain/provider/diary/diary_use_cases.dart';
 import 'package:diary_flutter/domain/provider/journal/journal_use_cases.dart';
 import 'package:diary_flutter/domain/provider/journal/my_journal_store.dart';
 import 'package:diary_flutter/presentation/journal/provider/feedback_active.dart';
@@ -94,8 +95,19 @@ class JournalService extends _$JournalService {
           state = const JournalInitial();
           return;
         }
-        await ref.read(chatsFeedbackNotifierProvider.notifier).postFeedback(
-            type: FeedbackType.post, body: journal.toChatsRequestBody());
+        final response =
+            await ref.read(chatsFeedbackNotifierProvider.notifier).postFeedback(
+                  type: FeedbackType.post,
+                  body: journal.toChatsRequestBody(),
+                );
+        if (response != null) {
+          ref.read(
+            postDiaryProvider(
+              chatsFeedbackResponse: response,
+              journal: journal,
+            ),
+          );
+        }
 
         Print.blue('Finishing Post journal');
       case JournalType.chat:
@@ -118,8 +130,21 @@ class JournalService extends _$JournalService {
           state = const JournalInitial();
           return;
         }
-        await ref.read(chatsFeedbackNotifierProvider.notifier).postFeedback(
-            type: FeedbackType.post, body: journal.toChatsRequestBody());
+        final response = await ref
+            .read(chatsFeedbackNotifierProvider.notifier)
+            .postFeedback(
+              type: FeedbackType.post,
+              body: journal.toChatsRequestBody(),
+            )
+            .then((value) => value);
+        if (response != null) {
+          ref.read(
+            postDiaryProvider(
+              chatsFeedbackResponse: response,
+              journal: journal,
+            ),
+          );
+        }
     }
   }
 }

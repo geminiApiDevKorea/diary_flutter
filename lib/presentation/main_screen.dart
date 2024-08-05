@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:diary_flutter/common/enums.dart';
+import 'package:diary_flutter/common/extension/date_time_extension.dart';
 import 'package:diary_flutter/data/model/journal.dart';
 import 'package:diary_flutter/domain/provider/auth/get_my_name.dart';
 import 'package:diary_flutter/domain/provider/common/focused_date.dart';
@@ -134,7 +135,7 @@ class MainFloatingActionButton extends HookConsumerWidget {
                     width: 140,
                     height: 36,
                     child: ElevatedButton.icon(
-                      onPressed: () => context.go(CalendarScreen.path),
+                      onPressed: () => context.pushNamed(CalendarScreen.name),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: colors.grayScale80.withOpacity(0.8),
                         foregroundColor: colors.grayScale80,

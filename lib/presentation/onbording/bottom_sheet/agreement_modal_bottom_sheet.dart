@@ -74,7 +74,7 @@ class AgreementModalBottomSheet extends ConsumerWidget {
     requestAgree() {
       ref.read(authProvider.notifier).agree().then((isSuccess) {
         if (isSuccess) {
-          context.push(SettingScreen.path);
+          context.go(SettingScreen.path);
         }
       });
     }
