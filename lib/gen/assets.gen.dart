@@ -74,6 +74,10 @@ class $AssetsImagesGen {
   AssetGenImage get iconGoogle =>
       const AssetGenImage('assets/images/icon_google.png');
 
+  /// File path: assets/images/icon_my_info.png
+  AssetGenImage get iconMyInfo =>
+      const AssetGenImage('assets/images/icon_my_info.png');
+
   /// File path: assets/images/left_arrow.png
   AssetGenImage get leftArrow =>
       const AssetGenImage('assets/images/left_arrow.png');
@@ -98,6 +102,7 @@ class $AssetsImagesGen {
         checked,
         iconActionRight,
         iconGoogle,
+        iconMyInfo,
         leftArrow,
         lock,
         music,

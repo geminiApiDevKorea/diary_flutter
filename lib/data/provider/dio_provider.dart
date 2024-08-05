@@ -11,6 +11,8 @@ Dio dio(DioRef ref, {required String baseUrl}) {
       baseUrl: baseUrl,
     ),
   );
-  dio.interceptors.addAll([PrettyDioLogger()]);
+  dio.interceptors.addAll([
+    PrettyDioLogger(),
+  ]);
   return dio;
 }

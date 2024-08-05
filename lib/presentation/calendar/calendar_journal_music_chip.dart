@@ -1,8 +1,13 @@
+import 'package:diary_flutter/data/model/music.dart';
 import 'package:diary_flutter/gen/gen_assets.dart';
 import 'package:flutter/material.dart';
 
 class CalendarJournalMusicChip extends StatelessWidget {
-  const CalendarJournalMusicChip({super.key});
+  final Music music;
+  const CalendarJournalMusicChip({
+    super.key,
+    required this.music,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -22,9 +27,9 @@ class CalendarJournalMusicChip extends StatelessWidget {
             const SizedBox(
               width: 5,
             ),
-            const Expanded(
+            Expanded(
               child: Text(
-                'It\'s Raining, So What - Epik High',
+                music.title,
                 overflow: TextOverflow.ellipsis,
               ),
             ),

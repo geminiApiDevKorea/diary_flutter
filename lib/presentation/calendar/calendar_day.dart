@@ -13,11 +13,14 @@ class CalendarDay extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final textStyle = GemTheme.of(ref).textStyle;
-    return Center(
-      child: Text(
-        '$day',
-        style: textStyle.button.withColor(
-          const Color(0xFF0C0C0C).withOpacity(0.56),
+    return SizedBox(
+      width: 40,
+      child: Center(
+        child: Text(
+          '$day',
+          style: textStyle.button.withColor(
+            const Color(0xFF0C0C0C).withOpacity(0.56),
+          ),
         ),
       ),
     );

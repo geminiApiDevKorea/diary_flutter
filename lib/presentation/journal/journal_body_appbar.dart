@@ -138,13 +138,13 @@ mixin JournalBodyAppbarHandlerMixin {
         if (context.mounted) {
           FocusScope.of(context).unfocus();
 
-          context.pop();
+          // context.pop();
         }
       },
       onConfirm: () async {
         await journalEventNotifier.onDelete();
         if (context.mounted) {
-          context.pop();
+          // context.pop();
           context.pop();
         }
       },

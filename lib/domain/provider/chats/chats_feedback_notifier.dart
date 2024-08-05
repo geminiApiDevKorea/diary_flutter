@@ -35,7 +35,7 @@ class ChatsFeedbackNotifier extends _$ChatsFeedbackNotifier {
     return const AsyncValue.data(ChatsFeedbackInitial());
   }
 
-  Future<void> postFeedback({
+  Future<ChatsFeedbackResponse?> postFeedback({
     required FeedbackType type,
     required ChatsRequestBody body,
   }) async {
@@ -48,7 +48,7 @@ class ChatsFeedbackNotifier extends _$ChatsFeedbackNotifier {
       if (token == null) {
         state =
             const AsyncValue.data(ChatsFeedbackError('No token found', null));
-        return;
+        return null;
       }
 
       final response = await repository.postChatsFeedback(
@@ -58,6 +58,7 @@ class ChatsFeedbackNotifier extends _$ChatsFeedbackNotifier {
       );
 
       state = AsyncValue.data(ChatsFeedbackData(response));
+      return response;
     } catch (e, stackTrace) {
       if (e is DioException) {
         final statusCode = e.response?.statusCode;
@@ -66,6 +67,7 @@ class ChatsFeedbackNotifier extends _$ChatsFeedbackNotifier {
       } else {
         state = AsyncValue.error(e, stackTrace);
       }
+      return null;
     }
   }
 }
