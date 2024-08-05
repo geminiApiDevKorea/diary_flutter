@@ -28,8 +28,7 @@ class IconTextButton extends ConsumerWidget {
         ),
         icon: Icon(CupertinoIcons.back, size: 18, color: colors.grayScale50),
         style: ElevatedButton.styleFrom(
-          overlayColor: Colors.transparent,
-          foregroundColor: colors.grayScale80,
+          backgroundColor: colors.subButtonBackground,
           elevation: 0,
           shadowColor: Colors.transparent,
           shape: RoundedRectangleBorder(

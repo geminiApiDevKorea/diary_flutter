@@ -30,6 +30,7 @@ Future<DeleteConfirmationResult?> showConfirmDialog({
             title: leftButtonTitle ?? 'Close',
             isPrimary: false,
             onTap: (popupContext) async {
+              FocusScope.of(context).unfocus();
               onClose?.call();
               Navigator.pop(popupContext, DeleteConfirmationResult.cancel);
             },
@@ -38,6 +39,7 @@ Future<DeleteConfirmationResult?> showConfirmDialog({
             title: rightButtonTitle ?? 'Confirm',
             isPrimary: true,
             onTap: (popupContext) async {
+              FocusScope.of(context).unfocus();
               onConfirm?.call();
               Navigator.pop(popupContext, DeleteConfirmationResult.confirm);
             },

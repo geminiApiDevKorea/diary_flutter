@@ -33,7 +33,8 @@ class JournalScreen extends HookConsumerWidget {
           child: Scaffold(
             floatingActionButtonLocation:
                 FloatingActionButtonLocation.centerTop,
-            floatingActionButton: JournalBodyAppBar(journalType: journalType),
+            floatingActionButton:
+                JournalBodyAppBar(context: context, journalType: journalType),
             body: JournalBody(
               type: type,
             ),

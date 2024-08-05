@@ -12,8 +12,9 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class JournalBodyAppBar extends HookConsumerWidget
     with JournalBodyAppbarHandlerMixin {
-  const JournalBodyAppBar({super.key, required this.journalType});
-
+  JournalBodyAppBar(
+      {super.key, required this.journalType, required this.context});
+  final BuildContext context;
   final JournalType journalType;
 
   @override
@@ -42,19 +43,6 @@ class JournalBodyAppBar extends HookConsumerWidget
               ),
             ),
             const Spacer(),
-            // TextButton(
-            //   child: Text(
-            //     "Delete",
-            //     style: textStyle.button.copyWith(color: colors.error),
-            //   ),
-            //   onPressed: () => handleDeleteButton(context, ref, journalType),
-            // ),
-            // TextButton(
-            //     child: Text(
-            //       "Finish",
-            //       style: textStyle.button.copyWith(color: colors.primary50),
-            //     ),
-            //     onPressed: () => handleFinishButton(context, ref, journalType)),
             AnimatedSwitcher(
                 duration: const Duration(milliseconds: 300),
                 transitionBuilder: (Widget child, Animation<double> animation) {
@@ -121,19 +109,19 @@ mixin JournalBodyAppbarHandlerMixin {
 
   Future<void> handleDeleteButton(
       BuildContext context, WidgetRef ref, JournalType journalType) async {
-    // 현재 키보드 가시성 확인
-    final isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom > 0;
+    // // 현재 키보드 가시성 확인
+    // final isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom > 0;
 
-    // 키보드 숨기기
-    FocusScope.of(context).unfocus();
+    // // 키보드 숨기기
+    // FocusScope.of(context).unfocus();
 
-    // 키보드가 보이는 상태였다면 잠시 대기
-    if (isKeyboardVisible) {
-      await Future.delayed(const Duration(milliseconds: 300));
-    }
+    // // 키보드가 보이는 상태였다면 잠시 대기
+    // if (isKeyboardVisible) {
+    //   await Future.delayed(const Duration(milliseconds: 300));
+    // }
 
-    // 컨텍스트가 여전히 유효한지 확인
-    if (!context.mounted) return;
+    // // 컨텍스트가 여전히 유효한지 확인
+    // if (!context.mounted) return;
 
     final colors = ref.gemColors;
     final journalEventNotifier = ref.read(journalServiceProvider(
@@ -147,17 +135,25 @@ mixin JournalBodyAppbarHandlerMixin {
       title: 'Delete Journal',
       description: 'Once you delete this journal, it cannot be recovered.',
       onClose: () async {
-        FocusScope.of(context).unfocus();
+        if (context.mounted) {
+          FocusScope.of(context).unfocus();
+
+          // context.pop();
+        }
       },
       onConfirm: () async {
         await journalEventNotifier.onDelete();
+        if (context.mounted) {
+          // context.pop();
+          context.pop();
+        }
       },
     );
-
-    if (result == DeleteConfirmationResult.confirm && context.mounted) {
-      FocusScope.of(context).unfocus();
-      context.pop();
-    }
+    // if (result == DeleteConfirmationResult.confirm) {
+    //   if (context.mounted) {
+    //     FocusScope.of(context).unfocus();
+    //   }
+    // }
   }
 
   Future<void> handleFinishButton(
@@ -186,5 +182,6 @@ mixin JournalBodyAppbarHandlerMixin {
         'type': journalType.value,
       });
     }
+    FocusScope.of(context).unfocus();
   }
 }

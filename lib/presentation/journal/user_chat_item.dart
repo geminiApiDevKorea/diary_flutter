@@ -1,20 +1,30 @@
+import 'package:diary_flutter/presentation/style/index.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class UserChatItem extends StatelessWidget {
+class UserChatItem extends ConsumerWidget {
   final String message;
 
   const UserChatItem({super.key, required this.message});
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.blue[100],
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Text(message),
+  Widget build(BuildContext context, WidgetRef ref) {
+    final textStyle = ref.gemTextStyle;
+    final colors = ref.gemColors;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: 10),
+        Text(
+          message,
+          style: textStyle.h2.withColor(colors.grayScale0),
+        ),
+        const SizedBox(height: 10),
+        Divider(
+          color: colors.grayScale80,
+          thickness: 1,
+        ),
+      ],
     );
   }
 }

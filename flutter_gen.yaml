@@ -18,6 +18,7 @@ flutter:
   assets:
     - assets/fonts/
     - assets/images/
+    - assets/lotties/
 
   fonts:
     - family: Adamina

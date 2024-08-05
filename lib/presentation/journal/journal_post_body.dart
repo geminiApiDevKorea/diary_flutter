@@ -7,7 +7,6 @@ import 'package:diary_flutter/domain/provider/journal/journal_use_cases.dart';
 import 'package:diary_flutter/presentation/journal/journal_music_card.dart';
 import 'package:diary_flutter/presentation/journal/journal_text_field.dart';
 import 'package:diary_flutter/presentation/style/index.dart';
-import 'package:diary_flutter/presentation/utils/hooks/use_scroll_animate_to_bottom.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -18,17 +17,31 @@ class PostJournalBody extends HookConsumerWidget with PostJournalHandlerMixin {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final scrollController = useScrollController(initialScrollOffset: 100);
+    final scrollController = useScrollController(initialScrollOffset: 0);
     final colors = ref.gemColors;
     final textStyle = ref.gemTextStyle;
     final chatFeedback = ref.watch(chatsFeedbackNotifierProvider);
     // final nowDate = DateTime.now();
     final focusedDate = ref.watch(focusedDateProvider);
     final getMyJournal = ref.watch(getMyJournalByDateProvider(focusedDate));
-    useScrollAnimateToBottom(
-      scrollController: scrollController,
-      scrollTriggerValue: getMyJournal,
-    );
+    // useScrollAnimateToBottom(
+    //   scrollController: scrollController,
+    //   scrollTriggerValue: getMyJournal,
+    // );
+    useEffect(() {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Future.delayed(const Duration(milliseconds: 600), () {
+          if (scrollController.hasClients) {
+            scrollController.animateTo(
+              scrollController.position.maxScrollExtent,
+              duration: const Duration(milliseconds: 200),
+              curve: Curves.easeOut,
+            );
+          }
+        });
+      });
+      return null;
+    }, [getMyJournal]);
 
     ref.listen<AsyncValue<ChatsFeedbackState>>(
       chatsFeedbackNotifierProvider,
@@ -111,6 +124,7 @@ mixin PostJournalHandlerMixin {
                   // print(myJournal?.music?.url ?? '');
                 }),
           ),
+          const SizedBox(height: 36),
         ],
       );
     } else if (state is ChatsFeedbackError) {
@@ -171,6 +185,7 @@ mixin PostJournalHandlerMixin {
                     // print(myJournal?.music?.url ?? '');
                   }),
             ),
+            const SizedBox(height: 36),
           ],
         );
       }
