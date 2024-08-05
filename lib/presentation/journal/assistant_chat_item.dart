@@ -1,4 +1,3 @@
-import 'package:diary_flutter/data/model/history.dart';
 import 'package:flutter/material.dart';
 
 class AssistantChatItem extends StatelessWidget {

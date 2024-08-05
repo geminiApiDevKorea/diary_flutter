@@ -65,6 +65,20 @@ int getJournalsWithMusicAndSongCount(GetJournalsWithMusicAndSongCountRef ref) {
       .length;
 }
 
+/// 8. 특정 날짜의 저널에 피드백이 있는지 확인 (title이 있거나 song이 있는 경우)
+@riverpod
+bool hasFeedback(HasFeedbackRef ref, DateTime date) {
+  final myJournals = ref.watch(myJournalStoreProvider);
+  final journal = myJournals.firstWhereOrNull(
+    (j) => _isSameDay(j.createdAt, date),
+  );
+
+  // 저널이 존재하고, (title이 null이 아니며 비어있지 않거나) 또는 (song이 null이 아닌 경우) true 반환
+  return journal != null &&
+      ((journal.title != null && journal.title!.isNotEmpty) ||
+          journal.song != null);
+}
+
 bool _isSameDay(DateTime date1, DateTime date2) {
   return date1.year == date2.year &&
       date1.month == date2.month &&
