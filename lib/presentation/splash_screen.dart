@@ -28,8 +28,7 @@ class SplashScreen extends HookConsumerWidget {
           authState.value is ErrorAuthState) {
         _moveNext(ref, context, OnboardingScreen.path);
       } else if (authState.value is SignedInState) {
-        // _moveNext(ref, context, MainScreen.path);
-        _moveNext(ref, context, SettingScreen.path);
+        _moveNext(ref, context, MainScreen.path);
       }
       return () {};
     }, [authState]);

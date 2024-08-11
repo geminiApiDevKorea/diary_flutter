@@ -98,12 +98,9 @@ class SettingScreen extends HookConsumerWidget {
                       ref
                           .read(authProvider.notifier)
                           .postUser(
-                            idToken: idToken,
-                            nickname: insertedName.value,
-                            gender: selectedGender.value == Gender.other
-                                ? null
-                                : selectedGender.value,
-                          )
+                              idToken: idToken,
+                              nickname: insertedName.value,
+                              gender: selectedGender.value ?? Gender.other)
                           .then(
                             (_) => context.pushReplacement(WelcomeScreen.path),
                           );

@@ -56,7 +56,7 @@ class Auth extends _$Auth {
       return await postUser(
         idToken: storedIdToken!,
         nickname: user?.displayName ?? _defaultNickName,
-        gender: Gender.female,
+        gender: Gender.other,
       );
     } on Exception catch (e) {
       return ErrorAuthState(exception: e);
@@ -79,7 +79,7 @@ class Auth extends _$Auth {
     final authState = await postUser(
       idToken: idToken,
       nickname: user.displayName ?? _defaultNickName,
-      gender: Gender.female,
+      gender: Gender.other,
     );
     state = AsyncValue.data(authState);
     if (authState is SignedInState) {
@@ -120,14 +120,14 @@ class Auth extends _$Auth {
   Future<AuthState> postUser({
     required String idToken,
     required String nickname,
-    required Gender? gender,
+    required Gender gender,
   }) async {
     try {
       final response = await ref.read(usersRepositoryProvider).postUsers(
             bearerToken: 'Bearer $idToken',
             body: UsersRequestBody(
               nickname: nickname,
-              gender: gender,
+              gender: gender == Gender.other ? Gender.female : gender,
             ),
           );
 
