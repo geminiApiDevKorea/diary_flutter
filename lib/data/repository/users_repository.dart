@@ -16,7 +16,7 @@ class UsersAgreementBody {
 @JsonSerializable()
 class UsersRequestBody {
   String nickname;
-  Gender gender;
+  Gender? gender;
 
   UsersRequestBody({
     required this.nickname,

@@ -53,7 +53,7 @@ class Auth extends _$Auth {
 
     try {
       final user = ref.read(googleAuthRepositoryProvider).currentUser();
-      return await _postUser(
+      return await postUser(
         idToken: storedIdToken!,
         nickname: user?.displayName ?? _defaultNickName,
         gender: Gender.female,
@@ -76,9 +76,10 @@ class Auth extends _$Auth {
     }
     _persistanceStorage.setValue(key, idToken);
 
-    final authState = await _postUser(
+    final authState = await postUser(
       idToken: idToken,
       nickname: user.displayName ?? _defaultNickName,
+      gender: Gender.female,
     );
     state = AsyncValue.data(authState);
     if (authState is SignedInState) {
@@ -116,10 +117,10 @@ class Auth extends _$Auth {
     }
   }
 
-  Future<AuthState> _postUser({
+  Future<AuthState> postUser({
     required String idToken,
     required String nickname,
-    Gender gender = Gender.female,
+    required Gender? gender,
   }) async {
     try {
       final response = await ref.read(usersRepositoryProvider).postUsers(

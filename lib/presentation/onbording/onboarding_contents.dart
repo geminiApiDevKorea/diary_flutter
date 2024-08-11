@@ -6,6 +6,7 @@ import 'package:diary_flutter/presentation/onbording/bottom_sheet/agreement_moda
 import 'package:diary_flutter/presentation/onbording/google_login_button.dart';
 import 'package:diary_flutter/presentation/onbording/onboarding_animated_text.dart';
 import 'package:diary_flutter/presentation/onbording/onbording_dot_indicator.dart';
+import 'package:diary_flutter/presentation/settings/setting_screen.dart';
 import 'package:diary_flutter/presentation/style/gem_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -41,6 +42,7 @@ class OnboardingContents extends HookConsumerWidget {
   _onSignIn(BuildContext context, WidgetRef ref) {
     final colors = GemTheme.of(ref).colors;
     ref.read(authProvider.notifier).signIn().then((value) => switch (value) {
+          // TODO : Gender Setting Test
           SignInState.needAgreement => showModalBottomSheet(
               backgroundColor: colors.modalBackground,
               context: context,
