@@ -25,6 +25,9 @@ class CustomTextFormField extends HookConsumerWidget {
     final controller = useTextEditingController(text: initialText);
     final input = useState(initialText);
     useEffect(() {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        onChangedInputText(input.value);
+      });
       onChanged() {
         input.value = controller.text;
         onChangedInputText(input.value);

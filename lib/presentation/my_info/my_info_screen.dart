@@ -1,4 +1,6 @@
+import 'package:diary_flutter/common/enums.dart';
 import 'package:diary_flutter/presentation/common/router.dart';
+import 'package:diary_flutter/presentation/my_info/my_info_option.dart';
 import 'package:diary_flutter/presentation/my_info/my_info_screen_header.dart';
 import 'package:diary_flutter/presentation/style/gem_theme.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +29,9 @@ class MyInfoScreen extends ConsumerWidget {
                 [
                   MyInfoScreenHeader(
                     previousScreen: previousScreen,
+                  ),
+                  ...MyInfoOptions.values.map(
+                    (value) => MyInfoOption(option: value),
                   ),
                 ],
               ),

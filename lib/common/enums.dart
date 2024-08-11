@@ -116,6 +116,8 @@ enum Gender {
   female,
   @JsonValue('MALE')
   male,
+  @JsonValue('FEMALE')
+  other,
 }
 
 enum TransitionDuration {
@@ -171,4 +173,58 @@ extension JournalListExtension on List<Journal> {
     if (isEmpty) return; // 빈 리스트인 경우 아무 작업도 하지 않음
     sort((a, b) => b.createdAt.compareTo(a.createdAt));
   }
+}
+
+enum SettingPhase {
+  name,
+  gender,
+}
+
+extension SettingPhaseExtension on SettingPhase {
+  bool get isLastSettingPhase => this == SettingPhase.gender;
+  String get title => switch (this) {
+        SettingPhase.name => 'Please enter\nyour nick name',
+        SettingPhase.gender => 'Please select\nyour gender',
+      };
+  String get description => switch (this) {
+        SettingPhase.name => 'You can change it later.',
+        SettingPhase.gender => 'We’ll recommend a playlist just for you.',
+      };
+
+  SettingPhase? get nextPhase => switch (this) {
+        SettingPhase.name => SettingPhase.gender,
+        SettingPhase.gender => null,
+      };
+}
+
+enum MyInfoOptions {
+  name,
+  gender,
+  openLicense,
+  privaryPolicy,
+  termsOfUse,
+  signOut,
+  deleteAccount,
+}
+
+extension MyInfoOptionsExtension on MyInfoOptions {
+  String get title => switch (this) {
+        MyInfoOptions.name => 'Name',
+        MyInfoOptions.gender => 'Gender',
+        MyInfoOptions.openLicense => 'Open License',
+        MyInfoOptions.privaryPolicy => 'Privacy Policy',
+        MyInfoOptions.termsOfUse => 'Terms of Use',
+        MyInfoOptions.signOut => 'Sign out',
+        MyInfoOptions.deleteAccount => 'Delete Account',
+      };
+  bool get isPrimary => switch (this) {
+        MyInfoOptions.deleteAccount => true,
+        _ => false,
+      };
+
+  bool get hasDetail => switch (this) {
+        MyInfoOptions.name => true,
+        MyInfoOptions.gender => true,
+        _ => false,
+      };
 }
