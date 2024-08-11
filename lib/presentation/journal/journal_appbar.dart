@@ -107,13 +107,14 @@ class JournalAppbar extends HookConsumerWidget {
       child: Container(
         padding: const EdgeInsets.fromLTRB(8, 8, 16, 8),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Hero(
               tag: 'calendarOrlist',
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
+              child: SizedBox(
+                width: 120,
+                height: 36,
                 child: IconTextButton(
                   text: 'List',
                   onPressed: () => handleListButton(ref, feedbackType, context),

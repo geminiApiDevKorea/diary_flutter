@@ -19,23 +19,39 @@ class IconTextButton extends ConsumerWidget {
     final colors = ref.gemColors;
 
     return SizedBox(
-      width: 100,
+      width: 109,
       height: 36,
-      child: ElevatedButton.icon(
-        label: Text(
-          text,
-          style: textStyle.button.copyWith(color: colors.grayScale0),
-        ),
-        icon: Icon(CupertinoIcons.back, size: 18, color: colors.grayScale50),
+      child: ElevatedButton(
+        onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: colors.subButtonBackground,
+          backgroundColor: colors.buttonBackground,
           elevation: 0,
           shadowColor: Colors.transparent,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(32),
           ),
+          padding: EdgeInsets.zero, // Remove default padding
         ),
-        onPressed: onPressed,
+        child: Padding(
+          padding: const EdgeInsets.only(
+              left: 6), // Add left padding for visual balance
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Icon(CupertinoIcons.back, size: 18, color: colors.grayScale50),
+              const SizedBox(width: 14), // Space between icon and text
+              Expanded(
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    text,
+                    style: textStyle.button.copyWith(color: colors.text),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

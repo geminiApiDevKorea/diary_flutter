@@ -4,6 +4,7 @@ import 'package:diary_flutter/data/model/journal.dart';
 import 'package:diary_flutter/domain/provider/journal/journal_use_cases.dart';
 import 'package:diary_flutter/presentation/common/provider/primitive_notifiers.dart';
 import 'package:diary_flutter/presentation/main/main_carousel_sliver.dart';
+import 'package:diary_flutter/presentation/main/main_horizontal_carousel.dart';
 import 'package:diary_flutter/presentation/style/index.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -66,7 +67,7 @@ class BottomTitleContainer extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
-      padding: const EdgeInsets.only(left: 56),
+      padding: const EdgeInsets.only(left: 36),
       child: Align(
         alignment: Alignment.centerLeft,
         child: Visibility(
@@ -95,9 +96,10 @@ class BottomTitle extends ConsumerWidget {
     //     journal.title ?? "Draft of \n${journal.createdAt.monthDayOrdinal}";
 
     return Container(
-      width: 300,
-      height: 200, // Adjust this height as needed
-
+      // color: Colors.amber,
+      width: MainHorizontalCarousel.cardWidth,
+      height: MainHorizontalCarousel.circleDiameter / 2,
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
         color: colors.primary100,
         borderRadius: BorderRadius.circular(8),
@@ -106,14 +108,18 @@ class BottomTitle extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         // mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+          const SizedBox(height: 4),
           Text(
             journal.title ?? "Draft of \n${journal.createdAt.monthDayOrdinal}",
-            style: textStyle.h1.withColor(colors.grayScale0).withFontSize(28),
+            style: textStyle.h1
+                .withColor(colors.grayScale0)
+                .withFontSize(28)
+                .withHeight(1.4),
             textAlign: TextAlign.left,
             maxLines: 3,
             overflow: TextOverflow.ellipsis,
           ),
-          const Spacer(),
+          const SizedBox(height: 10),
           Text(
             '${journal.createdAt.fullDateOrdinal} · ${journal.feedbackType.value.capitalize()}',
             style: textStyle.button.withColor(colors.caption),
