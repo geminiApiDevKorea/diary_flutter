@@ -16,9 +16,21 @@ extension DateTimeExtension on DateTime {
     'December'
   ];
 
-  static String _getOrdinal(int day) => day >= 11 && day <= 13
-      ? '${day}th'
-      : ['th', 'st', 'nd', 'rd', 'th'][day % 10 < 4 ? day % 10 : 4];
+  static String _getOrdinal(int day) {
+    if (day >= 11 && day <= 13) {
+      return '${day}th';
+    }
+    switch (day % 10) {
+      case 1:
+        return '${day}st';
+      case 2:
+        return '${day}nd';
+      case 3:
+        return '${day}rd';
+      default:
+        return '${day}th';
+    }
+  }
 
   String get yyyyMM => '$year-${month.toString().padLeft(2, '0')}';
   String get yyyyMMdd =>
