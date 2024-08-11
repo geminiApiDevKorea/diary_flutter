@@ -81,6 +81,7 @@ class OnboardingContents extends HookConsumerWidget {
         return Container(
           color: Colors.transparent,
           child: SafeArea(
+            bottom: false,
             child: Padding(
               padding: const EdgeInsets.only(
                 left: 16.0,

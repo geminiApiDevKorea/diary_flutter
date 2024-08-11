@@ -1,8 +1,11 @@
+import 'package:diary_flutter/common/enums.dart';
 import 'package:diary_flutter/domain/provider/auth/auth.dart';
+import 'package:diary_flutter/domain/provider/auth/get_my_id_token.dart';
 import 'package:diary_flutter/presentation/common/bottom_fulfilled_button.dart';
-import 'package:diary_flutter/presentation/common/input_field.dart';
 import 'package:diary_flutter/presentation/onbording/onbording_dot_indicator.dart';
 import 'package:diary_flutter/presentation/settings/setting_app_bar.dart';
+import 'package:diary_flutter/presentation/settings/setting_gender.dart';
+import 'package:diary_flutter/presentation/settings/setting_name_text_field.dart';
 import 'package:diary_flutter/presentation/style/index.dart';
 import 'package:diary_flutter/presentation/welcome/welcome_screen.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +21,13 @@ class SettingScreen extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final colors = GemTheme.of(ref).colors;
     final textStyle = GemTheme.of(ref).textStyle;
-    final isValidNickname = useState(false);
+    final isEnableNext = useState(false);
+    final settingPhase = useState(SettingPhase.name);
+    final selectedGender = useState<Gender?>(null);
+    final insertedName = useState<String>('');
+    final nextAnimationController = useAnimationController(
+      duration: const Duration(milliseconds: 200),
+    );
     return Scaffold(
       body: Container(
         color: colors.background,
@@ -33,52 +42,69 @@ class SettingScreen extends HookConsumerWidget {
                   children: [
                     const SettingAppBar(),
                     const SizedBox(height: 10),
-                    const OnbordingDotIndicator(
-                      currentIndex: 0,
-                      indicatorCount: 2,
+                    OnbordingDotIndicator(
+                      currentIndex: settingPhase.value.index,
+                      indicatorCount: SettingPhase.values.length,
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      'Please enter\nyour nick name',
+                      settingPhase.value.title,
                       style: textStyle.h2,
                     ),
                     const SizedBox(height: 6),
                     Text(
-                      'You can change it later.',
+                      settingPhase.value.description,
                       style: textStyle.paragraph.withColor(colors.caption),
                     ),
-                    const SizedBox(height: 16),
-                    ref.watch(authProvider).when(
-                          data: (authState) {
-                            final state = authState;
-                            if (state is SignedInState) {
-                              isValidNickname.value = state.name.length >= 2;
-                              return CustomTextFormField(
-                                initialText: state.name,
-                                isEditable: false,
-                                maxLength: 20,
-                                minLength: 2,
-                                onChangedInputText: (inputText) {
-                                  isValidNickname.value = inputText.length >= 2;
-                                },
-                              );
-                            } else {
-                              return const SizedBox();
-                            }
+                    SizedBox(
+                        height:
+                            settingPhase.value == SettingPhase.name ? 16 : 42),
+                    Stack(
+                      children: [
+                        SettingNameTextField(
+                          onChangedName: (name) {
+                            insertedName.value = name;
+                            isEnableNext.value = name.length >= 2;
                           },
-                          loading: () => const CircularProgressIndicator(),
-                          error: (error, _) => Text('Error: $error'),
+                          animation: nextAnimationController,
                         ),
+                        SettingGender(
+                          selectedGender: selectedGender.value,
+                          onSelect: (gender) {
+                            isEnableNext.value = true;
+                            selectedGender.value = gender;
+                          },
+                          animation: nextAnimationController,
+                        ),
+                      ],
+                    ),
                     const Spacer(),
                   ],
                 ),
               ),
               BottomFulfilledButton(
-                title: 'Next',
-                isEnabled: isValidNickname.value,
+                title:
+                    settingPhase.value.isLastSettingPhase ? 'Submit' : 'Next',
+                isEnabled: isEnableNext.value,
                 onTap: (isEnabled) {
                   if (isEnabled) {
-                    context.pushReplacement(WelcomeScreen.path);
+                    final nextPhase = settingPhase.value.nextPhase;
+                    if (nextPhase != null) {
+                      isEnableNext.value = false;
+                      settingPhase.value = nextPhase;
+                      nextAnimationController.forward();
+                    } else {
+                      final idToken = ref.read(getMyIdTokenProvider);
+                      ref
+                          .read(authProvider.notifier)
+                          .postUser(
+                              idToken: idToken,
+                              nickname: insertedName.value,
+                              gender: selectedGender.value ?? Gender.other)
+                          .then(
+                            (_) => context.pushReplacement(WelcomeScreen.path),
+                          );
+                    }
                   }
                 },
               ),

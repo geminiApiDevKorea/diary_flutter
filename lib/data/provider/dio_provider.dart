@@ -12,7 +12,7 @@ Dio dio(DioRef ref, {required String baseUrl}) {
     ),
   );
   dio.interceptors.addAll([
-    PrettyDioLogger(),
+    PrettyDioLogger(requestBody: true),
   ]);
   return dio;
 }

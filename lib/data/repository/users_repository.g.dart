@@ -19,18 +19,19 @@ Map<String, dynamic> _$UsersAgreementBodyToJson(UsersAgreementBody instance) =>
 UsersRequestBody _$UsersRequestBodyFromJson(Map<String, dynamic> json) =>
     UsersRequestBody(
       nickname: json['nickname'] as String,
-      gender: $enumDecode(_$GenderEnumMap, json['gender']),
+      gender: $enumDecodeNullable(_$GenderEnumMap, json['gender']),
     );
 
 Map<String, dynamic> _$UsersRequestBodyToJson(UsersRequestBody instance) =>
     <String, dynamic>{
       'nickname': instance.nickname,
-      'gender': _$GenderEnumMap[instance.gender]!,
+      'gender': _$GenderEnumMap[instance.gender],
     };
 
 const _$GenderEnumMap = {
   Gender.female: 'FEMALE',
   Gender.male: 'MALE',
+  Gender.other: 'FEMALE',
 };
 
 // **************************************************************************
