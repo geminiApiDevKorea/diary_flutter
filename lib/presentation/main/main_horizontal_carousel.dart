@@ -93,10 +93,7 @@ class MainHorizontalCarousel extends ConsumerWidget {
         ..translate(0.0, -ratio * 127, 0)
         ..scale(1 - ratio.abs() * 0.15),
       alignment: Alignment.center,
-      child: Opacity(
-        opacity: 1 - ratio.abs() * 0.2,
-        child: child,
-      ),
+      child: child,
     );
   }
 
@@ -313,7 +310,7 @@ class JournalImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return imgUrl != null
         ? ClipRRect(
-            borderRadius: BorderRadius.circular(128),
+            borderRadius: BorderRadius.circular(300),
             child: CachedNetworkImage(
               imageUrl: imgUrl!,
               width: MainHorizontalCarousel.circleDiameter,

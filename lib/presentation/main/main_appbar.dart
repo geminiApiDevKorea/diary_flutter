@@ -49,7 +49,6 @@ class MainAppbar extends HookConsumerWidget {
       delay: const Duration(milliseconds: 400),
       context,
       () {
-        ref.read(focusedDateProvider.notifier).updateDate(DateTime.now());
         listButtonAnimationController.value = 0;
         Future.microtask(() => listButtonAnimationController.forward());
       },

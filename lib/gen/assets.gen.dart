@@ -56,6 +56,21 @@ class $AssetsFontsGen {
       ];
 }
 
+class $AssetsIconsGen {
+  const $AssetsIconsGen();
+
+  /// File path: assets/icons/blankicon.png
+  AssetGenImage get blankicon =>
+      const AssetGenImage('assets/icons/blankicon.png');
+
+  /// File path: assets/icons/icon_1024.png
+  AssetGenImage get icon1024 =>
+      const AssetGenImage('assets/icons/icon_1024.png');
+
+  /// List of all assets
+  List<AssetGenImage> get values => [blankicon, icon1024];
+}
+
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
@@ -131,6 +146,7 @@ class Assets {
   Assets._();
 
   static const $AssetsFontsGen fonts = $AssetsFontsGen();
+  static const $AssetsIconsGen icons = $AssetsIconsGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();
   static const $AssetsLottiesGen lotties = $AssetsLottiesGen();
 }

@@ -76,6 +76,8 @@ dev_dependencies:
   envied_generator: ^0.5.4+1
   retrofit_generator: ^8.1.0
   flutter_gen_runner: ^5.6.0
+  flutter_launcher_icons: '^0.13.1'
+  flutter_native_splash: ^2.4.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -91,6 +93,7 @@ flutter:
     - assets/fonts/
     - assets/images/
     - assets/lotties/
+    - assets/icons/
 
   fonts:
     - family: Adamina
