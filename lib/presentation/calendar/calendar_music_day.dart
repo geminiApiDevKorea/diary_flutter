@@ -19,6 +19,7 @@ class CalendarMusicDay extends StatelessWidget {
           borderRadius: BorderRadius.circular(15.0),
           child: CachedNetworkImage(
             imageUrl: musicDiary.musicThumbnailImageUrl,
+            fit: BoxFit.cover,
             placeholder: (context, url) => const CircularProgressIndicator(),
             errorWidget: (context, url, error) => const Icon(Icons.error),
           ),

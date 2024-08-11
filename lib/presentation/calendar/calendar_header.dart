@@ -11,7 +11,7 @@ class CalendarHeader extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final textStyle = GemTheme.of(ref).textStyle;
-    final calendarChangeNotifier = CalendarInheritedNotifier.read(context);
+    final calendarChangeNotifier = CalendarInheritedNotifier.watch(context);
     final selectedDateTime = calendarChangeNotifier.selectedDateTime;
     return SizedBox(
       width: double.infinity,
