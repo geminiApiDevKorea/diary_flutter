@@ -26,7 +26,7 @@ class MainHeaderButton extends ConsumerWidget {
         borderRadius: BorderRadius.circular(32),
         onTap: onTap,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6.0),
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 6.0),
           child: SizedBox(
             height: 31,
             width: width ?? 130,
