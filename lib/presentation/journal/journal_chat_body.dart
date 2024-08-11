@@ -107,7 +107,8 @@ class ChatJournalBody extends JournalBody {
                 feedbackType: FeedbackType.chat,
               ),
               Text(
-                'Hi $myName\nHow was your day?',
+                'Hi $myName\nHow wasyour day?',
+                textAlign: TextAlign.start,
                 style: textStyle.paragraph
                     .withColor(colors.grayScale60)
                     .withHeight(1.2),

@@ -2,6 +2,7 @@ import 'package:diary_flutter/presentation/common/popup/confirm_popup.dart';
 import 'package:diary_flutter/presentation/common/popup/popup_button_param.dart';
 import 'package:diary_flutter/presentation/style/gem_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:palestine_console/palestine_console.dart';
 
 enum ConfirmationResult {
   cancel,
@@ -31,17 +32,20 @@ Future<ConfirmationResult?> showConfirmDialog({
             isPrimary: false,
             onTap: (popupContext) async {
               FocusScope.of(context).unfocus();
+
               onClose?.call();
               Navigator.pop(popupContext, ConfirmationResult.cancel);
+              FocusScope.of(context).unfocus();
             },
           ),
           PopupButtonParam(
             title: rightButtonTitle ?? 'Confirm',
             isPrimary: true,
             onTap: (popupContext) async {
-              FocusScope.of(context).unfocus();
               onConfirm?.call();
+
               Navigator.pop(popupContext, ConfirmationResult.confirm);
+              FocusScope.of(context).unfocus();
             },
           ),
         ],

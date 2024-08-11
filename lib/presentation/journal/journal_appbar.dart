@@ -11,10 +11,89 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class JournalAppbar extends HookConsumerWidget with JournalAppbarHandlerMixin {
-  JournalAppbar({super.key, required this.feedbackType, required this.context});
+class JournalAppbar extends HookConsumerWidget {
+  const JournalAppbar(
+      {super.key, required this.feedbackType, required this.context});
   final BuildContext context;
   final FeedbackType feedbackType;
+
+  _hideKeyboardIfNeed(BuildContext context) async {
+    final isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom > 0;
+    FocusScope.of(context).unfocus();
+    if (isKeyboardVisible) {
+      await Future.delayed(const Duration(milliseconds: 300));
+    }
+    if (!context.mounted) return;
+  }
+
+  Future<void> handleListButton(
+      WidgetRef ref, FeedbackType feedbackType, BuildContext context) async {
+    final journalEventNotifier = ref.read(journalServiceProvider(
+            feedbackType: feedbackType,
+            focusedDate: ref.watch(focusedDateProvider))
+        .notifier);
+    await journalEventNotifier.onList();
+    if (context.mounted) context.pop();
+  }
+
+  Future<void> handleDeleteButton(
+      BuildContext context, WidgetRef ref, FeedbackType feedbackType) async {
+    _hideKeyboardIfNeed(context).then((_) async {
+      final colors = ref.gemColors;
+      final journalEventNotifier = ref.read(journalServiceProvider(
+              feedbackType: feedbackType,
+              focusedDate: ref.watch(focusedDateProvider))
+          .notifier);
+
+      // ignore: unused_local_variable
+      final result = await showConfirmDialog(
+        context: context,
+        colors: colors,
+        title: 'Delete Journal',
+        description: 'Once you delete this journal, it cannot be recovered.',
+        onConfirm: () async {
+          journalEventNotifier.onDelete();
+
+          context.pop();
+        },
+      );
+    });
+
+    // if (result == DeleteConfirmationResult.confirm) {
+    //   if (context.mounted) {
+    //     FocusScope.of(context).unfocus();
+    //   }
+    // }
+  }
+
+  Future<void> handleFinishButton(
+      BuildContext context, WidgetRef ref, FeedbackType feedbackType) async {
+    // 현재 키보드 가시성 확인
+    final isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom > 0;
+
+    // 키보드 숨기기
+    FocusScope.of(context).unfocus();
+
+    // 키보드가 보이는 상태였다면 잠시 대기
+    if (isKeyboardVisible) {
+      await Future.delayed(const Duration(milliseconds: 300));
+    }
+
+    // 컨텍스트가 여전히 유효한지 확인
+    if (!context.mounted) return;
+
+    final journalEventNotifier = ref.read(journalServiceProvider(
+            feedbackType: feedbackType,
+            focusedDate: ref.read(focusedDateProvider))
+        .notifier);
+    await journalEventNotifier.onList(); //비어잇으면 빈거라도저장
+    if (context.mounted) {
+      FocusScope.of(context).unfocus();
+      await context.pushNamed(JournalCompletionScreen.name, queryParameters: {
+        QueryParameterKeys.feedbackType.value: feedbackType.value,
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -92,98 +171,5 @@ class JournalAppbar extends HookConsumerWidget with JournalAppbarHandlerMixin {
         ),
       ),
     );
-  }
-}
-
-mixin JournalAppbarHandlerMixin {
-  Future<void> handleListButton(
-      WidgetRef ref, FeedbackType feedbackType, BuildContext context) async {
-    final journalEventNotifier = ref.read(journalServiceProvider(
-            feedbackType: feedbackType,
-            focusedDate: ref.watch(focusedDateProvider))
-        .notifier);
-    await journalEventNotifier.onList();
-    if (context.mounted) context.pop();
-  }
-
-  Future<void> handleDeleteButton(
-      BuildContext context, WidgetRef ref, FeedbackType feedbackType) async {
-    // // 현재 키보드 가시성 확인
-    // final isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom > 0;
-
-    // // 키보드 숨기기
-    // FocusScope.of(context).unfocus();
-
-    // // 키보드가 보이는 상태였다면 잠시 대기
-    // if (isKeyboardVisible) {
-    //   await Future.delayed(const Duration(milliseconds: 300));
-    // }
-
-    // // 컨텍스트가 여전히 유효한지 확인
-    // if (!context.mounted) return;
-
-    final colors = ref.gemColors;
-    final journalEventNotifier = ref.read(journalServiceProvider(
-            feedbackType: feedbackType,
-            focusedDate: ref.watch(focusedDateProvider))
-        .notifier);
-
-    // ignore: unused_local_variable
-    final result = await showConfirmDialog(
-      context: context,
-      colors: colors,
-      title: 'Delete Journal',
-      description: 'Once you delete this journal, it cannot be recovered.',
-      onClose: () async {
-        if (context.mounted) {
-          FocusScope.of(context).unfocus();
-
-          // context.pop();
-        }
-      },
-      onConfirm: () async {
-        await journalEventNotifier.onDelete();
-        if (context.mounted) {
-          // context.pop();
-          context.pop();
-        }
-      },
-    );
-    // if (result == DeleteConfirmationResult.confirm) {
-    //   if (context.mounted) {
-    //     FocusScope.of(context).unfocus();
-    //   }
-    // }
-  }
-
-  Future<void> handleFinishButton(
-      BuildContext context, WidgetRef ref, FeedbackType feedbackType) async {
-    // 현재 키보드 가시성 확인
-    final isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom > 0;
-
-    // 키보드 숨기기
-    FocusScope.of(context).unfocus();
-
-    // 키보드가 보이는 상태였다면 잠시 대기
-    if (isKeyboardVisible) {
-      await Future.delayed(const Duration(milliseconds: 300));
-    }
-
-    // 컨텍스트가 여전히 유효한지 확인
-    if (!context.mounted) return;
-
-    final journalEventNotifier = ref.read(journalServiceProvider(
-            feedbackType: feedbackType,
-            focusedDate: ref.read(focusedDateProvider))
-        .notifier);
-    await journalEventNotifier.onList(); //비어잇으면 빈거라도저장
-    if (context.mounted) {
-      await context.pushNamed(JournalCompletionScreen.name, queryParameters: {
-        QueryParameterKeys.feedbackType.value: feedbackType.value,
-      });
-    }
-    if (context.mounted) {
-      FocusScope.of(context).unfocus();
-    }
   }
 }

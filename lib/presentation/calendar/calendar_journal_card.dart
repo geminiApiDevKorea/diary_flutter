@@ -4,6 +4,7 @@ import 'package:diary_flutter/data/repository/diary_repository.dart';
 import 'package:diary_flutter/domain/provider/common/focused_date.dart';
 import 'package:diary_flutter/gen/gen_assets.dart';
 import 'package:diary_flutter/presentation/calendar/calendar_journal_music_chip.dart';
+import 'package:diary_flutter/presentation/common/router.dart';
 import 'package:diary_flutter/presentation/journal/journal_screen.dart';
 import 'package:diary_flutter/presentation/style/gem_text_style.dart';
 import 'package:diary_flutter/presentation/style/gem_theme.dart';
@@ -34,7 +35,7 @@ class CalendarJournalCard extends ConsumerWidget {
                 .updateDate(diary.dateTime);
             if (context.mounted) {
               await context.pushNamed(JournalScreen.name, queryParameters: {
-                'type': diary.type.value,
+                QueryParameterKeys.feedbackType.value: diary.type.value,
               });
             }
           },

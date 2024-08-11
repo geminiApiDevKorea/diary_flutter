@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:diary_flutter/domain/provider/journal/my_journal_store.dart';
 import 'package:diary_flutter/presentation/calendar/calendar_screen.dart';
 import 'package:diary_flutter/presentation/common/hook/use_sync_animation_value.dart';
 import 'package:diary_flutter/presentation/common/hook/use_top_of_stack_callback.dart';
@@ -9,26 +10,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:palestine_console/palestine_console.dart';
 
 class MainAppbar extends HookConsumerWidget {
   const MainAppbar({
     super.key,
   });
 
-  // /// 액션 버튼 생성 함수
-  // Widget _buildActionButton({
-  //   required WidgetRef ref,
-  //   required String text,
-  //   required VoidCallback onPressed,
-  //   required Color color,
-  // }) {
-  //   final textStyle = ref.gemTextStyle;
+  /// 액션 버튼 생성 함수
+  Widget _buildActionButton({
+    required WidgetRef ref,
+    required String text,
+    required VoidCallback onPressed,
+    required Color color,
+  }) {
+    final textStyle = ref.gemTextStyle;
 
-  //   return TextButton(
-  //     onPressed: onPressed,
-  //     child: Text(text, style: textStyle.button.withColor(color)),
-  //   );
-  // }
+    return TextButton(
+      onPressed: onPressed,
+      child: Text(text, style: textStyle.button.withColor(color)),
+    );
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -98,10 +100,10 @@ class MainAppbar extends HookConsumerWidget {
                 ),
               ),
             ),
-            // // -> 삭제예정
-            // const Spacer(),
+            // -> 삭제예정
+            const Spacer(),
 
-            // /// 일기 삭제 버튼 -> 삭제예정
+            /// 일기 삭제 버튼 -> 삭제예정
             // _buildActionButton(
             //   text: "일기삭제",
             //   ref: ref,

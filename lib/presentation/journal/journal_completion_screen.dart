@@ -59,23 +59,16 @@ class JournalCompletionScreen extends HookConsumerWidget {
         leftButtonTitle: 'No',
         rightButtonTitle: 'Yes',
         description: 'You cannot write more or modify the content for today.',
-        onClose: () {
-          FocusScope.of(context).unfocus();
-        },
         onConfirm: () async {
           FocusScope.of(context).unfocus();
           final newTitle = textController.text.isEmpty
               ? focusedDate.monthDayOrdinal
               : textController.text;
-          await journalEventNotifier.onSave(
+          journalEventNotifier.onSave(
               newTitle: newTitle, feedbackType: feedbackType);
+          context.pop();
         },
       );
-
-      if (result == ConfirmationResult.confirm && context.mounted) {
-        FocusScope.of(context).unfocus();
-        context.pop();
-      }
     });
   }
 

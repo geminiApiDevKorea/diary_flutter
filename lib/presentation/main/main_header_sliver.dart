@@ -56,7 +56,7 @@ class MainHeader extends HookConsumerWidget {
           children: [
             Text("Good Evening, $myName",
                 style: textStyle.paragraph.withColor(colors.grayScale60)),
-            Text("How was\n your day?", style: textStyle.h1),
+            Text("How was\nyour day?", style: textStyle.h1),
             const SizedBox(height: 50),
             AnimatedSwitcher(
               duration: const Duration(milliseconds: 300),
