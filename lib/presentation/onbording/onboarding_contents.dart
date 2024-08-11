@@ -1,7 +1,7 @@
 import 'package:diary_flutter/domain/provider/auth/auth.dart';
 import 'package:diary_flutter/domain/provider/onboarding/onbording_notifier.dart';
 import 'package:diary_flutter/presentation/common/horizontal_swipe_detector.dart';
-import 'package:diary_flutter/presentation/main_screen.dart';
+import 'package:diary_flutter/presentation/main/main_screen.dart';
 import 'package:diary_flutter/presentation/onbording/bottom_sheet/agreement_modal_bottom_sheet.dart';
 import 'package:diary_flutter/presentation/onbording/google_login_button.dart';
 import 'package:diary_flutter/presentation/onbording/onboarding_animated_text.dart';

@@ -26,10 +26,12 @@ class CustomTransitions {
     required LocalKey key,
     required SlideDirection from,
     Duration transitionDuration = const Duration(milliseconds: 400),
+    Duration reverseTransitionDuration = const Duration(milliseconds: 400),
     Curve curve = Curves.easeInOut,
   }) {
     return CustomTransitionPage<void>(
       transitionDuration: transitionDuration,
+      reverseTransitionDuration: transitionDuration,
       key: key,
       child: child,
       transitionsBuilder: (context, animation, secondaryAnimation, child) =>

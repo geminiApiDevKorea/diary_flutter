@@ -1,5 +1,5 @@
 import 'package:diary_flutter/domain/provider/auth/auth.dart';
-import 'package:diary_flutter/presentation/main_screen.dart';
+import 'package:diary_flutter/presentation/main/main_screen.dart';
 import 'package:diary_flutter/presentation/onbording/onbording_screen.dart';
 import 'package:diary_flutter/presentation/onbording/onbording_title.dart';
 import 'package:diary_flutter/presentation/style/gem_theme.dart';

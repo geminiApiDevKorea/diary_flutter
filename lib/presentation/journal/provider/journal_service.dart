@@ -7,7 +7,6 @@ import 'package:diary_flutter/presentation/journal/provider/feedback_active.dart
 import 'package:diary_flutter/presentation/journal/provider/post_text_input.dart';
 import 'package:palestine_console/palestine_console.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:diary_flutter/data/model/journal.dart';
 
 part 'journal_service.g.dart';
 
@@ -39,7 +38,7 @@ class JournalService extends _$JournalService {
 
   @override
   JournalState build({
-    required JournalType journalType,
+    required FeedbackType feedbackType,
     required DateTime focusedDate,
   }) {
     return const JournalInitial();
@@ -47,41 +46,41 @@ class JournalService extends _$JournalService {
 
   // onList 메서드 구현
   Future<void> onList() async {
-    switch (journalType) {
-      case JournalType.post:
+    switch (feedbackType) {
+      case FeedbackType.post:
         final hasFeedback = ref.read(hasFeedbackProvider(focusedDate));
         if (hasFeedback) return;
         ref.read(myJournalStoreProvider.notifier).createOrUpdateUserInput(
-            focusedDate, ref.read(postTextInputProvider) ?? '', journalType);
-      case JournalType.chat:
+            focusedDate, ref.read(postTextInputProvider) ?? '', feedbackType);
+      case FeedbackType.chat:
         final hasFeedback = ref.read(hasFeedbackProvider(focusedDate));
         if (hasFeedback) return;
         ref.read(myJournalStoreProvider.notifier).createOrUpdateUserInput(
-            focusedDate, ref.read(postTextInputProvider) ?? '', journalType);
+            focusedDate, ref.read(postTextInputProvider) ?? '', feedbackType);
     }
   }
 
   // onDelete 메서드 구현
   Future<void> onDelete() async {
-    switch (journalType) {
-      case JournalType.post:
+    switch (feedbackType) {
+      case FeedbackType.post:
         ref.read(myJournalStoreProvider.notifier).delete(focusedDate);
 
-      case JournalType.chat:
+      case FeedbackType.chat:
         ref.read(myJournalStoreProvider.notifier).delete(focusedDate);
     }
   }
 
   // onSave 메서드 구현
   Future<void> onSave(
-      {required String newTitle, required JournalType journalType}) async {
-    switch (journalType) {
-      case JournalType.post:
+      {required String newTitle, required FeedbackType feedbackType}) async {
+    switch (feedbackType) {
+      case FeedbackType.post:
         await ref.read(myJournalStoreProvider.notifier).createOrUpdateUserInput(
-            focusedDate, ref.read(postTextInputProvider) ?? '', journalType);
+            focusedDate, ref.read(postTextInputProvider) ?? '', feedbackType);
         await ref
             .read(myJournalStoreProvider.notifier)
-            .createOrUpdateTitle(focusedDate, newTitle, journalType);
+            .createOrUpdateTitle(focusedDate, newTitle, feedbackType);
         final journal =
             await ref.read(myJournalStoreProvider.notifier).read(focusedDate);
         Print.yellow('Journal: $journal');
@@ -110,13 +109,13 @@ class JournalService extends _$JournalService {
         }
 
         Print.blue('Finishing Post journal');
-      case JournalType.chat:
+      case FeedbackType.chat:
         await ref
             .read(myJournalStoreProvider.notifier)
-            .createOrUpdateUserInput(focusedDate, 'yes, please', journalType);
+            .createOrUpdateUserInput(focusedDate, 'yes, please', feedbackType);
         await ref
             .read(myJournalStoreProvider.notifier)
-            .createOrUpdateTitle(focusedDate, newTitle, journalType);
+            .createOrUpdateTitle(focusedDate, newTitle, feedbackType);
         final journal =
             await ref.read(myJournalStoreProvider.notifier).read(focusedDate);
         Print.yellow('Journal: $journal');

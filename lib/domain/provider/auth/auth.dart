@@ -69,7 +69,7 @@ class Auth extends _$Auth {
     if (user == null) {
       return SignInState.unsignedIn;
     }
-    print('uid: ${user.uid}');
+    // print('uid: ${user.uid}');
     final idToken = await user.getIdToken();
     if (idToken == null || idToken.isEmpty) {
       return SignInState.unsignedIn;

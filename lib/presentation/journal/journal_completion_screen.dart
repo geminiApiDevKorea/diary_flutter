@@ -1,5 +1,5 @@
+import 'package:diary_flutter/common/enums.dart';
 import 'package:diary_flutter/common/extension/date_time_extension.dart';
-import 'package:diary_flutter/data/model/journal.dart';
 import 'package:diary_flutter/domain/provider/common/focused_date.dart';
 import 'package:diary_flutter/presentation/journal/confirm_dialog.dart';
 import 'package:diary_flutter/presentation/journal/provider/feedback_active.dart';
@@ -13,14 +13,14 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 class JournalCompletionScreen extends HookConsumerWidget {
   static const String path = 'completion';
   static const String name = 'journal_completion';
-  final String type;
-  const JournalCompletionScreen({super.key, required this.type});
+  final FeedbackType feedbackType;
+  const JournalCompletionScreen({super.key, required this.feedbackType});
 
-  JournalType get journalType => switch (type) {
-        'post' => JournalType.post,
-        'chat' => JournalType.chat,
-        _ => throw ArgumentError('Invalid journal type: $type'),
-      };
+  // FeedbackType get feedbackType => switch (type) {
+  //       'post' => FeedbackType.post,
+  //       'chat' => FeedbackType.chat,
+  //       _ => throw ArgumentError('Invalid journal type: $type'),
+  //     };
 
   _hideKeyboardIfNeed(BuildContext context) async {
     final isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom > 0;
@@ -32,7 +32,10 @@ class JournalCompletionScreen extends HookConsumerWidget {
   }
 
   _back(BuildContext context) {
-    _hideKeyboardIfNeed(context).then((_) => context.pop());
+    _hideKeyboardIfNeed(context).then((_) {
+      if (!context.mounted) return;
+      context.pop();
+    });
   }
 
   _save(
@@ -40,11 +43,12 @@ class JournalCompletionScreen extends HookConsumerWidget {
     WidgetRef ref,
     TextEditingController textController,
     DateTime focusedDate,
+    FeedbackType feedbackType,
   ) {
     _hideKeyboardIfNeed(context).then((_) async {
       final colors = ref.gemColors;
       final journalEventNotifier = ref.read(journalServiceProvider(
-              journalType: journalType,
+              feedbackType: feedbackType,
               focusedDate: ref.watch(focusedDateProvider))
           .notifier);
 
@@ -55,16 +59,20 @@ class JournalCompletionScreen extends HookConsumerWidget {
         leftButtonTitle: 'No',
         rightButtonTitle: 'Yes',
         description: 'You cannot write more or modify the content for today.',
+        onClose: () {
+          FocusScope.of(context).unfocus();
+        },
         onConfirm: () async {
+          FocusScope.of(context).unfocus();
           final newTitle = textController.text.isEmpty
-              ? focusedDate.toMonthDayOrdinal()
+              ? focusedDate.monthDayOrdinal
               : textController.text;
           await journalEventNotifier.onSave(
-              newTitle: newTitle, journalType: journalType);
+              newTitle: newTitle, feedbackType: feedbackType);
         },
       );
 
-      if (result == DeleteConfirmationResult.confirm && context.mounted) {
+      if (result == ConfirmationResult.confirm && context.mounted) {
         FocusScope.of(context).unfocus();
         context.pop();
       }
@@ -114,12 +122,8 @@ class JournalCompletionScreen extends HookConsumerWidget {
                         style:
                             textStyle.button.copyWith(color: colors.primary50),
                       ),
-                      onPressed: () => _save(
-                        context,
-                        ref,
-                        textController,
-                        focusedDate,
-                      ),
+                      onPressed: () => _save(context, ref, textController,
+                          focusedDate, feedbackType),
                     ),
                   ],
                 ),
@@ -143,7 +147,7 @@ class JournalCompletionScreen extends HookConsumerWidget {
                           borderRadius: BorderRadius.circular(30),
                           borderSide: BorderSide.none,
                         ),
-                        hintText: focusedDate.toMonthDayOrdinal(),
+                        hintText: focusedDate.monthDayOrdinal,
                         hintStyle:
                             textStyle.paragraph.withColor(colors.placeholder)),
                   ),

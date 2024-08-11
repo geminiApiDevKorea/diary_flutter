@@ -6,7 +6,7 @@ part of 'journal_service.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$journalServiceHash() => r'86190878a369fac47fc98d6a0442eecf69889685';
+String _$journalServiceHash() => r'ad3a70c14f3717a6eee7536b26bfb90e98be2453';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -31,11 +31,11 @@ class _SystemHash {
 
 abstract class _$JournalService
     extends BuildlessAutoDisposeNotifier<JournalState> {
-  late final JournalType journalType;
+  late final FeedbackType feedbackType;
   late final DateTime focusedDate;
 
   JournalState build({
-    required JournalType journalType,
+    required FeedbackType feedbackType,
     required DateTime focusedDate,
   });
 }
@@ -51,11 +51,11 @@ class JournalServiceFamily extends Family<JournalState> {
 
   /// See also [JournalService].
   JournalServiceProvider call({
-    required JournalType journalType,
+    required FeedbackType feedbackType,
     required DateTime focusedDate,
   }) {
     return JournalServiceProvider(
-      journalType: journalType,
+      feedbackType: feedbackType,
       focusedDate: focusedDate,
     );
   }
@@ -65,7 +65,7 @@ class JournalServiceFamily extends Family<JournalState> {
     covariant JournalServiceProvider provider,
   ) {
     return call(
-      journalType: provider.journalType,
+      feedbackType: provider.feedbackType,
       focusedDate: provider.focusedDate,
     );
   }
@@ -90,11 +90,11 @@ class JournalServiceProvider
     extends AutoDisposeNotifierProviderImpl<JournalService, JournalState> {
   /// See also [JournalService].
   JournalServiceProvider({
-    required JournalType journalType,
+    required FeedbackType feedbackType,
     required DateTime focusedDate,
   }) : this._internal(
           () => JournalService()
-            ..journalType = journalType
+            ..feedbackType = feedbackType
             ..focusedDate = focusedDate,
           from: journalServiceProvider,
           name: r'journalServiceProvider',
@@ -105,7 +105,7 @@ class JournalServiceProvider
           dependencies: JournalServiceFamily._dependencies,
           allTransitiveDependencies:
               JournalServiceFamily._allTransitiveDependencies,
-          journalType: journalType,
+          feedbackType: feedbackType,
           focusedDate: focusedDate,
         );
 
@@ -116,11 +116,11 @@ class JournalServiceProvider
     required super.allTransitiveDependencies,
     required super.debugGetCreateSourceHash,
     required super.from,
-    required this.journalType,
+    required this.feedbackType,
     required this.focusedDate,
   }) : super.internal();
 
-  final JournalType journalType;
+  final FeedbackType feedbackType;
   final DateTime focusedDate;
 
   @override
@@ -128,7 +128,7 @@ class JournalServiceProvider
     covariant JournalService notifier,
   ) {
     return notifier.build(
-      journalType: journalType,
+      feedbackType: feedbackType,
       focusedDate: focusedDate,
     );
   }
@@ -139,14 +139,14 @@ class JournalServiceProvider
       origin: this,
       override: JournalServiceProvider._internal(
         () => create()
-          ..journalType = journalType
+          ..feedbackType = feedbackType
           ..focusedDate = focusedDate,
         from: from,
         name: null,
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
-        journalType: journalType,
+        feedbackType: feedbackType,
         focusedDate: focusedDate,
       ),
     );
@@ -161,14 +161,14 @@ class JournalServiceProvider
   @override
   bool operator ==(Object other) {
     return other is JournalServiceProvider &&
-        other.journalType == journalType &&
+        other.feedbackType == feedbackType &&
         other.focusedDate == focusedDate;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, journalType.hashCode);
+    hash = _SystemHash.combine(hash, feedbackType.hashCode);
     hash = _SystemHash.combine(hash, focusedDate.hashCode);
 
     return _SystemHash.finish(hash);
@@ -176,8 +176,8 @@ class JournalServiceProvider
 }
 
 mixin JournalServiceRef on AutoDisposeNotifierProviderRef<JournalState> {
-  /// The parameter `journalType` of this provider.
-  JournalType get journalType;
+  /// The parameter `feedbackType` of this provider.
+  FeedbackType get feedbackType;
 
   /// The parameter `focusedDate` of this provider.
   DateTime get focusedDate;
@@ -189,7 +189,8 @@ class _JournalServiceProviderElement
   _JournalServiceProviderElement(super.provider);
 
   @override
-  JournalType get journalType => (origin as JournalServiceProvider).journalType;
+  FeedbackType get feedbackType =>
+      (origin as JournalServiceProvider).feedbackType;
   @override
   DateTime get focusedDate => (origin as JournalServiceProvider).focusedDate;
 }

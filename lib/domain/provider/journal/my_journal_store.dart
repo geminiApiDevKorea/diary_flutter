@@ -1,3 +1,4 @@
+import 'package:diary_flutter/common/enums.dart';
 import 'package:diary_flutter/data/model/history.dart';
 import 'package:diary_flutter/data/model/journal.dart';
 import 'package:diary_flutter/data/model/song.dart';
@@ -34,10 +35,10 @@ class MyJournalStore extends _$MyJournalStore {
   }
 
   Future<void> createOrUpdateUserInput(
-      DateTime date, String newUserInput, JournalType journalType) async {
+      DateTime date, String newUserInput, FeedbackType feedbackType) async {
     ref
         .read(storedJournalProvider(_idToken).notifier)
-        .createOrUpdateUserInput(_idToken, date, newUserInput, journalType);
+        .createOrUpdateUserInput(_idToken, date, newUserInput, feedbackType);
   }
 
   Future<void> updateSong(DateTime date, Song newSong) async {
@@ -78,9 +79,9 @@ class MyJournalStore extends _$MyJournalStore {
   }
 
   Future<void> createOrUpdateTitle(
-      DateTime date, String newTitle, JournalType journalType) async {
+      DateTime date, String newTitle, FeedbackType feedbackType) async {
     await ref
         .read(storedJournalProvider(_idToken).notifier)
-        .createOrUpdateTitle(_idToken, date, newTitle, journalType);
+        .createOrUpdateTitle(_idToken, date, newTitle, feedbackType);
   }
 }

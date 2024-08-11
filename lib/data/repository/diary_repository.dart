@@ -1,5 +1,5 @@
+import 'package:diary_flutter/common/enums.dart';
 import 'package:diary_flutter/data/model/history.dart';
-import 'package:diary_flutter/data/model/journal.dart';
 import 'package:diary_flutter/data/model/music.dart';
 import 'package:dio/dio.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -28,7 +28,7 @@ class MusicDiary {
   final DateTime dateTime;
   final String title;
   final List<History> contents;
-  final JournalType type;
+  final FeedbackType type;
   final Music music;
 
   String get musicThumbnailImageUrl => music.thumbnailUrl;
@@ -81,7 +81,7 @@ class DailyDiary {
   final String dateTime;
   final String title;
   final List<History> contents;
-  final JournalType type;
+  final FeedbackType type;
   final Music music;
   List<String>? tag;
   DailyDiary({

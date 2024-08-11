@@ -12,7 +12,7 @@ MusicDiary _$MusicDiaryFromJson(Map<String, dynamic> json) => MusicDiary(
       contents: (json['contents'] as List<dynamic>)
           .map((e) => History.fromJson(e as Map<String, dynamic>))
           .toList(),
-      type: $enumDecode(_$JournalTypeEnumMap, json['type']),
+      type: $enumDecode(_$FeedbackTypeEnumMap, json['type']),
       music: Music.fromJson(json['music'] as Map<String, dynamic>),
     );
 
@@ -21,13 +21,13 @@ Map<String, dynamic> _$MusicDiaryToJson(MusicDiary instance) =>
       'dateTime': const DateTimeConverter().toJson(instance.dateTime),
       'title': instance.title,
       'contents': instance.contents,
-      'type': _$JournalTypeEnumMap[instance.type]!,
+      'type': _$FeedbackTypeEnumMap[instance.type]!,
       'music': instance.music,
     };
 
-const _$JournalTypeEnumMap = {
-  JournalType.post: 'post',
-  JournalType.chat: 'chat',
+const _$FeedbackTypeEnumMap = {
+  FeedbackType.chat: 'chat',
+  FeedbackType.post: 'post',
 };
 
 DiaryRespons _$DiaryResponsFromJson(Map<String, dynamic> json) => DiaryRespons(
@@ -56,7 +56,7 @@ Map<String, dynamic> _$DiaryPostResponseToJson(DiaryPostResponse instance) =>
     };
 
 DailyDiary _$DailyDiaryFromJson(Map<String, dynamic> json) => DailyDiary(
-      type: $enumDecode(_$JournalTypeEnumMap, json['type']),
+      type: $enumDecode(_$FeedbackTypeEnumMap, json['type']),
       dateTime: json['dateTime'] as String,
       title: json['title'] as String,
       contents: (json['contents'] as List<dynamic>)
@@ -71,7 +71,7 @@ Map<String, dynamic> _$DailyDiaryToJson(DailyDiary instance) =>
       'dateTime': instance.dateTime,
       'title': instance.title,
       'contents': instance.contents,
-      'type': _$JournalTypeEnumMap[instance.type]!,
+      'type': _$FeedbackTypeEnumMap[instance.type]!,
       'music': instance.music,
       'tag': instance.tag,
     };
@@ -91,7 +91,7 @@ Map<String, dynamic> _$DiaryPostBodyToJson(DiaryPostBody instance) =>
 // RetrofitGenerator
 // **************************************************************************
 
-// ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers
+// ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers,unused_element
 
 class _DiaryRepository implements DiaryRepository {
   _DiaryRepository(
@@ -137,8 +137,8 @@ class _DiaryRepository implements DiaryRepository {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = DiaryRespons.fromJson(_result.data!);
-    return value;
+    final _value = DiaryRespons.fromJson(_result.data!);
+    return _value;
   }
 
   @override
@@ -169,8 +169,8 @@ class _DiaryRepository implements DiaryRepository {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = DiaryPostResponse.fromJson(_result.data!);
-    return value;
+    final _value = DiaryPostResponse.fromJson(_result.data!);
+    return _value;
   }
 
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {

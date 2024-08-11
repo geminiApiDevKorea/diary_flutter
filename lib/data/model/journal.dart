@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:diary_flutter/common/enums.dart';
 import 'package:diary_flutter/data/model/history.dart';
 import 'package:diary_flutter/data/model/music.dart';
 import 'package:diary_flutter/data/model/song.dart';
@@ -7,14 +8,6 @@ import 'package:diary_flutter/data/repository/chats_repository.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'journal.g.dart';
-
-@JsonEnum(alwaysCreate: true)
-enum JournalType {
-  @JsonValue('post')
-  post,
-  @JsonValue('chat')
-  chat,
-}
 
 @JsonSerializable(explicitToJson: true)
 class Journal {
@@ -27,7 +20,7 @@ class Journal {
   final List<String> tags;
   final List<History> history;
   @JsonKey(name: 'type')
-  final JournalType journalType;
+  final FeedbackType feedbackType;
 
   static Journal createDummy({
     required String idToken,
@@ -62,7 +55,7 @@ class Journal {
               "This is a sample reason for choosing this song",
             )
           : null,
-      journalType: JournalType.post,
+      feedbackType: FeedbackType.post,
     );
   }
 
@@ -75,7 +68,7 @@ class Journal {
     this.song,
     List<String>? tags,
     List<History>? history,
-    required this.journalType,
+    required this.feedbackType,
   })  : tags = tags ?? [],
         history = history ?? [];
 
@@ -99,7 +92,7 @@ class Journal {
     Song? song,
     List<String>? tags,
     List<History>? history,
-    JournalType? journalType,
+    FeedbackType? type,
   }) {
     return Journal(
       title: title ?? this.title,
@@ -110,23 +103,12 @@ class Journal {
       song: song ?? this.song,
       tags: tags ?? this.tags,
       history: history ?? this.history,
-      journalType: journalType ?? this.journalType,
+      feedbackType: type ?? feedbackType,
     );
   }
 
   @override
   String toString() {
-    return 'Journal(title: $title,  idToken: $idToken, createdAt: $createdAt, userInput: $userInput, music: $music, song: $song, tags: $tags, history: $history, type: $journalType)';
-  }
-}
-
-extension JournalTypeExtension on JournalType {
-  String get value {
-    switch (this) {
-      case JournalType.post:
-        return 'post';
-      case JournalType.chat:
-        return 'chat';
-    }
+    return 'Journal(title: $title,  idToken: $idToken, createdAt: $createdAt, userInput: $userInput, music: $music, song: $song, tags: $tags, history: $history, type: $feedbackType)';
   }
 }

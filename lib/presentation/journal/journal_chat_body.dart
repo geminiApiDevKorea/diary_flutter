@@ -1,6 +1,5 @@
 import 'package:diary_flutter/common/enums.dart';
 import 'package:diary_flutter/data/model/history.dart';
-import 'package:diary_flutter/data/model/journal.dart';
 import 'package:diary_flutter/data/repository/chats_repository.dart';
 import 'package:diary_flutter/domain/provider/auth/get_my_name.dart';
 import 'package:diary_flutter/domain/provider/chats/chats_feedback_notifier.dart';
@@ -9,13 +8,13 @@ import 'package:diary_flutter/domain/provider/common/focused_date.dart';
 import 'package:diary_flutter/domain/provider/journal/journal_use_cases.dart';
 import 'package:diary_flutter/domain/provider/journal/my_journal_store.dart';
 import 'package:diary_flutter/gen/assets.gen.dart';
-import 'package:diary_flutter/gen/gen_assets.dart';
 import 'package:diary_flutter/presentation/journal/assistant_chat_item.dart';
 import 'package:diary_flutter/presentation/journal/date_header_display.dart';
-import 'package:diary_flutter/presentation/journal/journal_post_body.dart';
+import 'package:diary_flutter/presentation/journal/journal_feedback_widget.dart';
 import 'package:diary_flutter/presentation/journal/journal_text_field.dart';
 import 'package:diary_flutter/presentation/journal/provider/post_text_input.dart';
 import 'package:diary_flutter/presentation/journal/user_chat_item.dart';
+import 'package:diary_flutter/presentation/journal/journal_screen.dart';
 import 'package:diary_flutter/presentation/style/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -23,13 +22,13 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:palestine_console/palestine_console.dart';
 
-class ChatJournalBody extends HookConsumerWidget with PostJournalHandlerMixin {
+class ChatJournalBody extends JournalBody {
   const ChatJournalBody({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // final journalEvent =
-    //     ref.watch(journalServiceProvider(journalType: JournalType.chat));
+    //     ref.watch(journalServiceProvider(feedbackType: FeedbackType.chat));
     final colors = ref.gemColors;
     final textStyle = ref.gemTextStyle;
     // final nowDate = DateTime.now();
@@ -105,7 +104,7 @@ class ChatJournalBody extends HookConsumerWidget with PostJournalHandlerMixin {
             children: [
               DateHeaderDisplay(
                 date: focusedDate,
-                journalType: JournalType.chat,
+                feedbackType: FeedbackType.chat,
               ),
               Text(
                 'Hi $myName\nHow was your day?',
@@ -192,7 +191,7 @@ class ChatJournalBody extends HookConsumerWidget with PostJournalHandlerMixin {
               //   error: (error, stack) => Center(child: Text('Error: $error')),
               // ),
               JournalTextField(
-                  journalType: JournalType.chat,
+                  feedbackType: FeedbackType.chat,
                   submitClear: true,
                   date: focusedDate,
                   onSubmitted: () async {
@@ -204,7 +203,7 @@ class ChatJournalBody extends HookConsumerWidget with PostJournalHandlerMixin {
                     ref
                         .read(myJournalStoreProvider.notifier)
                         .createOrUpdateUserInput(
-                            focusedDate, userInput, JournalType.chat);
+                            focusedDate, userInput, FeedbackType.chat);
                     await ref.read(myJournalStoreProvider.notifier).addHistory(
                         focusedDate,
                         History(role: Role.user, message: userInput));
@@ -219,9 +218,11 @@ class ChatJournalBody extends HookConsumerWidget with PostJournalHandlerMixin {
                   }),
 
               chatFeedback.when(
-                data: (state) =>
-                    buildChatFeedbackWidget(context, state, ref, getMyJournal),
-                loading: () => buildChatFeedbackLoadingWidget(),
+                data: (state) => ChatFeedbackWidget(
+                  state: state,
+                  myJournal: getMyJournal,
+                ),
+                loading: () => const ChatFeedbackLoadingWidget(),
                 error: (error, stack) => Text('Error: $error',
                     style: textStyle.h4.copyWith(color: colors.error)),
               ),
