@@ -196,3 +196,35 @@ extension SettingPhaseExtension on SettingPhase {
         SettingPhase.gender => null,
       };
 }
+
+enum MyInfoOptions {
+  name,
+  gender,
+  openLicense,
+  privaryPolicy,
+  termsOfUse,
+  signOut,
+  deleteAccount,
+}
+
+extension MyInfoOptionsExtension on MyInfoOptions {
+  String get title => switch (this) {
+        MyInfoOptions.name => 'Name',
+        MyInfoOptions.gender => 'Gender',
+        MyInfoOptions.openLicense => 'Open License',
+        MyInfoOptions.privaryPolicy => 'Privacy Policy',
+        MyInfoOptions.termsOfUse => 'Terms of Use',
+        MyInfoOptions.signOut => 'Sign out',
+        MyInfoOptions.deleteAccount => 'Delete Account',
+      };
+  bool get isPrimary => switch (this) {
+        MyInfoOptions.deleteAccount => true,
+        _ => false,
+      };
+
+  bool get hasDetail => switch (this) {
+        MyInfoOptions.name => true,
+        MyInfoOptions.gender => true,
+        _ => false,
+      };
+}

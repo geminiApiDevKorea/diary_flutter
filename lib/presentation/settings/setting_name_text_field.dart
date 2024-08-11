@@ -20,10 +20,7 @@ class SettingNameTextField extends ConsumerWidget {
       builder: (context, child) {
         final width = MediaQuery.sizeOf(context).width;
         return Transform.translate(
-          offset: Offset(
-            0 - width * animation.value,
-            0,
-          ),
+          offset: Offset(0 - width * animation.value, 0),
           child: child,
         );
       },
@@ -37,9 +34,6 @@ class SettingNameTextField extends ConsumerWidget {
                   maxLength: 20,
                   minLength: 2,
                   onChangedInputText: onChangedName,
-                  // (inputText) {
-                  //   isValid(inputText.length >= 2);
-                  // },
                 );
               } else {
                 return const Nil();

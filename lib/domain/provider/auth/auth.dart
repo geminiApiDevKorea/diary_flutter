@@ -63,6 +63,11 @@ class Auth extends _$Auth {
     }
   }
 
+  signOut() {
+    _persistanceStorage.removeValue(key);
+    state = AsyncValue.data(NeedSigninState());
+  }
+
   Future<SignInState> signIn() async {
     final user =
         await ref.read(googleAuthRepositoryProvider).signInWithGoogle();
