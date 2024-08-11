@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:palestine_console/palestine_console.dart';
 
 class SplashScreen extends HookConsumerWidget {
   static const String path = '/';
@@ -23,6 +24,7 @@ class SplashScreen extends HookConsumerWidget {
     final colors = GemTheme.of(ref).colors;
     final authState = ref.watch(authProvider);
     useEffect(() {
+      Print.white(authState.value.toString());
       if (authState.value is NeedSigninState ||
           authState.value is ErrorAuthState) {
         _moveNext(ref, context, OnboardingScreen.path);

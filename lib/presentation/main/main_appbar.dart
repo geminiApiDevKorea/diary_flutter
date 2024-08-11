@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:diary_flutter/domain/provider/common/focused_date.dart';
 import 'package:diary_flutter/domain/provider/journal/my_journal_store.dart';
 import 'package:diary_flutter/presentation/calendar/calendar_screen.dart';
 import 'package:diary_flutter/presentation/common/hook/use_sync_animation_value.dart';
@@ -48,6 +49,7 @@ class MainAppbar extends HookConsumerWidget {
       delay: const Duration(milliseconds: 400),
       context,
       () {
+        ref.read(focusedDateProvider.notifier).updateDate(DateTime.now());
         listButtonAnimationController.value = 0;
         Future.microtask(() => listButtonAnimationController.forward());
       },
@@ -59,40 +61,58 @@ class MainAppbar extends HookConsumerWidget {
       child: Container(
         padding: const EdgeInsets.fromLTRB(8, 8, 16, 8),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             /// 캘린더 버튼
             Hero(
               tag: 'calendarOrlist',
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(32),
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 50, sigmaY: 50),
-                  child: SizedBox(
-                    width: 140,
-                    height: 36,
-                    child: ElevatedButton.icon(
-                      onPressed: () => context.pushNamed(CalendarScreen.name),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: colors.subButtonBackground,
-                        elevation: 0,
-                        shadowColor: Colors.transparent,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(32),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: SizedBox(
+                  width: 120,
+                  height: 36,
+                  child: Align(
+                    child: SizedBox(
+                      width: 99,
+                      height: 36,
+                      child: ElevatedButton(
+                        onPressed: () => context.pushNamed(CalendarScreen.name),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: colors.buttonBackground,
+                          elevation: 0,
+                          shadowColor: Colors.transparent,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(32),
+                          ),
+                          padding: EdgeInsets.zero, // Remove default padding
                         ),
-                      ),
-                      icon: Icon(CupertinoIcons.back,
-                          size: 18, color: colors.grayScale50),
-                      label: AnimatedBuilder(
-                        animation: listButtonAnimationController,
-                        builder: (context, child) => FadeTransition(
-                          opacity: listButtonAnimationController,
-                          child: child,
-                        ),
-                        child: Text(
-                          'Calendar',
-                          style: textStyle.button
-                              .copyWith(color: colors.grayScale0),
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              left: 6), // Add left padding for visual balance
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Icon(CupertinoIcons.back,
+                                  size: 18, color: colors.grayScale70),
+                              const SizedBox(
+                                  width: 5), // Space between icon and text
+                              Expanded(
+                                child: AnimatedBuilder(
+                                  animation: listButtonAnimationController,
+                                  builder: (context, child) => FadeTransition(
+                                    opacity: listButtonAnimationController,
+                                    child: child,
+                                  ),
+                                  child: Text(
+                                    'Calendar',
+                                    style: textStyle.button
+                                        .copyWith(color: colors.text),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),

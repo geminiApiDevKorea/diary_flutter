@@ -21,6 +21,8 @@ sealed class GemColors {
   // final Color buttonBackgorund = const Color();
   final Color subButtonBackground = const Color(0xFFF6F5EC);
 
+  final Color buttonBackground = const Color(0xFFF3F3F3);
+
   // 그레이스케일
   final Color grayScale100;
   final Color grayScale90;
