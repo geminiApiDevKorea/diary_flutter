@@ -1,7 +1,6 @@
 import 'package:diary_flutter/common/enums.dart';
 import 'package:diary_flutter/presentation/settings/setting_gender_item.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 
 typedef GenderSelectionCallback = void Function(Gender selectedGender);
 

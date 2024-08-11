@@ -52,7 +52,7 @@ Future<void> postDiary(
     bearerToken: 'Bearer $idToken',
     body: DiaryPostBody(
       dailyDiary: DailyDiary(
-        type: journal.journalType,
+        type: journal.feedbackType,
         dateTime: journal.createdAt.yyyyMMdd,
         title: journal.title ?? '',
         contents: [

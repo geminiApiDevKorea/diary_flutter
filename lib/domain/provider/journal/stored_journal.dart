@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:math';
+import 'package:diary_flutter/common/enums.dart';
 import 'package:diary_flutter/data/model/history.dart';
 import 'package:diary_flutter/data/model/journal.dart';
 import 'package:diary_flutter/data/model/music.dart';
@@ -69,9 +70,9 @@ class StoredJournal extends _$StoredJournal {
   /// [idToken] - 저널의 ID 토큰
   /// [date] - 저널의 생성 날짜
   /// [newUserInput] - 업데이트할 사용자 입력
-  /// [journalType] - 저널의 타입
+  /// [feedbackType] - 저널의 타입
   Future<void> createOrUpdateUserInput(String idToken, DateTime date,
-      String? newUserInput, JournalType journalType) async {
+      String? newUserInput, FeedbackType feedbackType) async {
     final allJournals = _getAllJournals();
     final index = allJournals.indexWhere(
         (j) => j.idToken == idToken && _isSameDay(j.createdAt, date));
@@ -86,7 +87,7 @@ class StoredJournal extends _$StoredJournal {
         idToken: idToken,
         createdAt: date,
         userInput: newUserInput ?? '',
-        journalType: journalType, // 기본 타입으로 설정
+        feedbackType: feedbackType, // 기본 타입으로 설정
       ));
     }
 
@@ -204,7 +205,7 @@ class StoredJournal extends _$StoredJournal {
               "This is a sample reason for choosing this song",
             )
           : null,
-      journalType: JournalType.post,
+      feedbackType: FeedbackType.post,
     );
 
     await createOrUpdate(newJournal);
@@ -224,7 +225,7 @@ class StoredJournal extends _$StoredJournal {
   /// [date] - 저널의 생성 날짜
   /// [newTitle] - 업데이트할 새로운 타이틀
   Future<void> createOrUpdateTitle(String idToken, DateTime date,
-      String newTitle, JournalType journalType) async {
+      String newTitle, FeedbackType feedbackType) async {
     final allJournals = _getAllJournals();
     final index = allJournals.indexWhere(
         (j) => j.idToken == idToken && _isSameDay(j.createdAt, date));
@@ -238,7 +239,7 @@ class StoredJournal extends _$StoredJournal {
         idToken: idToken,
         createdAt: date,
         title: newTitle,
-        journalType: journalType, // 기본 타입으로 설정
+        feedbackType: feedbackType, // 기본 타입으로 설정
       ));
     }
 

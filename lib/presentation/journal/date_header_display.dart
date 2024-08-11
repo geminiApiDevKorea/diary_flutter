@@ -1,16 +1,15 @@
 import 'package:diary_flutter/common/enums.dart';
 import 'package:diary_flutter/common/extension/date_time_extension.dart';
-import 'package:diary_flutter/data/model/journal.dart';
 import 'package:diary_flutter/presentation/style/index.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class DateHeaderDisplay extends ConsumerWidget {
   final DateTime date;
-  final JournalType journalType;
+  final FeedbackType feedbackType;
   const DateHeaderDisplay({
     super.key,
-    required this.journalType,
+    required this.feedbackType,
     required this.date,
   });
 
@@ -22,12 +21,12 @@ class DateHeaderDisplay extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
-          date.toMonthDayOrdinal(),
+          date.monthDayOrdinal,
           style: textStyle.h1.withColor(colors.grayScale0),
         ),
         const SizedBox(height: 12),
         Text(
-          'From   ${date.toDDMYYHH()}    ${journalType.value.capitalize()}',
+          'From   ${date.ddMyyHHmm}    ${feedbackType.value.capitalize()}',
           style: textStyle.paragraph.withColor(colors.grayScale60),
         ),
         const SizedBox(height: 10),

@@ -1,4 +1,4 @@
-import 'package:diary_flutter/data/model/journal.dart';
+import 'package:diary_flutter/common/enums.dart';
 import 'package:diary_flutter/domain/provider/common/focused_date.dart';
 import 'package:diary_flutter/domain/provider/journal/journal_use_cases.dart';
 import 'package:diary_flutter/presentation/journal/provider/post_text_input.dart';
@@ -8,7 +8,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class JournalTextField extends HookConsumerWidget {
-  final JournalType journalType;
+  final FeedbackType feedbackType;
   final DateTime date;
   final VoidCallback? onSubmitted;
   final bool submitClear; // 추가된 변수
@@ -16,7 +16,7 @@ class JournalTextField extends HookConsumerWidget {
   const JournalTextField({
     super.key,
     required this.date,
-    required this.journalType,
+    required this.feedbackType,
     this.onSubmitted,
     this.submitClear = false, // 기본값은 false
   });
@@ -33,10 +33,10 @@ class JournalTextField extends HookConsumerWidget {
     String? getHintText() {
       if (hasFeedback) return null;
 
-      switch (journalType) {
-        case JournalType.post:
+      switch (feedbackType) {
+        case FeedbackType.post:
           return 'Just write down any word \nabout your day.';
-        case JournalType.chat:
+        case FeedbackType.chat:
           return 'Chat to AI';
         default:
           return null;
@@ -44,7 +44,7 @@ class JournalTextField extends HookConsumerWidget {
     }
 
     return Visibility(
-      visible: (!hasFeedback || journalType == JournalType.post),
+      visible: (!hasFeedback || feedbackType == FeedbackType.post),
       child: TextField(
         autofocus: false,
         controller: textController,

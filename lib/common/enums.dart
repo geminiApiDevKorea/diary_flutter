@@ -88,6 +88,29 @@ enum FeedbackType {
   post,
 }
 
+FeedbackType getFeedbackTypeFromString(String? value) {
+  if (value == null) {
+    throw Exception('Feedback type is not provided');
+  }
+  return FeedbackType.values.firstWhere(
+    (type) => type.value == value,
+    orElse: () => throw Exception('Invalid feedback type: $value'),
+  );
+}
+
+extension FeedbackTypeExtension on FeedbackType {
+  String get value {
+    switch (this) {
+      case FeedbackType.chat:
+        return 'chat';
+      case FeedbackType.post:
+        return 'post';
+      default:
+        throw ArgumentError('Unknown FeedbackType: $this');
+    }
+  }
+}
+
 enum Weekday {
   sun,
   mon,
@@ -137,7 +160,7 @@ extension TransitionDurationExtension on TransitionDuration {
       case TransitionDuration.medium:
         return const Duration(milliseconds: 600);
       case TransitionDuration.long:
-        return const Duration(milliseconds: 3000);
+        return const Duration(milliseconds: 900);
     }
   }
 }

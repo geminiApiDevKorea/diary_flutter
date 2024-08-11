@@ -38,7 +38,7 @@ const _$GenderEnumMap = {
 // RetrofitGenerator
 // **************************************************************************
 
-// ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers
+// ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers,unused_element
 
 class _UsersRepository implements UsersRepository {
   _UsersRepository(
@@ -78,8 +78,8 @@ class _UsersRepository implements UsersRepository {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = UserResponse.fromJson(_result.data!);
-    return value;
+    final _value = UserResponse.fromJson(_result.data!);
+    return _value;
   }
 
   @override
@@ -110,8 +110,8 @@ class _UsersRepository implements UsersRepository {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = UserResponse.fromJson(_result.data!);
-    return value;
+    final _value = UserResponse.fromJson(_result.data!);
+    return _value;
   }
 
   @override
@@ -138,8 +138,8 @@ class _UsersRepository implements UsersRepository {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = UserResponse.fromJson(_result.data!);
-    return value;
+    final _value = UserResponse.fromJson(_result.data!);
+    return _value;
   }
 
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {

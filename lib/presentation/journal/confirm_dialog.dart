@@ -2,13 +2,14 @@ import 'package:diary_flutter/presentation/common/popup/confirm_popup.dart';
 import 'package:diary_flutter/presentation/common/popup/popup_button_param.dart';
 import 'package:diary_flutter/presentation/style/gem_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:palestine_console/palestine_console.dart';
 
-enum DeleteConfirmationResult {
+enum ConfirmationResult {
   cancel,
   confirm,
 }
 
-Future<DeleteConfirmationResult?> showConfirmDialog({
+Future<ConfirmationResult?> showConfirmDialog({
   required BuildContext context,
   required GemColors colors,
   required String title,
@@ -18,7 +19,7 @@ Future<DeleteConfirmationResult?> showConfirmDialog({
   VoidCallback? onClose,
   VoidCallback? onConfirm,
 }) {
-  return showDialog<DeleteConfirmationResult?>(
+  return showDialog<ConfirmationResult?>(
     barrierColor: colors.modalBackground,
     context: context,
     builder: (context) {
@@ -31,17 +32,20 @@ Future<DeleteConfirmationResult?> showConfirmDialog({
             isPrimary: false,
             onTap: (popupContext) async {
               FocusScope.of(context).unfocus();
+
               onClose?.call();
-              Navigator.pop(popupContext, DeleteConfirmationResult.cancel);
+              Navigator.pop(popupContext, ConfirmationResult.cancel);
+              FocusScope.of(context).unfocus();
             },
           ),
           PopupButtonParam(
             title: rightButtonTitle ?? 'Confirm',
             isPrimary: true,
             onTap: (popupContext) async {
-              FocusScope.of(context).unfocus();
               onConfirm?.call();
-              Navigator.pop(popupContext, DeleteConfirmationResult.confirm);
+
+              Navigator.pop(popupContext, ConfirmationResult.confirm);
+              FocusScope.of(context).unfocus();
             },
           ),
         ],

@@ -21,7 +21,7 @@ Journal _$JournalFromJson(Map<String, dynamic> json) => Journal(
       history: (json['history'] as List<dynamic>?)
           ?.map((e) => History.fromJson(e as Map<String, dynamic>))
           .toList(),
-      journalType: $enumDecode(_$JournalTypeEnumMap, json['type']),
+      feedbackType: $enumDecode(_$FeedbackTypeEnumMap, json['type']),
     );
 
 Map<String, dynamic> _$JournalToJson(Journal instance) => <String, dynamic>{
@@ -33,10 +33,10 @@ Map<String, dynamic> _$JournalToJson(Journal instance) => <String, dynamic>{
       'song': instance.song?.toJson(),
       'tags': instance.tags,
       'history': instance.history.map((e) => e.toJson()).toList(),
-      'type': _$JournalTypeEnumMap[instance.journalType]!,
+      'type': _$FeedbackTypeEnumMap[instance.feedbackType]!,
     };
 
-const _$JournalTypeEnumMap = {
-  JournalType.post: 'post',
-  JournalType.chat: 'chat',
+const _$FeedbackTypeEnumMap = {
+  FeedbackType.chat: 'chat',
+  FeedbackType.post: 'post',
 };

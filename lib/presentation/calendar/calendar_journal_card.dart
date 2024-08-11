@@ -1,10 +1,11 @@
+import 'package:diary_flutter/common/enums.dart';
 import 'package:diary_flutter/common/extension/date_time_extension.dart';
-import 'package:diary_flutter/data/model/journal.dart';
 import 'package:diary_flutter/data/repository/diary_repository.dart';
 import 'package:diary_flutter/domain/provider/common/focused_date.dart';
 import 'package:diary_flutter/gen/gen_assets.dart';
 import 'package:diary_flutter/presentation/calendar/calendar_journal_music_chip.dart';
-import 'package:diary_flutter/presentation/journal_screen.dart';
+import 'package:diary_flutter/presentation/common/router.dart';
+import 'package:diary_flutter/presentation/journal/journal_screen.dart';
 import 'package:diary_flutter/presentation/style/gem_text_style.dart';
 import 'package:diary_flutter/presentation/style/gem_theme.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +35,7 @@ class CalendarJournalCard extends ConsumerWidget {
                 .updateDate(diary.dateTime);
             if (context.mounted) {
               await context.pushNamed(JournalScreen.name, queryParameters: {
-                'type': diary.type.value,
+                QueryParameterKeys.feedbackType.value: diary.type.value,
               });
             }
           },
@@ -52,7 +53,7 @@ class CalendarJournalCard extends ConsumerWidget {
                     GenAssets.images.lock.image(scale: 2),
                     const SizedBox(width: 10),
                     Text(
-                      '${diary.dateTime.toMonthDayOrdinal()}, ${diary.dateTime.year} · ${diary.type == JournalType.post ? 'Posted' : 'Chat'}',
+                      '${diary.dateTime.monthDayOrdinal}, ${diary.dateTime.year} · ${diary.type == FeedbackType.post ? 'Posted' : 'Chat'}',
                       style:
                           textStyle.button.withColor(const Color(0xFF484848)),
                     ),

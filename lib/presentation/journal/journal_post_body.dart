@@ -1,18 +1,19 @@
-import 'package:diary_flutter/data/model/journal.dart';
+import 'package:diary_flutter/common/enums.dart';
 import 'package:diary_flutter/domain/provider/chats/chats_feedback_notifier.dart';
 import 'package:diary_flutter/domain/provider/common/focused_date.dart';
 import 'package:diary_flutter/domain/provider/journal/my_journal_store.dart';
 import 'package:diary_flutter/presentation/journal/date_header_display.dart';
 import 'package:diary_flutter/domain/provider/journal/journal_use_cases.dart';
-import 'package:diary_flutter/presentation/journal/journal_music_card.dart';
+import 'package:diary_flutter/presentation/journal/journal_feedback_widget.dart';
 import 'package:diary_flutter/presentation/journal/journal_text_field.dart';
+import 'package:diary_flutter/presentation/journal/journal_screen.dart';
 import 'package:diary_flutter/presentation/style/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:palestine_console/palestine_console.dart';
 
-class PostJournalBody extends HookConsumerWidget with PostJournalHandlerMixin {
+class PostJournalBody extends JournalBody {
   const PostJournalBody({super.key});
 
   @override
@@ -77,125 +78,22 @@ class PostJournalBody extends HookConsumerWidget with PostJournalHandlerMixin {
           children: [
             DateHeaderDisplay(
               date: focusedDate,
-              journalType: JournalType.post,
+              feedbackType: FeedbackType.post,
             ),
-            JournalTextField(journalType: JournalType.post, date: focusedDate),
+            JournalTextField(
+                feedbackType: FeedbackType.post, date: focusedDate),
             chatFeedback.when(
-              data: (state) =>
-                  buildChatFeedbackWidget(context, state, ref, getMyJournal),
-              loading: () => buildChatFeedbackLoadingWidget(),
+              data: (state) => ChatFeedbackWidget(
+                state: state,
+                myJournal: getMyJournal,
+              ),
+              loading: () => const ChatFeedbackLoadingWidget(),
               error: (error, stack) => Text('Error: $error',
                   style: textStyle.h4.copyWith(color: colors.error)),
             ),
           ],
         ),
       ),
-    );
-  }
-}
-
-mixin PostJournalHandlerMixin {
-  Widget buildChatFeedbackWidget(
-      BuildContext context, state, WidgetRef ref, Journal? myJournal) {
-    final colors = ref.gemColors;
-    final textStyle = ref.gemTextStyle;
-
-    if (state is ChatsFeedbackData) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(
-            height: 120,
-          ),
-          const Divider(),
-          const SizedBox(height: 13),
-          Text('Muse Recommends you',
-              style: textStyle.button.withColor(colors.grayScale70)),
-          const SizedBox(height: 10),
-          Text(myJournal?.song?.reason ?? '',
-              style: textStyle.h5.withHeight(1.3)),
-          const SizedBox(height: 36),
-          Center(
-            child: JournalMusicCard(
-                song: myJournal?.song?.title ?? '',
-                singer: myJournal?.song?.singer ?? '',
-                imgUrl: myJournal?.music?.thumbnailUrl ?? '',
-                onButtonPressed: () {
-                  // print(myJournal?.music?.url ?? '');
-                }),
-          ),
-          const SizedBox(height: 36),
-        ],
-      );
-    } else if (state is ChatsFeedbackError) {
-      if (state.statusCode == 401) {
-        //TODO: 재로그인 로직 추가!!
-        Print.red("다시 로그인해주세요");
-        return const JournalMusicCard(
-          imgUrl: null,
-          onButtonPressed: null,
-        );
-      }
-      if (state.statusCode == 400) {
-        Print.red("일기 내용이 없습니다");
-        // WidgetsBinding.instance.addPostFrameCallback((_) {
-        //   ScaffoldMessenger.of(context).showSnackBar(
-        //     const SnackBar(content: Text('Journal is Empty!')),
-        //   );
-        // });
-
-        return const SizedBox.shrink();
-      }
-      if (state.statusCode == 500) {
-        Print.red(state.error);
-        // WidgetsBinding.instance.addPostFrameCallback((_) {
-        //   ScaffoldMessenger.of(context).showSnackBar(
-        //     SnackBar(content: Text(state.error)),
-        //   );
-        // });
-        return const SizedBox.shrink();
-      }
-      return Text('Error: ${state.error}',
-          style: textStyle.h4.copyWith(color: colors.error));
-    } else {
-      if (myJournal?.music == null) {
-        return const SizedBox();
-      } else {
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(
-              height: 120,
-            ),
-            const Divider(),
-            const SizedBox(height: 13),
-            Text('Muse Recommends you',
-                style: textStyle.button.withColor(colors.grayScale70)),
-            const SizedBox(height: 10),
-            Text(myJournal?.song?.reason ?? '',
-                style: textStyle.h5.withHeight(1.3)),
-            const SizedBox(height: 36),
-            Center(
-              child: JournalMusicCard(
-                  // bottomText: myJournal?.music?.title ?? '',
-                  song: myJournal?.song?.title,
-                  singer: myJournal?.song?.singer,
-                  imgUrl: myJournal?.music?.thumbnailUrl ?? '',
-                  onButtonPressed: () {
-                    // print(myJournal?.music?.url ?? '');
-                  }),
-            ),
-            const SizedBox(height: 36),
-          ],
-        );
-      }
-    }
-  }
-
-  Widget buildChatFeedbackLoadingWidget() {
-    return const JournalMusicCard(
-      imgUrl: null,
-      onButtonPressed: null,
     );
   }
 }

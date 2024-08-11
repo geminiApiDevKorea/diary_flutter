@@ -1,23 +1,17 @@
-import 'package:diary_flutter/data/model/journal.dart';
+import 'package:diary_flutter/common/enums.dart';
 import 'package:diary_flutter/presentation/journal/journal_chat_body.dart';
-import 'package:diary_flutter/presentation/journal/journal_body_appbar.dart';
+import 'package:diary_flutter/presentation/journal/journal_appbar.dart';
 import 'package:diary_flutter/presentation/journal/journal_post_body.dart';
 import 'package:diary_flutter/presentation/style/index.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class JournalScreen extends HookConsumerWidget {
-  const JournalScreen({super.key, required this.type});
-  final String type;
+  const JournalScreen({super.key, required this.feedbackType});
+  final FeedbackType feedbackType;
 
   static const String path = '/journal';
   static const String name = 'journal';
-
-  JournalType get journalType => switch (type) {
-        'post' => JournalType.post,
-        'chat' => JournalType.chat,
-        _ => throw ArgumentError('Invalid journal type: $type'),
-      };
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -31,34 +25,25 @@ class JournalScreen extends HookConsumerWidget {
           top: true,
           bottom: false,
           child: Scaffold(
-            floatingActionButtonLocation:
-                FloatingActionButtonLocation.centerTop,
-            floatingActionButton:
-                JournalBodyAppBar(context: context, journalType: journalType),
-            body: JournalBody(
-              type: type,
-            ),
-          ),
+              floatingActionButtonLocation:
+                  FloatingActionButtonLocation.centerTop,
+              floatingActionButton:
+                  JournalAppbar(context: context, feedbackType: feedbackType),
+              body: JournalBody.create(feedbackType)),
         ),
       ),
     );
   }
 }
 
-class JournalBody extends StatelessWidget {
-  final String type;
+abstract class JournalBody extends HookConsumerWidget {
+  const JournalBody({super.key});
 
-  const JournalBody({
-    super.key,
-    required this.type,
-  });
-
-  @override
-  Widget build(BuildContext context) {
+  factory JournalBody.create(FeedbackType type) {
     switch (type) {
-      case 'chat':
+      case FeedbackType.chat:
         return const ChatJournalBody();
-      case 'post':
+      case FeedbackType.post:
         return const PostJournalBody();
       default:
         throw ArgumentError('Invalid journal type: $type');

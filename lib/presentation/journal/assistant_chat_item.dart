@@ -12,6 +12,7 @@ class AssistantChatItem extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final colors = ref.gemColors;
     final textStyle = ref.gemTextStyle;
+    // ignore: unused_local_variable
     final chatsPrompt = ref.watch(chatsPromptNotifierProvider);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
