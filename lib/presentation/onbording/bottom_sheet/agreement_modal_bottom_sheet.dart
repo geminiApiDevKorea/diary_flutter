@@ -1,3 +1,4 @@
+import 'package:diary_flutter/common/enums.dart';
 import 'package:diary_flutter/domain/provider/auth/auth.dart';
 import 'package:diary_flutter/domain/provider/onboarding/agreement_notifier.dart';
 import 'package:diary_flutter/presentation/common/bottom_fulfilled_button.dart';
@@ -60,9 +61,8 @@ class AgreementModalBottomSheet extends ConsumerWidget {
     return AgreementCheckBox(
       title: type.title,
       isChecked: state.isChecked(type),
+      agreementType: type,
       onTap: () => onTap(type),
-      isRequired: type.isRequired,
-      url: type.url,
     );
   }
 
@@ -72,11 +72,13 @@ class AgreementModalBottomSheet extends ConsumerWidget {
     required bool isEnabledAgreement,
   }) {
     requestAgree() {
-      ref.read(authProvider.notifier).agree().then((isSuccess) {
-        if (isSuccess) {
-          context.go(SettingScreen.path);
-        }
-      });
+      ref.read(authProvider.notifier).agree().then(
+        (isSuccess) {
+          if (isSuccess) {
+            context.go(SettingScreen.path);
+          }
+        },
+      );
     }
 
     if (isEnabledAgreement) {
@@ -126,6 +128,7 @@ class AgreementModalBottomSheet extends ConsumerWidget {
                     isChecked: agreementState is SelectionAgreementState
                         ? agreementState.isAllAgreed
                         : false,
+                    agreementType: null,
                     onTap: () => ref
                         .read(agreementNotifierProvider.notifier)
                         .toggleAllAgreements(),

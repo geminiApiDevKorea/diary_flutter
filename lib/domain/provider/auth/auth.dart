@@ -30,10 +30,12 @@ class SignedInState extends AuthState {
   final bool isAgreed;
   final String idToken;
   final String name;
+  final String? gender;
   SignedInState({
     required this.idToken,
     required this.isAgreed,
     required this.name,
+    this.gender,
   });
 }
 
@@ -53,12 +55,7 @@ class Auth extends _$Auth {
     }
 
     try {
-      final user = ref.read(googleAuthRepositoryProvider).currentUser();
-      return await postUser(
-        idToken: storedIdToken!,
-        nickname: user?.displayName ?? _defaultNickName,
-        gender: Gender.other,
-      );
+      return currentUser(idToken: storedIdToken!);
     } on Exception catch (e) {
       return ErrorAuthState(exception: e);
     }
@@ -86,7 +83,7 @@ class Auth extends _$Auth {
     final authState = await postUser(
       idToken: idToken,
       nickname: user.displayName ?? _defaultNickName,
-      gender: Gender.other,
+      gender: Gender.others,
     );
     state = AsyncValue.data(authState);
     if (authState is SignedInState) {
@@ -112,6 +109,7 @@ class Auth extends _$Auth {
             idToken: currentState.idToken,
             isAgreed: response.isAgreed,
             name: response.name,
+            gender: response.gender,
           ),
         );
         return true;
@@ -134,7 +132,7 @@ class Auth extends _$Auth {
             bearerToken: 'Bearer $idToken',
             body: UsersRequestBody(
               nickname: nickname,
-              gender: gender == Gender.other ? Gender.female : gender,
+              gender: gender,
             ),
           );
 
@@ -142,6 +140,26 @@ class Auth extends _$Auth {
         idToken: idToken,
         isAgreed: response.isAgreed,
         name: response.name,
+        gender: response.gender,
+      );
+    } on Exception catch (e) {
+      return ErrorAuthState(exception: e);
+    }
+  }
+
+  Future<AuthState> currentUser({
+    required String idToken,
+  }) async {
+    try {
+      final response = await ref.read(usersRepositoryProvider).getCurrentUser(
+            bearerToken: 'Bearer $idToken',
+          );
+
+      return SignedInState(
+        idToken: idToken,
+        isAgreed: response.isAgreed,
+        name: response.name,
+        gender: response.gender,
       );
     } on Exception catch (e) {
       return ErrorAuthState(exception: e);

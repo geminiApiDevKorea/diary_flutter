@@ -1,8 +1,39 @@
 import 'package:diary_flutter/data/model/journal.dart';
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 part 'enums.g.dart';
+
+enum AgreementType {
+  termsOfService,
+  privacyPolicy,
+}
+
+extension AgreementTypeExtension on AgreementType {
+  bool get isRequired => true;
+
+  String get title => switch (this) {
+        AgreementType.termsOfService => 'Terms of Service',
+        AgreementType.privacyPolicy => 'Privacy Policy',
+      };
+
+  String get url => switch (this) {
+        AgreementType.termsOfService =>
+          'https://sites.google.com/view/muse-diary/%ED%99%88/terms-of-service?authuser=0',
+        AgreementType.privacyPolicy =>
+          'https://sites.google.com/view/muse-diary/%ED%99%88/privacy-policy?authuser=0',
+      };
+  open() async {
+    final uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(
+        uri,
+        mode: LaunchMode.platformDefault,
+      );
+    }
+  }
+}
 
 enum HomeNavigations {
   main,
@@ -136,8 +167,8 @@ enum Gender {
   female,
   @JsonValue('MALE')
   male,
-  @JsonValue('FEMALE')
-  other,
+  @JsonValue('OTHERS')
+  others,
 }
 
 enum TransitionDuration {
@@ -220,25 +251,32 @@ extension SettingPhaseExtension on SettingPhase {
 enum MyInfoOptions {
   name,
   gender,
-  openLicense,
+  // openLicense,
   privaryPolicy,
   termsOfUse,
   signOut,
-  deleteAccount,
+  // deleteAccount,
 }
 
 extension MyInfoOptionsExtension on MyInfoOptions {
   String get title => switch (this) {
         MyInfoOptions.name => 'Name',
         MyInfoOptions.gender => 'Gender',
-        MyInfoOptions.openLicense => 'Open License',
+        // MyInfoOptions.openLicense => 'Open License',
         MyInfoOptions.privaryPolicy => 'Privacy Policy',
         MyInfoOptions.termsOfUse => 'Terms of Use',
         MyInfoOptions.signOut => 'Sign out',
-        MyInfoOptions.deleteAccount => 'Delete Account',
+        // MyInfoOptions.deleteAccount => 'Delete Account',
       };
   bool get isPrimary => switch (this) {
-        MyInfoOptions.deleteAccount => true,
+        // MyInfoOptions.deleteAccount => true,
+        _ => false,
+      };
+
+  bool get isActionable => switch (this) {
+        MyInfoOptions.privaryPolicy => true,
+        MyInfoOptions.termsOfUse => true,
+        MyInfoOptions.signOut => true,
         _ => false,
       };
 

@@ -1,43 +1,11 @@
+import 'package:diary_flutter/common/enums.dart';
 import 'package:diary_flutter/data/provider/users_repository_provider.dart';
 import 'package:diary_flutter/data/repository/users_repository.dart';
-import 'package:diary_flutter/domain/provider/auth/auth.dart';
+import 'package:diary_flutter/domain/provider/auth/get_my_id_token.dart';
 import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'agreement_notifier.g.dart';
-
-enum AgreementType {
-  termsOfService,
-  privacyPolicy,
-}
-
-extension AgreementTypeExtension on AgreementType {
-  String get title {
-    switch (this) {
-      case AgreementType.termsOfService:
-        return 'Terms of Service';
-      case AgreementType.privacyPolicy:
-        return 'Privacy Policy';
-    }
-  }
-
-  bool get isRequired {
-    switch (this) {
-      case AgreementType.termsOfService:
-      case AgreementType.privacyPolicy:
-        return true;
-    }
-  }
-
-  String get url {
-    switch (this) {
-      case AgreementType.termsOfService:
-        return 'https://example.com/terms';
-      case AgreementType.privacyPolicy:
-        return 'https://example.com/privacy';
-    }
-  }
-}
 
 sealed class AgreementState {
   final Map<AgreementType, bool> agreements;
@@ -108,18 +76,16 @@ class AgreementNotifier extends _$AgreementNotifier {
 
   agree() async {
     try {
-      final user = ref.read(authProvider).value;
-      if (user != null && user is SignedInState) {
-        final response =
-            await ref.read(usersRepositoryProvider).putUsersAgreement(
-                  bearerToken: 'Bearer ${user.idToken}',
-                  body: UsersAgreementBody(agreement: true),
-                );
-        state = AgreementedState(
-          agreements: state.agreements,
-          isAgreed: response.isAgreed,
-        );
-      }
+      final idToken = ref.read(getMyIdTokenProvider);
+      final response =
+          await ref.read(usersRepositoryProvider).putUsersAgreement(
+                bearerToken: 'Bearer $idToken',
+                body: UsersAgreementBody(agreement: true),
+              );
+      state = AgreementedState(
+        agreements: state.agreements,
+        isAgreed: response.isAgreed,
+      );
     } catch (e) {
       if (kDebugMode) {
         print(e);
