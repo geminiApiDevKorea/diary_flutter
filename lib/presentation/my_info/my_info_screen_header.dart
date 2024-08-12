@@ -1,14 +1,9 @@
 import 'package:diary_flutter/gen/gen_assets.dart';
-import 'package:diary_flutter/presentation/common/router.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class MyInfoScreenHeader extends StatelessWidget {
-  final PreviousScreens previousScreen;
-  const MyInfoScreenHeader({
-    super.key,
-    required this.previousScreen,
-  });
+  const MyInfoScreenHeader({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -40,11 +35,7 @@ class MyInfoScreenHeader extends StatelessWidget {
                         child: GenAssets.images.iconActionRight.image(scale: 2),
                       ),
                       const SizedBox(width: 19),
-                      Text(
-                        previousScreen == PreviousScreens.calendar
-                            ? 'Calendar'
-                            : 'List',
-                      ),
+                      const Text('Journal'),
                     ],
                   ),
                 ),

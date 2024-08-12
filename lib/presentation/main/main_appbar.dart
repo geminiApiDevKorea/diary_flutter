@@ -1,17 +1,15 @@
-import 'dart:ui';
-
-import 'package:diary_flutter/domain/provider/common/focused_date.dart';
-import 'package:diary_flutter/domain/provider/journal/my_journal_store.dart';
+import 'package:diary_flutter/gen/gen_assets.dart';
 import 'package:diary_flutter/presentation/calendar/calendar_screen.dart';
 import 'package:diary_flutter/presentation/common/hook/use_sync_animation_value.dart';
 import 'package:diary_flutter/presentation/common/hook/use_top_of_stack_callback.dart';
+import 'package:diary_flutter/presentation/common/router.dart';
+import 'package:diary_flutter/presentation/my_info/my_info_screen.dart';
 import 'package:diary_flutter/presentation/style/index.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:palestine_console/palestine_console.dart';
 
 class MainAppbar extends HookConsumerWidget {
   const MainAppbar({
@@ -121,6 +119,17 @@ class MainAppbar extends HookConsumerWidget {
             ),
             // -> 삭제예정
             const Spacer(),
+
+            InkWell(
+              onTap: () => context.pushNamed(
+                MyInfoScreen.name,
+                queryParameters: {
+                  QueryParameterKeys.previous.toString():
+                      PreviousScreens.main.toString(),
+                },
+              ),
+              child: GenAssets.images.iconProfile.image(scale: 2),
+            ),
 
             /// 일기 삭제 버튼 -> 삭제예정
             // _buildActionButton(

@@ -9,7 +9,6 @@ enum HomeNavigations {
   chat,
   write,
   diary,
-  setting,
 }
 
 extension HomeNavigationsExtension on HomeNavigations {
@@ -18,14 +17,12 @@ extension HomeNavigationsExtension on HomeNavigations {
         HomeNavigations.chat => 'Chat',
         HomeNavigations.write => 'Write',
         HomeNavigations.diary => 'Diary',
-        HomeNavigations.setting => 'Setting',
       };
   IconData get iconData => switch (this) {
         HomeNavigations.main => Icons.home_outlined,
         HomeNavigations.chat => Icons.chat_rounded,
         HomeNavigations.write => Icons.add_outlined,
         HomeNavigations.diary => Icons.book_outlined,
-        HomeNavigations.setting => Icons.settings_outlined,
       };
 }
 
@@ -123,13 +120,13 @@ enum Weekday {
 
 extension WeekdayExtension on Weekday {
   String get name => switch (this) {
-        Weekday.sun => '일',
-        Weekday.mon => '월',
-        Weekday.tue => '화',
-        Weekday.wed => '수',
-        Weekday.thu => '목',
-        Weekday.fri => '금',
-        Weekday.sat => '토',
+        Weekday.sun => 'Sun',
+        Weekday.mon => 'Mon',
+        Weekday.tue => 'Tue',
+        Weekday.wed => 'Wed',
+        Weekday.thu => 'Thu',
+        Weekday.fri => 'Fri',
+        Weekday.sat => 'Sat',
       };
 }
 

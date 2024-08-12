@@ -1,6 +1,4 @@
 import 'package:diary_flutter/gen/gen_assets.dart';
-import 'package:diary_flutter/presentation/common/router.dart';
-import 'package:diary_flutter/presentation/my_info/my_info_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -40,13 +38,6 @@ class CalendarDiaryNavigationBar extends StatelessWidget {
                 ),
               ),
             ),
-          ),
-          InkWell(
-            onTap: () => context.pushNamed(MyInfoScreen.name, queryParameters: {
-              QueryParameterKeys.previous.toString():
-                  PreviousScreens.calendar.toString(),
-            }),
-            child: GenAssets.images.iconMyInfo.image(scale: 2),
           ),
         ],
       ),

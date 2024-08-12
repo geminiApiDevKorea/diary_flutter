@@ -91,7 +91,7 @@ Map<String, dynamic> _$DiaryPostBodyToJson(DiaryPostBody instance) =>
 // RetrofitGenerator
 // **************************************************************************
 
-// ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers,unused_element
+// ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers
 
 class _DiaryRepository implements DiaryRepository {
   _DiaryRepository(
@@ -137,8 +137,8 @@ class _DiaryRepository implements DiaryRepository {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final _value = DiaryRespons.fromJson(_result.data!);
-    return _value;
+    final value = DiaryRespons.fromJson(_result.data!);
+    return value;
   }
 
   @override
@@ -169,8 +169,8 @@ class _DiaryRepository implements DiaryRepository {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final _value = DiaryPostResponse.fromJson(_result.data!);
-    return _value;
+    final value = DiaryPostResponse.fromJson(_result.data!);
+    return value;
   }
 
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {

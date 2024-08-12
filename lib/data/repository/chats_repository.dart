@@ -17,6 +17,8 @@ class ChatsRequestBody {
   ChatsRequestBody({required this.userInput, required this.histories});
 
   Map<String, dynamic> toJson() => _$ChatsRequestBodyToJson(this);
+  factory ChatsRequestBody.fromJson(Map<String, dynamic> json) =>
+      _$ChatsRequestBodyFromJson(json);
 
   @override
   String toString() {
@@ -123,7 +125,7 @@ class ChatsPromptResponse {
 
 @RestApi()
 abstract class ChatsRepository {
-  factory ChatsRepository(Dio dio) = _ChatsRepository;
+  factory ChatsRepository(Dio dio, {String? baseUrl}) = _ChatsRepository;
 
   @POST('/chats/feedback')
   Future<ChatsFeedbackResponse> postChatsFeedback({

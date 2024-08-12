@@ -1,5 +1,4 @@
 import 'package:diary_flutter/common/enums.dart';
-import 'package:diary_flutter/presentation/common/router.dart';
 import 'package:diary_flutter/presentation/my_info/my_info_option.dart';
 import 'package:diary_flutter/presentation/my_info/my_info_screen_header.dart';
 import 'package:diary_flutter/presentation/style/gem_theme.dart';
@@ -9,11 +8,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 class MyInfoScreen extends ConsumerWidget {
   static const String path = '/$name';
   static const String name = 'my_info';
-  final PreviousScreens previousScreen;
-  const MyInfoScreen({
-    super.key,
-    required this.previousScreen,
-  });
+  const MyInfoScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -27,9 +22,7 @@ class MyInfoScreen extends ConsumerWidget {
             SliverList(
               delegate: SliverChildListDelegate(
                 [
-                  MyInfoScreenHeader(
-                    previousScreen: previousScreen,
-                  ),
+                  const MyInfoScreenHeader(),
                   ...MyInfoOptions.values.map(
                     (value) => MyInfoOption(option: value),
                   ),

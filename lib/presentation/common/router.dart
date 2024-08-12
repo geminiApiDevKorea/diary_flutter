@@ -4,10 +4,8 @@ import 'package:diary_flutter/presentation/journal/journal_completion_screen.dar
 import 'package:diary_flutter/presentation/journal/journal_screen.dart';
 import 'package:diary_flutter/presentation/main/main_screen.dart';
 import 'package:diary_flutter/presentation/common/custom_transitions.dart';
-import 'package:diary_flutter/presentation/home_screen.dart';
 import 'package:diary_flutter/presentation/my_info/my_info_screen.dart';
 import 'package:diary_flutter/presentation/onbording/onbording_screen.dart';
-import 'package:diary_flutter/presentation/terms_screen.dart';
 import 'package:diary_flutter/presentation/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:diary_flutter/presentation/settings/setting_screen.dart';
@@ -66,30 +64,11 @@ GoRouter router(RouterRef ref) {
       GoRoute(
         path: MyInfoScreen.path,
         name: MyInfoScreen.name,
-        builder: (context, state) {
-          final previousQueryString =
-              state.uri.queryParameters[QueryParameterKeys.previous.toString()];
-          if (previousQueryString == null) {
-            throw Exception('previous screen is not exist');
-          }
-          final previousScreen = PreviousScreens.values
-              .firstWhere((e) => e.toString() == previousQueryString);
-          return MyInfoScreen(
-            previousScreen: previousScreen,
-          );
-        },
+        builder: (context, state) => const MyInfoScreen(),
       ),
       GoRoute(
         path: OnboardingScreen.path,
         builder: (context, state) => const OnboardingScreen(),
-      ),
-      GoRoute(
-        path: HomeScreen.path,
-        builder: (context, state) => const HomeScreen(),
-      ),
-      GoRoute(
-        path: TermsScreen.path,
-        builder: (context, state) => const TermsScreen(),
       ),
       GoRoute(
         path: SettingScreen.path,

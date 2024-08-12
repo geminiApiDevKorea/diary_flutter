@@ -2,7 +2,6 @@ import 'package:diary_flutter/presentation/common/popup/confirm_popup.dart';
 import 'package:diary_flutter/presentation/common/popup/popup_button_param.dart';
 import 'package:diary_flutter/presentation/style/gem_colors.dart';
 import 'package:flutter/material.dart';
-import 'package:palestine_console/palestine_console.dart';
 
 enum ConfirmationResult {
   cancel,

@@ -111,7 +111,7 @@ class DiaryPostBody {
 
 @RestApi()
 abstract class DiaryRepository {
-  factory DiaryRepository(Dio dio) = _DiaryRepository;
+  factory DiaryRepository(Dio dio, {String? baseUrl}) = _DiaryRepository;
 
   @GET('/diary')
   Future<DiaryRespons> getDiary({
