@@ -141,11 +141,11 @@ Future<void> launchMusicUrl(BuildContext context, String? url) async {
   if (url != null && url.isNotEmpty) {
     try {
       final uri = Uri.parse(url);
-      if (await canLaunchUrl(uri)) {
-        await launchUrl(uri, mode: LaunchMode.externalApplication);
-      } else {
-        Print.red('Could not launch $url');
-        // showErrorSnackBar(context, 'Could not open the music link');
+
+      final laucher =
+          await launchUrl(uri, mode: LaunchMode.externalApplication);
+      if (!laucher) {
+        await launchUrl(uri, mode: LaunchMode.inAppBrowserView);
       }
     } catch (e) {
       Print.red('Error launching URL: $e');
