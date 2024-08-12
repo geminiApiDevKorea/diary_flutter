@@ -10,6 +10,8 @@ part 'users_repository.g.dart';
 class UsersAgreementBody {
   final bool agreement;
   Map<String, dynamic> toJson() => _$UsersAgreementBodyToJson(this);
+  factory UsersAgreementBody.fromJson(Map<String, dynamic> json) =>
+      _$UsersAgreementBodyFromJson(json);
   UsersAgreementBody({required this.agreement});
 }
 
@@ -46,7 +48,7 @@ class UsersRequestBody {
 
 @RestApi()
 abstract interface class UsersRepository {
-  factory UsersRepository(Dio dio) = _UsersRepository;
+  factory UsersRepository(Dio dio, {String? baseUrl}) = _UsersRepository;
   @POST('/users')
   Future<UserResponse> postUsers(
       {@Header('Authorization') required String bearerToken,

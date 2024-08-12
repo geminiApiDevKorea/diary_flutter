@@ -32,12 +32,17 @@ class CalendarJournalCard extends ConsumerWidget {
           onTap: () async {
             await ref
                 .read(focusedDateProvider.notifier)
-                .updateDate(diary.dateTime);
-            if (context.mounted) {
-              await context.pushNamed(JournalScreen.name, queryParameters: {
-                QueryParameterKeys.feedbackType.value: diary.type.value,
-              });
-            }
+                .updateDate(diary.dateTime)
+                .then(
+              (_) {
+                context.pushNamed(
+                  JournalScreen.name,
+                  queryParameters: {
+                    QueryParameterKeys.feedbackType.value: diary.type.value,
+                  },
+                );
+              },
+            );
           },
           borderRadius: BorderRadius.circular(20),
           child: Container(

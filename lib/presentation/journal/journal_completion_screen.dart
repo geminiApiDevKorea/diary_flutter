@@ -14,13 +14,10 @@ class JournalCompletionScreen extends HookConsumerWidget {
   static const String path = 'completion';
   static const String name = 'journal_completion';
   final FeedbackType feedbackType;
-  const JournalCompletionScreen({super.key, required this.feedbackType});
-
-  // FeedbackType get feedbackType => switch (type) {
-  //       'post' => FeedbackType.post,
-  //       'chat' => FeedbackType.chat,
-  //       _ => throw ArgumentError('Invalid journal type: $type'),
-  //     };
+  const JournalCompletionScreen({
+    super.key,
+    required this.feedbackType,
+  });
 
   _hideKeyboardIfNeed(BuildContext context) async {
     final isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom > 0;
@@ -45,31 +42,35 @@ class JournalCompletionScreen extends HookConsumerWidget {
     DateTime focusedDate,
     FeedbackType feedbackType,
   ) {
-    _hideKeyboardIfNeed(context).then((_) async {
-      final colors = ref.gemColors;
-      final journalEventNotifier = ref.read(journalServiceProvider(
-              feedbackType: feedbackType,
-              focusedDate: ref.watch(focusedDateProvider))
-          .notifier);
+    _hideKeyboardIfNeed(context).then(
+      (_) async {
+        final colors = ref.gemColors;
+        final journalEventNotifier = ref.read(
+          journalServiceProvider(
+            feedbackType: feedbackType,
+            focusedDate: ref.watch(focusedDateProvider),
+          ).notifier,
+        );
 
-      final result = await showConfirmDialog(
-        context: context,
-        colors: colors,
-        title: 'Journal Completed!',
-        leftButtonTitle: 'No',
-        rightButtonTitle: 'Yes',
-        description: 'You cannot write more or modify the content for today.',
-        onConfirm: () async {
-          FocusScope.of(context).unfocus();
-          final newTitle = textController.text.isEmpty
-              ? focusedDate.monthDayOrdinal
-              : textController.text;
-          journalEventNotifier.onSave(
-              newTitle: newTitle, feedbackType: feedbackType);
-          context.pop();
-        },
-      );
-    });
+        await showConfirmDialog(
+          context: context,
+          colors: colors,
+          title: 'Journal Completed!',
+          leftButtonTitle: 'No',
+          rightButtonTitle: 'Yes',
+          description: 'You cannot write more or modify the content for today.',
+          onConfirm: () async {
+            FocusScope.of(context).unfocus();
+            final newTitle = textController.text.isEmpty
+                ? focusedDate.monthDayOrdinal
+                : textController.text;
+            journalEventNotifier.onSave(
+                newTitle: newTitle, feedbackType: feedbackType);
+            context.pop();
+          },
+        );
+      },
+    );
   }
 
   @override
