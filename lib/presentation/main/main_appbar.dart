@@ -86,14 +86,19 @@ class MainAppbar extends HookConsumerWidget {
                         ),
                         child: Padding(
                           padding: const EdgeInsets.only(
-                              left: 6), // Add left padding for visual balance
+                            left: 6,
+                          ), // Add left padding for visual balance
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              Icon(CupertinoIcons.back,
-                                  size: 18, color: colors.grayScale70),
+                              Icon(
+                                CupertinoIcons.back,
+                                size: 18,
+                                color: colors.grayScale70,
+                              ),
                               const SizedBox(
-                                  width: 5), // Space between icon and text
+                                width: 5,
+                              ), // Space between icon and text
                               Expanded(
                                 child: AnimatedBuilder(
                                   animation: listButtonAnimationController,
@@ -121,13 +126,7 @@ class MainAppbar extends HookConsumerWidget {
             const Spacer(),
 
             InkWell(
-              onTap: () => context.pushNamed(
-                MyInfoScreen.name,
-                queryParameters: {
-                  QueryParameterKeys.previous.toString():
-                      PreviousScreens.main.toString(),
-                },
-              ),
+              onTap: () => context.pushNamed(MyInfoScreen.name),
               child: GenAssets.images.iconProfile.image(scale: 2),
             ),
 
