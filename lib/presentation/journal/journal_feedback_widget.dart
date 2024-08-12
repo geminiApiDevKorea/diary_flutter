@@ -6,25 +6,19 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:palestine_console/palestine_console.dart';
-// Import other necessary dependencies
 
 class ChatFeedbackWidget extends ConsumerWidget {
   final dynamic state;
   final Journal? myJournal;
-  // final Function(BuildContext, String?) launchMusicUrl;
 
   const ChatFeedbackWidget({
     super.key,
     required this.state,
     required this.myJournal,
-    // required this.launchMusicUrl,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // final colors = ref.gemColors;
-    // final textStyle = ref.gemTextStyle;
-
     if (state is ChatsFeedbackData) {
       return _buildRecommendationContent(context, ref);
     } else if (state is ChatsFeedbackError) {
