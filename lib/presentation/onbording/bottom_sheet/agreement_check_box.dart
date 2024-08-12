@@ -1,3 +1,4 @@
+import 'package:diary_flutter/common/enums.dart';
 import 'package:diary_flutter/gen/gen_assets.dart';
 import 'package:diary_flutter/presentation/style/enums.dart';
 import 'package:diary_flutter/presentation/style/gem_theme.dart';
@@ -8,15 +9,13 @@ class AgreementCheckBox extends ConsumerWidget {
   final String title;
   final bool isChecked;
   final Function() onTap;
-  final bool? isRequired;
-  final String? url;
+  final AgreementType? agreementType;
   const AgreementCheckBox({
     super.key,
     required this.title,
     required this.isChecked,
     required this.onTap,
-    this.isRequired,
-    this.url,
+    this.agreementType,
   });
 
   @override
@@ -47,7 +46,7 @@ class AgreementCheckBox extends ConsumerWidget {
               title,
               style: textStyle.h4,
             ),
-            if (isRequired ?? false) ...[
+            if (agreementType?.isRequired ?? false) ...[
               const SizedBox(width: 4),
               Text(
                 'Required',
@@ -55,20 +54,18 @@ class AgreementCheckBox extends ConsumerWidget {
                 style: textStyle.captionBold.copyWith(color: colors.primary50),
               ),
             ],
-            if (url != null) ...[
-              const Spacer(),
-              Material(
-                color: Colors.transparent,
-                child: InkWell(
-                  onTap: () {},
-                  child: SizedBox(
-                    width: 30,
-                    height: 30,
-                    child: GenAssets.images.iconActionRight.image(scale: 2),
-                  ),
+            const Spacer(),
+            Material(
+              color: Colors.transparent,
+              child: InkWell(
+                onTap: agreementType?.open,
+                child: SizedBox(
+                  width: 30,
+                  height: 30,
+                  child: GenAssets.images.iconActionRight.image(scale: 2),
                 ),
-              )
-            ],
+              ),
+            ),
           ],
         ),
       ),

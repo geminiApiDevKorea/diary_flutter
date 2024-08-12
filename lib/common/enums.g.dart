@@ -14,5 +14,5 @@ const _$FeedbackTypeEnumMap = {
 const _$GenderEnumMap = {
   Gender.female: 'FEMALE',
   Gender.male: 'MALE',
-  Gender.other: 'FEMALE',
+  Gender.others: 'OTHERS',
 };
