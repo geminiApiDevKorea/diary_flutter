@@ -2,7 +2,6 @@ import 'package:diary_flutter/gen/gen_assets.dart';
 import 'package:diary_flutter/presentation/calendar/calendar_screen.dart';
 import 'package:diary_flutter/presentation/common/hook/use_sync_animation_value.dart';
 import 'package:diary_flutter/presentation/common/hook/use_top_of_stack_callback.dart';
-import 'package:diary_flutter/presentation/common/router.dart';
 import 'package:diary_flutter/presentation/my_info/my_info_screen.dart';
 import 'package:diary_flutter/presentation/style/index.dart';
 import 'package:flutter/cupertino.dart';
