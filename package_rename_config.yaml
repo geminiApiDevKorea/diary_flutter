@@ -1,0 +1,30 @@
+# dart run package_rename
+package_rename_config:
+  android:
+    app_name: Muse Diary
+    package_name: com.gem.diary_flutter
+
+  ios:
+    app_name: Muse Diary
+    bundle_name: Muse Diary
+    package_name: com.gem.diaryFlutter
+
+  # linux:
+  #   app_name: Muse Diary
+  #   package_name: gem.musediary.app
+  #   exe_name: muse_diary
+
+  # macos:
+  #   app_name: Muse Diary
+  #   package_name: gem.musediary.app
+  #   copyright_notice: Copyright © 2023 Muse Diary. All rights reserved.
+
+  # web:
+  #   app_name: Muse Diary
+  #   description: A diary app with music regemmendations
+
+  # windows:
+  #   app_name: Muse Diary
+  #   organization: Muse Diary
+  #   copyright_notice: Copyright © 2023 Muse Diary. All rights reserved.
+  #   exe_name: muse_diary

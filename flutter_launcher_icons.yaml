@@ -1,0 +1,8 @@
+# flutter pub run flutter_launcher_icons
+flutter_launcher_icons:
+  android: 'launcher_icon'
+  ios: true
+  image_path: 'assets/icons/icon_1024.png'
+  min_sdk_android: 21
+  adaptive_icon_background: '#000000' # 또는 원하는 배경색
+  adaptive_icon_foreground: 'assets/icons/icon_1024.png' # 메인 이미지와 동일한 파일 사용

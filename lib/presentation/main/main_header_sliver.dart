@@ -105,10 +105,10 @@ class MainHeader extends HookConsumerWidget {
       AnimationController darkeningAnimationController) {
     return Row(
       key: const ValueKey('view_today_button'),
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         MainHeaderButton(
-          width: 320,
+          width: 295,
           text: 'View Today',
           onTap: () => _navigateToJournal(context, ref,
               myJournalonToday.feedbackType, darkeningAnimationController),

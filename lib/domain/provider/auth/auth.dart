@@ -4,6 +4,7 @@ import 'package:diary_flutter/data/provider/persistance_storage_provider.dart';
 import 'package:diary_flutter/data/provider/users_repository_provider.dart';
 import 'package:diary_flutter/data/repository/users_repository.dart';
 import 'package:diary_flutter/data/storage/persistance_storage.dart';
+import 'package:palestine_console/palestine_console.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'auth.g.dart';
@@ -72,9 +73,10 @@ class Auth extends _$Auth {
     final user =
         await ref.read(googleAuthRepositoryProvider).signInWithGoogle();
     if (user == null) {
+      Print.yellow('user is null');
       return SignInState.unsignedIn;
     }
-    // print('uid: ${user.uid}');
+    Print.yellow('uid: ${user.uid}');
     final idToken = await user.getIdToken();
     if (idToken == null || idToken.isEmpty) {
       return SignInState.unsignedIn;
